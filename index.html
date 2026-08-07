@@ -171,6 +171,12 @@
          box-shadow:0 1px 3px rgba(0,0,0,.20), 0 5px 12px rgba(0,0,0,.10);
          transition:transform 120ms ease, background 120ms ease, color 120ms ease, border-color 120ms ease; }
   .pin i { width:7px; height:7px; border-radius:50%; display:block; flex:none; }
+  .pin i.d-low { background:var(--ok); }
+  .pin i.d-mid { background:var(--accent); }
+  .pin i.d-high { background:var(--warn); }
+  .home-ring-leaf { stroke:var(--ink-soft); }
+  .theme-row { display:flex; align-items:center; gap:6px; margin-left:auto; }
+  .theme-row + .count { margin-left:12px; }
   .leaflet-marker-icon:hover .pin, .pin.on {
          background:var(--ink); color:var(--paper); border-color:var(--ink); transform:scale(1.08); }
   .leaflet-marker-icon:hover { z-index:1000 !important; }
@@ -275,6 +281,12 @@
         <option value="m2">Área, mayor primero</option>
         <option value="value">Precio por m², menor primero</option>
       </select>
+      <span class="theme-row">
+        <span class="control-label">Tema</span>
+        <button class="chip" type="button" data-theme-set="system">Sistema</button>
+        <button class="chip" type="button" data-theme-set="light">Claro</button>
+        <button class="chip" type="button" data-theme-set="dark">Oscuro</button>
+      </span>
       <span class="count" id="count"></span>
     </div>
   </div>
@@ -747,12 +759,12 @@
     });
   }
 
-  function focusCard(url) {
+  function focusCard(url, scroll) {
     var card = grid.querySelector('[data-id="' + url + '"]');
     if (!card) return;
     Array.prototype.forEach.call(grid.children, function (c) { c.classList.remove("is-focus"); });
     card.classList.add("is-focus");
-    card.scrollIntoView({ behavior:"smooth", block:"center" });
+    if (scroll !== false) card.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
 
@@ -767,18 +779,17 @@
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   }
   var CARTO = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
-  var lmap = L.map("leafmap", { scrollWheelZoom:false, zoomSnap:0.5 }).setView([4.716, -74.056], 13);
+  var lmap = L.map("leafmap", { scrollWheelZoom:false }).setView([4.716, -74.056], 13);
   L.control.scale({ imperial:false }).addTo(lmap);
-  var claro = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-                          { maxZoom:20, subdomains:"abcd", attribution:CARTO });
-  var oscuro = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-                           { maxZoom:20, subdomains:"abcd", attribution:CARTO });
+  var URL_CLARO = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+  var URL_OSCURO = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+  var base = L.tileLayer(isDark() ? URL_OSCURO : URL_CLARO,
+                         { maxZoom:20, subdomains:"abcd", attribution:CARTO }).addTo(lmap);
   var satelite = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     { maxZoom:19, attribution:"Imagery &copy; Esri" });
-  var base = isDark() ? oscuro : claro;
-  base.addTo(lmap);
   L.control.layers({ "Mapa": base, "Satelite": satelite }, null, { position:"topright" }).addTo(lmap);
+  function syncBase() { base.setUrl(isDark() ? URL_OSCURO : URL_CLARO); }
 
   var TIER_COLOR = { "t-low":"--ok", "t-mid":"--accent", "t-high":"--warn" };
   function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
@@ -787,7 +798,7 @@
   L.marker([HOME.lat, HOME.lon], { zIndexOffset:900, icon: L.divIcon({
       className:"", iconSize:null, html:'<span class="homepin">Tu apto</span>' }) }).addTo(homeLayer);
   [1,2,3].forEach(function (km) {
-    L.circle([HOME.lat, HOME.lon], { radius:km * 1000, color:cssVar("--ink-soft"), weight:1,
+    L.circle([HOME.lat, HOME.lon], { radius:km * 1000, weight:1, className:"home-ring-leaf",
       dashArray:"4 6", fill:false, interactive:false, opacity:.55 }).addTo(homeLayer);
   });
 
@@ -810,7 +821,7 @@
     rows.slice().sort(function (a, b) { return b.lat - a.lat; }).forEach(function (d) {
       var t = total(d);
       var m = L.marker([d.lat, d.lon], { icon: L.divIcon({ className:"", iconSize:null,
-        html:'<span class="pin"><i style="background:' + cssVar(TIER_COLOR[tier(t)]) + '"></i>' +
+        html:'<span class="pin"><i class="d-' + tier(t).slice(2) + '"></i>' +
              shortCop(t) + "</span>" }) });
       var foto = d.img
         ? '<img class="ph" src="' + d.img + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
@@ -827,7 +838,7 @@
         '<span class="pm">a ' + d.km.toFixed(1).replace(".", ",") + " km de tu casa &middot; " + d.src + "</span>" +
         '<a class="go" href="' + linkOf(d) + '" target="_blank" rel="noopener noreferrer">Ver ficha &rarr;</a>' +
         "</div></div>", { maxWidth:236, minWidth:236, offset:[0, -6] });
-      m.on("click", function () { focusCard(d.url); markPin(d.url); });
+      m.on("click", function () { focusCard(d.url, false); markPin(d.url); });
       m.addTo(markerLayer);
       pinById[d.url] = m;
       pts.push([d.lat, d.lon]);
@@ -847,6 +858,30 @@
   }
   vReal.addEventListener("click", function () { switchView(true); });
   vPlot.addEventListener("click", function () { switchView(false); });
+
+  /* ---------- tema claro / oscuro ---------- */
+  var TKEY = "arriendo-tema";
+  var tBtns = Array.prototype.slice.call(document.querySelectorAll("[data-theme-set]"));
+  function applyTheme(v, persist) {
+    if (v === "system") document.documentElement.removeAttribute("data-theme");
+    else document.documentElement.setAttribute("data-theme", v);
+    tBtns.forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-theme-set") === v));
+    });
+    if (persist) { try { localStorage.setItem(TKEY, v); } catch (e) {} }
+    syncBase();
+  }
+  tBtns.forEach(function (b) {
+    b.addEventListener("click", function () { applyTheme(b.getAttribute("data-theme-set"), true); });
+  });
+  var saved = "system";
+  try { saved = localStorage.getItem(TKEY) || "system"; } catch (e) {}
+  applyTheme(saved, false);
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").addEventListener) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+      if (!document.documentElement.getAttribute("data-theme")) syncBase();
+    });
+  }
 
   function render() {
     var rows = DATA.filter(function (d) {
