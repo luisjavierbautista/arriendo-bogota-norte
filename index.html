@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Búsqueda de apartamento en arriendo en el norte de Bogotá: 34 candidatos vigentes en cuatro portales, con mapa y filtros.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏢</text></svg>">
+<meta name="description" content="Busqueda de apartamento en arriendo en el norte de Bogota: 34 candidatos vigentes en cuatro portales, con mapa y filtros.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#127970;</text></svg>">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -158,22 +158,50 @@
   /* La regla .mapwrap svg del plano de coordenadas rompe el SVG interno de Leaflet: acotarla. */
   .mapwrap svg { width:auto; height:auto; }
   .mapwrap > svg { display:block; width:100%; height:auto; }
+
   .map-switch { display:flex; gap:6px; margin:0 0 12px; }
   #leafmap { height:min(80vh,760px); width:100%; }
+  .mapwrap.is-map { border-radius:10px; }
   .leaflet-container { background:var(--surface-2); font-family:var(--sans); }
-  .leaflet-popup-content-wrapper { background:var(--surface); color:var(--ink);
-    border-radius:var(--r); box-shadow:0 2px 14px rgba(0,0,0,.22); }
+
+  .leaflet-marker-icon { background:none; border:0; }
+  .pin { display:inline-flex; align-items:center; gap:5px; background:var(--surface); color:var(--ink);
+         border:1px solid var(--line); border-radius:100px; padding:5px 10px;
+         font:600 12.5px/1 var(--sans); font-variant-numeric:tabular-nums; white-space:nowrap;
+         box-shadow:0 1px 3px rgba(0,0,0,.20), 0 5px 12px rgba(0,0,0,.10);
+         transition:transform 120ms ease, background 120ms ease, color 120ms ease, border-color 120ms ease; }
+  .pin i { width:7px; height:7px; border-radius:50%; display:block; flex:none; }
+  .leaflet-marker-icon:hover .pin, .pin.on {
+         background:var(--ink); color:var(--paper); border-color:var(--ink); transform:scale(1.08); }
+  .leaflet-marker-icon:hover { z-index:1000 !important; }
+  .pin.on i { box-shadow:0 0 0 1.5px var(--paper); }
+
+  .homepin { display:inline-flex; align-items:center; gap:6px; background:var(--ink); color:var(--paper);
+             border-radius:100px; padding:5px 11px; font:600 12px/1 var(--sans); white-space:nowrap;
+             box-shadow:0 2px 8px rgba(0,0,0,.28); }
+  .homepin::before { content:""; width:8px; height:8px; border-radius:50%;
+                     background:var(--paper); display:block; flex:none; }
+
+  .leaflet-popup-content-wrapper { background:var(--surface); color:var(--ink); border-radius:10px;
+    padding:0; overflow:hidden; box-shadow:0 6px 28px rgba(0,0,0,.26); }
   .leaflet-popup-tip { background:var(--surface); }
-  .leaflet-popup-content { margin:12px 14px; font-size:13px; line-height:1.5; }
-  .leaflet-popup-content .pt { font-family:var(--mono); font-size:1.15rem;
-    font-variant-numeric:tabular-nums; letter-spacing:-.03em; display:block; }
-  .leaflet-popup-content .pb { font-family:var(--serif); font-size:1.05rem; display:block; margin-bottom:4px; }
-  .leaflet-popup-content .pm { color:var(--muted); font-family:var(--mono); font-size:11px; }
-  .leaflet-control-attribution { background:rgba(255,255,255,.75) !important; font-size:10px !important; }
+  .leaflet-popup-content { margin:0; width:236px !important; font-size:13px; line-height:1.45; }
+  .leaflet-popup-close-button { color:#fff !important; text-shadow:0 1px 3px rgba(0,0,0,.7);
+    top:6px !important; right:8px !important; font-size:20px !important; }
+  .pcard .ph { display:block; width:100%; height:142px; object-fit:cover; background:var(--surface-2); }
+  .pcard .noph { display:flex; align-items:center; justify-content:center; height:142px;
+    background:var(--surface-2); color:var(--muted); font-size:11.5px; font-family:var(--mono); }
+  .pcard .body { padding:11px 13px 13px; display:flex; flex-direction:column; gap:3px; }
+  .pcard .pb { font-family:var(--serif); font-size:1.06rem; line-height:1.15; }
+  .pcard .pt { font-family:var(--mono); font-size:1.28rem; font-variant-numeric:tabular-nums;
+    letter-spacing:-.035em; line-height:1.1; }
+  .pcard .pm { color:var(--muted); font-family:var(--mono); font-size:10.5px; }
+  .pcard .sp { color:var(--ink-soft); font-size:12px; }
+  .pcard .go { margin-top:5px; align-self:flex-start; }
+
+  .leaflet-control-attribution { background:rgba(255,255,255,.72) !important; font-size:10px !important; }
   :root[data-theme="dark"] .leaflet-control-attribution,
-  :root:not([data-theme="light"]) .leaflet-control-attribution { background:rgba(0,0,0,.55) !important; }
-  :root[data-theme="dark"] .leaflet-tile,
-  :root:not([data-theme="light"]) .leaflet-tile { filter:brightness(.78) contrast(1.05) saturate(.85); }
+  :root:not([data-theme="light"]) .leaflet-control-attribution { background:rgba(0,0,0,.5) !important; }
   .hidden { display:none !important; }
 </style>
 </head>
@@ -254,16 +282,16 @@
   <section class="block" id="map-block" style="margin-top:36px">
     <h2>Dónde quedan</h2>
     <p class="lede">
-      Coordenadas reales de cada ficha, sobre el callejero de OpenStreetMap. Los dos mapas obedecen
-      los filtros de arriba. El cuadrado es
+      Coordenadas reales de cada ficha. Cada pastilla es el costo mensual total; haz clic para ver la
+      foto y saltar a la ficha. Los dos mapas obedecen los filtros de arriba. El punto oscuro es
       <strong>Portales del Country</strong> y los círculos punteados son anillos de 1 a 5 km. Fíjate en
       el punto solitario de Country sobre la Carrera 19: es todo lo que dio esa zona.
     </p>
     <div class="map-switch">
-      <button class="chip" type="button" id="v-real" aria-pressed="true">Mapa real</button>
+      <button class="chip" type="button" id="v-real" aria-pressed="true">Mapa</button>
       <button class="chip" type="button" id="v-plot" aria-pressed="false">Plano de coordenadas</button>
     </div>
-    <div class="mapwrap" id="wrap-real"><div id="leafmap"></div></div>
+    <div class="mapwrap is-map" id="wrap-real"><div id="leafmap"></div></div>
     <div class="mapwrap hidden" id="wrap-plot">
       <svg id="map" viewBox="0 0 700 743" role="img" aria-label="Ubicación de los candidatos en el norte de Bogotá"></svg>
       <div class="maptip" id="maptip" aria-hidden="true"></div>
@@ -272,8 +300,8 @@
       <span><i style="background:var(--ok)"></i> hasta $3,7 M</span>
       <span><i style="background:var(--accent)"></i> $3,7 – $4,2 M</span>
       <span><i style="background:var(--warn)"></i> más de $4,2 M</span>
-      <span>El tamaño del punto es el área</span>
-      <span>Borde punteado = ubicación aproximada al barrio</span>
+      <span>La pastilla muestra el costo mensual total</span>
+      <span>En el plano de coordenadas, el tamaño del punto es el área</span>
     </div>
   </section>
 
@@ -363,172 +391,172 @@
   var DATA = [
     { barrio:"Iberia", canon:3100000, admin:10000, m2:100, hab:3, ban:2, parq:1, dep:true,
       estrato:5, piso:4, asc:"nd", src:"Fincaraíz", date:"2026-07-30", pub:"Century 21 Total Services",
-      lat:4.7206652, lon:-74.0668202, approx:false, url:"/apartamento-en-arriendo-en-iberia-bogota/194055704",
+      lat:4.7206652, lon:-74.0668202, approx:false, url:"/apartamento-en-arriendo-en-iberia-bogota/194055704", img:"",
       note:"Reformado, con vista al parque, estudio y lavandería independiente. Parqueadero cubierto y depósito.",
       flags:[{t:"La administración figura en $10.000, que parece un dato de relleno. Confírmala.", s:"crit"}] },
     { barrio:"Alhambra", canon:2365000, admin:835000, m2:100, hab:3, ban:2, parq:2, dep:null,
       estrato:5, piso:2, asc:"si", src:"Fincaraíz", date:"2026-08-06", pub:"ZALA Colombia Consultores",
-      lat:4.701292, lon:-74.0646081, approx:false, url:"/apartamento-en-arriendo-en-monaco-bogota/194085024",
+      lat:4.701292, lon:-74.0646081, approx:false, url:"/apartamento-en-arriendo-en-monaco-bogota/194085024", img:"",
       note:"Urbanización Mónaco, en el borde de Alhambra: piso 2 con ascensor, dos garajes y cien metros exactos.",
       flags:[{t:"Publicado ayer. Ascensor confirmado y dos garajes por $3.200.000.", s:"ok"}] },
     { barrio:"Pasadena", canon:3500000, admin:0, m2:105, hab:4, ban:4, parq:1, dep:null,
       estrato:5, piso:3, asc:"nd", src:"Fincaraíz", date:"2026-07-31", pub:"Área IN SAS",
-      lat:4.6943317, lon:-74.0612682, approx:false, url:"/apartamento-en-arriendo-en-pasadena-bogota/194057154",
+      lat:4.6943317, lon:-74.0612682, approx:false, url:"/apartamento-en-arriendo-en-pasadena-bogota/194057154", img:"https://cdn2.infocasas.com.uy/repo/img/6a6c296d74e1d_infocdn__i9dnzlijjzkrdkxooefdjblotc0q6at2rgrnmfizjpg.jpg",
       note:"Cuatro habitaciones y cuatro baños en 105 m², administración incluida.",
       flags:[] },
     { barrio:"Niza", canon:3617000, admin:0, m2:115, hab:3, ban:3, parq:1, dep:true,
       estrato:5, piso:3, asc:"si", src:"Fincaraíz", date:"2026-08-07", pub:"Mubrick SAS",
-      lat:4.7115868, lon:-74.0681586, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/194088848",
+      lat:4.7115868, lon:-74.0681586, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/194088848", img:"",
       note:"Estudio, comedor independiente, cocina cerrada y cuarto de servicio. Republicado hoy por la misma inmobiliaria.",
       flags:[{t:"Publicado hoy.", s:"ok"},{t:"El aviso anterior de este mismo apartamento decía 'piso 3 sin ascensor'; el nuevo marca ascensor. Pregúntalo.", s:"crit"}] },
     { barrio:"La Calleja", canon:3730000, admin:null, m2:100, hab:3, ban:2, parq:2, dep:true,
       estrato:5, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Alma Analida Delgado",
-      lat:4.71086, lon:-74.04742, approx:false, url:"/inmueble/arriendo-apartamento-bogota-country-club-3-habitaciones-2-banos-2-garajes/15942-M6883981",
+      lat:4.71086, lon:-74.04742, approx:false, url:"/inmueble/arriendo-apartamento-bogota-country-club-3-habitaciones-2-banos-2-garajes/15942-M6883981", img:"https://multimedia.metrocuadrado.com/15942-M6883981/15942-M6883981_1_x.jpg",
       note:"La Calleja Alta, frente a parque: sin amoblar, sala-comedor amplia, cocina abierta, dos parqueaderos y depósito.",
       flags:[{t:"Bajó $100.000 desde el barrido anterior.", s:"ok"},{t:"Único sobreviviente de los cinco de La Calleja: los otros cuatro se cayeron.", s:"warn"},{t:"El aviso no informa la administración.", s:"warn"}] },
     { barrio:"Santa Bárbara Central", canon:3750000, admin:null, m2:135, hab:3, ban:3, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
-      lat:4.694824, lon:-74.035454, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3381963",
+      lat:4.694824, lon:-74.035454, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3381963", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3381963/beac175372438666_plana.jpeg",
       note:"Ciento treinta y cinco metros en Santa Bárbara Central, a menos de dos kilómetros de tu casa actual.",
       flags:[{t:"El aviso no informa la administración.", s:"warn"}] },
     { barrio:"Colina Campestre", canon:3900000, admin:null, m2:110, hab:3, ban:2, parq:1, dep:null,
       estrato:4, piso:11, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado (sin inmobiliaria)",
-      lat:4.74399, lon:-74.06473, approx:false, url:"/inmueble/arriendo-apartamento-bogota-gilmar-3-habitaciones-2-banos-1-garajes/MC6701135",
+      lat:4.74399, lon:-74.06473, approx:false, url:"/inmueble/arriendo-apartamento-bogota-gilmar-3-habitaciones-2-banos-1-garajes/MC6701135", img:"https://multimedia.metrocuadrado.com/MC6701135/MC6701135_8_x.jpg",
       note:"Penthouse esquinero en piso 11 con vistas panorámicas y doble balcón. Piscina climatizada y gimnasio.",
       flags:[{t:"El aviso no informa la administración.", s:"warn"},{t:"No lista ascensor, pero es un piso 11: casi seguro lo tiene.", s:"warn"}] },
     { barrio:"Colina Campestre", canon:3300000, admin:632500, m2:107, hab:3, ban:3, parq:2, dep:true,
       estrato:4, piso:5, asc:"nd", src:"Metrocuadrado", date:null, pub:"Gerardo Gómez",
-      lat:4.73953, lon:-74.06634, approx:false, url:"/inmueble/arriendo-apartamento-bogota-el-plan-3-habitaciones-3-banos-2-garajes/17016-M6821923",
+      lat:4.73953, lon:-74.06634, approx:false, url:"/inmueble/arriendo-apartamento-bogota-el-plan-3-habitaciones-3-banos-2-garajes/17016-M6821923", img:"https://multimedia.metrocuadrado.com/17016-M6821923/17016-M6821923_31_x.jpg",
       note:"Torres de Sevilla, piso 5: sala comedor, cocina, lavandería y cuarto de servicio.",
       flags:[{t:"Dos parqueaderos y depósito por $3.932.500.", s:"ok"},{t:"Los 107 m² son construidos; el área privada es de 88 m².", s:"warn"},{t:"Piso 5 y el aviso no menciona ascensor.", s:"crit"}] },
     { barrio:"Atabanza", canon:3400000, admin:600000, m2:116, hab:3, ban:3, parq:2, dep:null,
       estrato:5, piso:4, asc:"nd", src:"Fincaraíz", date:"2026-08-05", pub:"Inmobiliaria Peña Marín",
-      lat:4.708644, lon:-74.0613903, approx:false, url:"/apartamento-en-arriendo-en-atabanza-bogota/194081684",
+      lat:4.708644, lon:-74.0613903, approx:false, url:"/apartamento-en-arriendo-en-atabanza-bogota/194081684", img:"https://cdn2.infocasas.com.uy/repo/img/6a73e0ff81e27_infocdn__4seveebbdp0kxiwugwzpkrmhc3utbyjoqb7muoh5jpg.jpg",
       note:"Piso 4 con 116 m², tres baños y dos garajes. También publicado en Metrocuadrado como Lagos de Córdoba–Atabanza.",
       flags:[{t:"Primer aviso de Atabanza en toda la búsqueda: el barrio estaba vacío.", s:"ok"}] },
     { barrio:"Santa Bárbara", canon:4000000, admin:0, m2:115, hab:3, ban:3, parq:1, dep:null,
       estrato:6, piso:null, asc:"si", src:"Fincaraíz", date:"2026-07-27", pub:"MAFER Inversiones",
-      lat:4.6942787, lon:-74.0366395, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/194039195",
+      lat:4.6942787, lon:-74.0366395, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/194039195", img:"",
       note:"Ciento quince metros con tres baños y ascensor confirmado, administración incluida, a 1,7 km de tu casa.",
       flags:[{t:"Ascensor confirmado y administración incluida.", s:"ok"}] },
     { barrio:"Santa Bárbara Central", canon:4000000, admin:null, m2:105, hab:3, ban:2, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
-      lat:4.69569, lon:-74.036324, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3775992",
+      lat:4.69569, lon:-74.036324, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3775992", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3775992/abbc__178606252440_plana.jpeg",
       note:"Ciento cinco metros en Santa Bárbara Central, a 1,6 km de Portales del Country.",
       flags:[{t:"El aviso no informa la administración.", s:"warn"}] },
     { barrio:"Colina Campestre", canon:4000000, admin:0, m2:102, hab:3, ban:2, parq:2, dep:true,
       estrato:5, piso:11, asc:"si", src:"Fincaraíz", date:"2024-04-16", pub:"Andrés Romero",
-      lat:4.7309545, lon:-74.0607856, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/10786125",
+      lat:4.7309545, lon:-74.0607856, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/10786125", img:"",
       note:"Vistas al oriente y al norte, recién pintado. Piso 11 con ascensor y dos garajes.",
       flags:[{t:"Aviso de abril de 2024 que lleva más de dos años publicado: verifica que siga vigente.", s:"crit"}] },
     { barrio:"Colina Campestre", canon:4000000, admin:null, m2:116, hab:3, ban:3, parq:2, dep:true,
       estrato:5, piso:3, asc:"si", src:"Fincaraíz", date:"2026-07-24", pub:"RTM Inmobiliaria",
-      lat:4.7234462, lon:-74.0635419, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194032770",
+      lat:4.7234462, lon:-74.0635419, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194032770", img:"",
       note:"Parques de Áticos: completamente exterior con vista abierta, cuarto de servicio con baño y principal con walk-in closet.",
       flags:[{t:"Ascensor confirmado, dos parqueaderos y depósito.", s:"ok"},{t:"El aviso no informa la administración.", s:"warn"}] },
     { barrio:"Niza", canon:4000000, admin:0, m2:115, hab:3, ban:3, parq:2, dep:null,
       estrato:5, piso:null, asc:"si", src:"Ciencuadras", date:null, pub:"Lateral Colombia",
-      lat:4.711777, lon:-74.078308, approx:false, url:"/inmueble/apartamento-en-arriendo-en-niza-norte-bogota-3799709",
+      lat:4.711777, lon:-74.078308, approx:false, url:"/inmueble/apartamento-en-arriendo-en-niza-norte-bogota-3799709", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3799709/adcbd__178586031642_plana.png",
       note:"Niza Norte: exterior esquinero con vista a parque, conjunto de cuatro torres con portería 24 horas y garaje doble.",
       flags:[{t:"Bajó de $4.200.000 a $4.000.000 desde el barrido anterior.", s:"ok"},{t:"Ascensor confirmado y dos parqueaderos.", s:"ok"}] },
     { barrio:"Molinos Norte", canon:3234000, admin:766000, m2:113.59, hab:3, ban:3, parq:1, dep:null,
       estrato:6, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Díaz Castro",
-      lat:4.694804, lon:-74.037558, approx:false, url:"/inmueble/apartamento-en-arriendo-en-molinos-norte-bogota-3631175",
+      lat:4.694804, lon:-74.037558, approx:false, url:"/inmueble/apartamento-en-arriendo-en-molinos-norte-bogota-3631175", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3631175/acddbab177293525363_plana.jpeg",
       note:"Interior con acabados de calidad, espacios amplios y muy buena iluminación natural.",
       flags:[] },
     { barrio:"Alhambra", canon:4000000, admin:null, m2:120, hab:3, ban:3, parq:2, dep:true,
       estrato:5, piso:null, asc:"nd", src:"Properati", date:null, pub:"Properati (sin inmobiliaria)",
-      lat:4.7026269, lon:-74.0609083, approx:true, url:"/detalle/14032-32-81e6-6b80e5383ed4-3ddee326-9e57-3da3",
+      lat:4.7026269, lon:-74.0609083, approx:true, url:"/detalle/14032-32-81e6-6b80e5383ed4-3ddee326-9e57-3da3", img:"https://img.properati.com/eyJidWNrZXQiOiJwcmQtbGlmdWxsY29ubmVjdC1iYWNrZW5kLWIyYi1pbWFnZXMiLCJrZXkiOiJpbmdlc3Rlci8wMTlmZDNkOC1jMThjLTc4YjgtYWY1OS04OGNhNWUwNTE4Y2UvMTczZjBhNmQwNGEzNzJkZDk3ZjYyZDcwNTI4ZDlhZDU0MjY0NjkzMTcyMDBiYWVhMDRmZmJkNmE2M2QxOWZlNy5qcGVnIiwiYnJhbmQiOiJwcm9wZXJhdGkiLCJlZGl0cyI6eyJyb3RhdGUiOm51bGwsInJlc2l6ZSI6eyJ3aWR0aCI6MzIwLCJoZWlnaHQiOjI0MCwiZml0IjoiY292ZXIifX19",
       note:"Dos parqueaderos, trastero, gas natural y seguridad privada.",
       flags:[{t:"El aviso no informa la administración.", s:"warn"},{t:"Ubicación aproximada al centroide del barrio.", s:"warn"}] },
     { barrio:"Potosí", canon:4100000, admin:null, m2:100, hab:3, ban:2, parq:2, dep:false,
       estrato:4, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"BEMSA S.A.S",
-      lat:4.701064, lon:-74.077744, approx:false, url:"/inmueble/apartamento-en-arriendo-en-potosi-bogota-3425626",
+      lat:4.701064, lon:-74.077744, approx:false, url:"/inmueble/apartamento-en-arriendo-en-potosi-bogota-3425626", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3425626/bfbcd175372312685_plana.jpeg",
       note:"Espacioso y bien ventilado: sala, comedor, tres habitaciones, biblioteca y cocina.",
       flags:[{t:"Único aviso de Potosí en los cuatro portales.", s:"ok"},{t:"El aviso no informa la administración.", s:"warn"}] },
     { barrio:"Colina Campestre", canon:4100000, admin:0, m2:100, hab:3, ban:3, parq:2, dep:true,
       estrato:5, piso:10, asc:"si", src:"Fincaraíz", date:"2026-07-21", pub:"Cesar Blanco",
-      lat:4.7263653, lon:-74.0669404, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194016468",
+      lat:4.7263653, lon:-74.0669404, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194016468", img:"",
       note:"Totalmente remodelado, chimenea funcional, iluminación inteligente y vista al norte. Coworking y zona de niños.",
       flags:[{t:"Ascensor confirmado, dos parqueaderos y depósito.", s:"ok"}] },
     { barrio:"Pasadena", canon:4100000, admin:0, m2:110, hab:3, ban:4, parq:1, dep:null,
       estrato:5, piso:3, asc:"si", src:"Fincaraíz", date:"2026-07-21", pub:"Aurora Vásquez",
-      lat:4.6959186, lon:-74.062562, approx:false, url:"/apartamento-en-arriendo-en-pasadena-bogota/194014077",
+      lat:4.6959186, lon:-74.062562, approx:false, url:"/apartamento-en-arriendo-en-pasadena-bogota/194014077", img:"https://cdn2.infocasas.com.uy/repo/img/6a5fa9275f98f_infocdn__qlzsakqholpkfkzatb2ca9vzwewkkzpjznovc5enjpg.jpg",
       note:"A pocos minutos de la Autopista Norte y la Calle 100, rodeado de parques y comercio.",
       flags:[] },
     { barrio:"Molinos Norte", canon:4200000, admin:0, m2:101, hab:3, ban:3, parq:1, dep:null,
       estrato:6, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Mil Predios",
-      lat:4.69476, lon:-74.04265, approx:false, url:"/inmueble/arriendo-apartamento-bogota-molinos-norte-3-habitaciones-3-banos-1-garajes/2832-M6608378",
+      lat:4.69476, lon:-74.04265, approx:false, url:"/inmueble/arriendo-apartamento-bogota-molinos-norte-3-habitaciones-3-banos-1-garajes/2832-M6608378", img:"https://multimedia.metrocuadrado.com/2832-M6608378/2832-M6608378_22_x.jpg",
       note:"Santa Bárbara Central–Molinos: dos habitaciones más estudio que el aviso cuenta como tercera, baño de servicio y patio de ropas.",
       flags:[{t:"La tercera habitación es un estudio: verifícalo si necesitas tres alcobas reales.", s:"warn"},{t:"El aviso no informa la administración.", s:"warn"}] },
     { barrio:"Niza", canon:4200000, admin:0, m2:110, hab:3, ban:2, parq:2, dep:null,
       estrato:5, piso:4, asc:"si", src:"Fincaraíz", date:"2026-07-02", pub:"Metropolis Inmobiliaria",
-      lat:4.7086137, lon:-74.081396, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/193947250",
+      lat:4.7086137, lon:-74.081396, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/193947250", img:"https://cdn2.infocasas.com.uy/repo/img/6a52cffe3437c_infocdn__nhbazxmkfulvctd1nhtj6ogfluk8k9carivvac1wjpg.jpg",
       note:"Sala comedor amplia con chimenea y zona de ropas independiente. Piso 4 del Mirador del Puerto III.",
       flags:[{t:"Ascensor confirmado y dos parqueaderos.", s:"ok"}] },
     { barrio:"Niza", canon:4200000, admin:0, m2:112, hab:3, ban:2, parq:2, dep:true,
       estrato:6, piso:4, asc:"nd", src:"Fincaraíz", date:"2025-09-23", pub:"Adriana Bayona",
-      lat:4.7080813, lon:-74.0816419, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/192906101",
+      lat:4.7080813, lon:-74.0816419, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/192906101", img:"https://cdn2.infocasas.com.uy/repo/img/6a0e37a864df7_infocdn__fbywcadwyalhu1hlpt5qzvq5otzsbegmjcstau85jpg.jpg",
       note:"Sala con chimenea y principal con walk-in closet y tina. Reconocimiento facial, gimnasio, squash y tenis.",
       flags:[{t:"Aviso de septiembre de 2025 que sigue publicado once meses después.", s:"crit"}] },
     { barrio:"Pontevedra", canon:3766000, admin:534000, m2:104, hab:3, ban:3, parq:1, dep:true,
       estrato:4, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Inmobiliarias Aliadas",
-      lat:4.69414, lon:-74.08197, approx:false, url:"/inmueble/arriendo-apartamento-bogota-pontevedra-3-habitaciones-3-banos-1-garajes/183-M6885957",
+      lat:4.69414, lon:-74.08197, approx:false, url:"/inmueble/arriendo-apartamento-bogota-pontevedra-3-habitaciones-3-banos-1-garajes/183-M6885957", img:"https://multimedia.metrocuadrado.com/183-M6885957/183-M6885957_1_x.jpg",
       note:"Acabados modernos, cocina integral a gas y zona de ropas independiente. Gimnasio, cancha de fútbol, squash y terraza BBQ.",
       flags:[{t:"Cambió de portal: antes estaba en Fincaraíz, ahora aparece en Metrocuadrado.", s:"warn"}] },
     { barrio:"Iberia", canon:4300000, admin:null, m2:114, hab:3, ban:3, parq:2, dep:null,
       estrato:5, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Ruth Yolanda Caro",
-      lat:4.72802, lon:-74.06848, approx:false, url:"/inmueble/arriendo-apartamento-bogota-iberia-4-habitaciones-3-banos-2-garajes/20041-M6803263",
+      lat:4.72802, lon:-74.06848, approx:false, url:"/inmueble/arriendo-apartamento-bogota-iberia-4-habitaciones-3-banos-2-garajes/20041-M6803263", img:"https://multimedia.metrocuadrado.com/20041-M6803263/20041-M6803263_12_x.jpg",
       note:"Atalaya Iberia: suite principal con vestier y estudio, balcones con buena luz y dos parqueaderos. Gimnasio, sauna y salones.",
       flags:[{t:"El aviso no informa la administración y el canon ya está en $4,3 M.", s:"crit"}] },
     { barrio:"Pasadena", canon:3800000, admin:500000, m2:103, hab:3, ban:3, parq:1, dep:null,
       estrato:5, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Houm Colombia",
-      lat:4.691749, lon:-74.065923, approx:false, url:"/inmueble/apartamento-en-arriendo-en-pasadena-bogota-3361704",
+      lat:4.691749, lon:-74.065923, approx:false, url:"/inmueble/apartamento-en-arriendo-en-pasadena-bogota-3361704", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3361704/acc__178492395588_plana.jpeg",
       note:"Sin amoblar, admite mascotas, con vigilancia 24 horas y lavandería. Edificio de 1991.",
       flags:[{t:"Acepta mascotas.", s:"ok"}] },
     { barrio:"Santa Ana", canon:4400000, admin:null, m2:110, hab:3, ban:2, parq:1, dep:null,
       estrato:5, piso:3, asc:"si", src:"Fincaraíz", date:"2026-07-07", pub:"Promotora Inmobiliaria",
-      lat:4.6858094, lon:-74.0356915, approx:false, url:"/apartamento-en-arriendo-en-santa-ana-bogota/193963218",
+      lat:4.6858094, lon:-74.0356915, approx:false, url:"/apartamento-en-arriendo-en-santa-ana-bogota/193963218", img:"https://cdn2.infocasas.com.uy/repo/img/6a74c1b3c710e_infocdn__12979-1-1774896822jpg.jpg",
       note:"Amoblado, con pisos en porcelanato, cocina integral, garaje cubierto y hall de entrada.",
       flags:[{t:"Ascensor confirmado.", s:"ok"},{t:"El aviso no informa la administración y el canon ya está en $4,4 M. Se entrega amoblado.", s:"crit"}] },
     { barrio:"Lagos de Córdoba", canon:3650000, admin:786000, m2:103, hab:3, ban:3, parq:2, dep:false,
       estrato:5, piso:null, asc:"si", src:"Metrocuadrado", date:null, pub:"ESTYVAR Enterprises",
-      lat:4.70485, lon:-74.06744, approx:false, url:"/inmueble/arriendo-apartamento-bogota-lagos-de-cordoba-3-habitaciones-3-banos-2-garajes/399-M6820539",
+      lat:4.70485, lon:-74.06744, approx:false, url:"/inmueble/arriendo-apartamento-bogota-lagos-de-cordoba-3-habitaciones-3-banos-2-garajes/399-M6820539", img:"https://multimedia.metrocuadrado.com/399-M6820539/399-M6820539_21_x.jpg",
       note:"Tres dormitorios con vista sobre el lago y los cerros, estudio y zona de ropas.",
       flags:[{t:"Ascensor confirmado y dos parqueaderos.", s:"ok"}] },
     { barrio:"Country", canon:4500000, admin:null, m2:130.59, hab:3, ban:3, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado (sin inmobiliaria)",
-      lat:4.71344, lon:-74.04756, approx:false, url:"/inmueble/arriendo-apartamento-bogota-contry-3-habitaciones-3-banos-1-garajes/MC6666465",
+      lat:4.71344, lon:-74.04756, approx:false, url:"/inmueble/arriendo-apartamento-bogota-contry-3-habitaciones-3-banos-1-garajes/MC6666465", img:"https://multimedia.metrocuadrado.com/MC6666465/MC6666465_2_x.jpg",
       note:"Ciento treinta metros en el sector Country, sobre la Carrera 19 con Calle 128, a kilómetro y medio de tu casa.",
       flags:[{t:"Único aviso del racimo Country en los cuatro portales.", s:"ok"},{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"}] },
     { barrio:"Molinos Norte", canon:4500000, admin:null, m2:121.95, hab:3, ban:2, parq:2, dep:true,
       estrato:6, piso:5, asc:"nd", src:"Ciencuadras", date:null, pub:"JCO Inversiones",
-      lat:4.691807, lon:-74.044304, approx:false, url:"/inmueble/apartamento-en-arriendo-en-molinos-norte-bogota-3819436",
+      lat:4.691807, lon:-74.044304, approx:false, url:"/inmueble/apartamento-en-arriendo-en-molinos-norte-bogota-3819436", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3819436/aaca__1785360577100_plana.jpeg",
       note:"Sector Santa Paula, quinto piso: cocina integral, zona de lavado y sala comedor con chimenea.",
       flags:[{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"}] },
     { barrio:"Molinos Norte", canon:4500000, admin:null, m2:100, hab:3, ban:2, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado (sin inmobiliaria)",
-      lat:4.69343, lon:-74.0381, approx:false, url:"/inmueble/arriendo-apartamento-bogota-molinos-del-norte-3-habitaciones-2-banos-1-garajes/164-M6821227",
+      lat:4.69343, lon:-74.0381, approx:false, url:"/inmueble/arriendo-apartamento-bogota-molinos-del-norte-3-habitaciones-2-banos-1-garajes/164-M6821227", img:"https://multimedia.metrocuadrado.com/164-M6821227/164-M6821227_1_x.jpg",
       note:"Cien metros en Molinos del Norte, a 1,8 km de tu casa actual.",
       flags:[{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"}] },
     { barrio:"Bella Suiza", canon:4500000, admin:null, m2:115, hab:3, ban:3, parq:2, dep:true,
       estrato:5, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"MAFER Inversiones",
-      lat:4.70302, lon:-74.03016, approx:false, url:"/inmueble/arriendo-apartamento-bogota-bella-suiza-3-habitaciones-3-banos-2-garajes/18758-M6864019",
+      lat:4.70302, lon:-74.03016, approx:false, url:"/inmueble/arriendo-apartamento-bogota-bella-suiza-3-habitaciones-3-banos-2-garajes/18758-M6864019", img:"https://multimedia.metrocuadrado.com/18758-M6864019/18758-M6864019_1_x.jpg",
       note:"Cocina cerrada y terraza cubierta, edificio automatizado con portería. Dos parqueaderos y depósito.",
       flags:[{t:"Lo más cerca de tu casa actual: 0,9 km.", s:"ok"},{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"}] },
     { barrio:"Navarra", canon:4500000, admin:0, m2:103, hab:3, ban:2, parq:2, dep:null,
       estrato:6, piso:3, asc:"nd", src:"Fincaraíz", date:"2026-07-30", pub:"Óscar García",
-      lat:4.6926622, lon:-74.0501092, approx:false, url:"/apartamento-en-arriendo-en-chico-navarra-bogota/194054894",
+      lat:4.6926622, lon:-74.0501092, approx:false, url:"/apartamento-en-arriendo-en-chico-navarra-bogota/194054894", img:"https://cdn2.infocasas.com.uy/repo/img/6a6b9348ddc2d_infocdn__mwjonyznukjavpoffffaojmppxqhb3q9slzishgdjpg.jpg",
       note:"Chicó Navarra, edificio inteligente con ventanería termoacústica, piso 3. Cocina con lavavajillas y todero 8 horas.",
       flags:[{t:"Queda exactamente en tu tope.", s:"warn"}] },
     { barrio:"Santa Bárbara", canon:4500000, admin:null, m2:121, hab:3, ban:3, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Properati", date:null, pub:"Properati (sin inmobiliaria)",
-      lat:4.6960375, lon:-74.0349189, approx:true, url:"/detalle/14032-32-b18f-c4d1a0d6e5ee-19fb50b-b110-7558",
+      lat:4.6960375, lon:-74.0349189, approx:true, url:"/detalle/14032-32-b18f-c4d1a0d6e5ee-19fb50b-b110-7558", img:"",
       note:"Ciento veintiún metros en Santa Bárbara, a 1,5 km de Portales del Country.",
       flags:[{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"},{t:"Ubicación aproximada al centroide del barrio.", s:"warn"}] },
     { barrio:"Colina Campestre", canon:4500000, admin:0, m2:107, hab:3, ban:3, parq:2, dep:true,
       estrato:4, piso:2, asc:"si", src:"Fincaraíz", date:"2026-07-13", pub:"Tatiana Méndez",
-      lat:4.7395278, lon:-74.066336, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/193985240",
+      lat:4.7395278, lon:-74.066336, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/193985240", img:"",
       note:"Alcoba principal con baño privado y walk-in closet, más zona de servicio con baño. Piscina cubierta, squash y vigilancia 24/7 junto a Parque La Colina.",
       flags:[{t:"Ascensor confirmado, dos parqueaderos y depósito.", s:"ok"},{t:"Queda exactamente en tu tope.", s:"warn"}] }
   ];
@@ -728,58 +756,80 @@
   }
 
 
-  /* ---------- mapa real con Leaflet ---------- */
-  var lmap = L.map("leafmap", { scrollWheelZoom:false, zoomSnap:0.5 })
-    .setView([(HOME.lat + 4.716) / 2, -74.056], 13);
+  /* ---------- mapa real: basemap minimalista + pastillas de precio ---------- */
+  function shortCop(n) {
+    var m = n / 1000000;
+    return "$" + (m >= 10 ? Math.round(m) : m.toFixed(1).replace(".", ",")) + " M";
+  }
+  function isDark() {
+    var t = document.documentElement.getAttribute("data-theme");
+    if (t) return t === "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  var CARTO = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
+  var lmap = L.map("leafmap", { scrollWheelZoom:false, zoomSnap:0.5 }).setView([4.716, -74.056], 13);
   L.control.scale({ imperial:false }).addTo(lmap);
-  var calles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' });
+  var claro = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                          { maxZoom:20, subdomains:"abcd", attribution:CARTO });
+  var oscuro = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                           { maxZoom:20, subdomains:"abcd", attribution:CARTO });
   var satelite = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-    maxZoom:19, attribution:"Imagery &copy; Esri" });
-  calles.addTo(lmap);
-  L.control.layers({ "Calles": calles, "Satélite": satelite }, null, { position:"topright" }).addTo(lmap);
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    { maxZoom:19, attribution:"Imagery &copy; Esri" });
+  var base = isDark() ? oscuro : claro;
+  base.addTo(lmap);
+  L.control.layers({ "Mapa": base, "Satelite": satelite }, null, { position:"topright" }).addTo(lmap);
 
   var TIER_COLOR = { "t-low":"--ok", "t-mid":"--accent", "t-high":"--warn" };
-  function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
 
   var homeLayer = L.layerGroup().addTo(lmap);
-  L.circleMarker([HOME.lat, HOME.lon], { radius:7, color:cssVar("--ink"), weight:2,
-      fillColor:cssVar("--ink"), fillOpacity:.9 })
-    .bindTooltip("Tu apartamento actual · Portales del Country", { permanent:false })
-    .addTo(homeLayer);
+  L.marker([HOME.lat, HOME.lon], { zIndexOffset:900, icon: L.divIcon({
+      className:"", iconSize:null, html:'<span class="homepin">Tu apto</span>' }) }).addTo(homeLayer);
   [1,2,3].forEach(function (km) {
     L.circle([HOME.lat, HOME.lon], { radius:km * 1000, color:cssVar("--ink-soft"), weight:1,
-      dashArray:"4 5", fill:false, interactive:false }).addTo(homeLayer);
+      dashArray:"4 6", fill:false, interactive:false, opacity:.55 }).addTo(homeLayer);
   });
 
   var markerLayer = L.layerGroup().addTo(lmap);
-  var lastBounds = null;
+  var lastBounds = null, pinById = {};
   function refit() { lmap.invalidateSize(); if (lastBounds) lmap.fitBounds(lastBounds, { animate:false }); }
+
+  function markPin(url) {
+    Array.prototype.forEach.call(document.querySelectorAll("#leafmap .pin.on"),
+      function (p) { p.classList.remove("on"); });
+    var m = pinById[url];
+    if (m && m._icon) { var s = m._icon.querySelector(".pin"); if (s) s.classList.add("on"); }
+  }
+  window.markPin = markPin;
+
   function drawLeaflet(rows) {
     markerLayer.clearLayers();
+    pinById = {};
     var pts = [[HOME.lat, HOME.lon]];
-    rows.forEach(function (d) {
+    rows.slice().sort(function (a, b) { return b.lat - a.lat; }).forEach(function (d) {
       var t = total(d);
-      var m = L.circleMarker([d.lat, d.lon], {
-        radius: 6 + (Math.sqrt(d.m2) - 10) * 1.1,
-        color: cssVar("--surface"), weight: 1.5,
-        fillColor: cssVar(TIER_COLOR[tier(t)]), fillOpacity: .92,
-        dashArray: d.approx ? "2 2" : null
-      });
+      var m = L.marker([d.lat, d.lon], { icon: L.divIcon({ className:"", iconSize:null,
+        html:'<span class="pin"><i style="background:' + cssVar(TIER_COLOR[tier(t)]) + '"></i>' +
+             shortCop(t) + "</span>" }) });
+      var foto = d.img
+        ? '<img class="ph" src="' + d.img + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
+        : '<div class="noph">sin foto en el aviso</div>';
       m.bindPopup(
+        '<div class="pcard">' + foto + '<div class="body">' +
         '<span class="pb">' + d.barrio + "</span>" +
         '<span class="pt">' + cop(t) + "</span>" +
-        '<span class="pm">' + (d.admin === null ? "canon " + cop(d.canon) + " · admin no informada"
-          : d.admin === 0 ? "canon " + cop(d.canon) + " · admin incluida"
-          : "canon " + cop(d.canon) + " + admin " + cop(d.admin)) + "</span><br>" +
-        nice(d.m2) + " m² · " + d.hab + " hab · " + d.parq + " parq · " +
-        (d.asc === "si" ? "ascensor" : "ascensor ?") + "<br>" +
-        '<span class="pm">a ' + d.km.toFixed(1).replace(".", ",") + " km de tu casa · " + d.src + "</span><br>" +
-        '<a class="go" href="' + linkOf(d) + '" target="_blank" rel="noopener noreferrer">Ver ficha →</a>'
-      );
-      m.on("click", function () { focusCard(d.url); });
+        '<span class="pm">' + (d.admin === null ? "canon " + cop(d.canon) + " &middot; admin no informada"
+          : d.admin === 0 ? "canon " + cop(d.canon) + " &middot; admin incluida"
+          : "canon " + cop(d.canon) + " + admin " + cop(d.admin)) + "</span>" +
+        '<span class="sp">' + nice(d.m2) + " m&sup2; &middot; " + d.hab + " hab &middot; " + d.parq +
+        " parq &middot; " + (d.asc === "si" ? "ascensor" : "ascensor sin confirmar") + "</span>" +
+        '<span class="pm">a ' + d.km.toFixed(1).replace(".", ",") + " km de tu casa &middot; " + d.src + "</span>" +
+        '<a class="go" href="' + linkOf(d) + '" target="_blank" rel="noopener noreferrer">Ver ficha &rarr;</a>' +
+        "</div></div>", { maxWidth:236, minWidth:236, offset:[0, -6] });
+      m.on("click", function () { focusCard(d.url); markPin(d.url); });
       m.addTo(markerLayer);
+      pinById[d.url] = m;
       pts.push([d.lat, d.lon]);
     });
     lastBounds = pts.length > 1 ? L.latLngBounds(pts).pad(0.04) : null;
