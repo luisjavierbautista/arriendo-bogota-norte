@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Búsqueda de apartamento en arriendo en el norte de Bogotá: 34 candidatos vigentes en cuatro portales, con mapa y filtros.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏢</text></svg>">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<title>Arriendo Bogotá norte — candidatos octubre 2026</title>
+<style>
+  :root {
+    --paper:#E8EBE8; --surface:#F5F7F4; --surface-2:#DFE4DF; --ink:#141715; --ink-soft:#3A423C;
+    --muted:#5A635C; --line:#C8D0C8; --line-soft:#D8DED8; --accent:#1F4E4A; --accent-ink:#FFFFFF;
+    --ok:#4A7A2E; --warn:#8A6112; --crit:#8E3A2C; --ok-bg:#E3EAD6; --warn-bg:#EFE5CC; --crit-bg:#EFDCD7;
+    --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --maxw:1120px; --r:3px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#121614; --surface:#1A1F1C; --surface-2:#242B26; --ink:#E4E9E4; --ink-soft:#C2CBC3;
+      --muted:#909B92; --line:#2E3630; --line-soft:#262D28; --accent:#74B8AB; --accent-ink:#0E1412;
+      --ok:#A3C773; --warn:#D3A94E; --crit:#D98878; --ok-bg:#242D19; --warn-bg:#2C2618; --crit-bg:#2E1F1B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#121614; --surface:#1A1F1C; --surface-2:#242B26; --ink:#E4E9E4; --ink-soft:#C2CBC3;
+    --muted:#909B92; --line:#2E3630; --line-soft:#262D28; --accent:#74B8AB; --accent-ink:#0E1412;
+    --ok:#A3C773; --warn:#D3A94E; --crit:#D98878; --ok-bg:#242D19; --warn-bg:#2C2618; --crit-bg:#2E1F1B;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans);
+         font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:var(--maxw); margin:0 auto; padding:0 20px 96px; }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible, select:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+
+  .masthead { display:flex; flex-direction:column; gap:18px; padding:56px 0 28px; border-bottom:1px solid var(--line); }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  .masthead h1 { font-family:var(--serif); font-weight:400; font-size:clamp(2.1rem,5.2vw,3.4rem);
+                 line-height:1.06; letter-spacing:-.015em; text-wrap:balance; margin:0; }
+  .masthead h1 em { font-style:italic; color:var(--accent); }
+  .deck { max-width:62ch; color:var(--ink-soft); font-size:1.02rem; margin:0; }
+  .criteria { display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin:0; padding:0; }
+  .criteria li { font-family:var(--mono); font-size:11.5px; border:1px solid var(--line);
+                 border-radius:var(--r); padding:4px 9px; color:var(--ink-soft); background:var(--surface); }
+
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px;
+           background:var(--line); border:1px solid var(--line); margin:32px 0 0; }
+  .tile { background:var(--surface); padding:18px; display:flex; flex-direction:column; gap:4px; }
+  .tile .n { font-family:var(--mono); font-size:2rem; font-variant-numeric:tabular-nums; line-height:1; letter-spacing:-.03em; }
+  .tile .l { font-size:12.5px; color:var(--muted); line-height:1.35; }
+  .tile.is-key .n { color:var(--accent); }
+
+  .verdict { margin:28px 0 0; padding:20px 22px; border-left:3px solid var(--accent);
+             background:var(--surface); display:flex; flex-direction:column; gap:10px; }
+  .verdict h2 { font-family:var(--serif); font-weight:400; font-size:1.22rem; margin:0; letter-spacing:-.01em; }
+  .verdict p { margin:0; color:var(--ink-soft); max-width:68ch; font-size:.96rem; }
+  .verdict strong { font-weight:600; color:var(--ink); }
+
+  .controls { position:sticky; top:0; z-index:20; background:var(--paper); border-bottom:1px solid var(--line);
+              padding:14px 0 13px; margin:44px 0 0; display:flex; flex-direction:column; gap:11px; }
+  .control-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .control-label { font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase;
+                   color:var(--muted); margin-right:4px; }
+  .chip { font-family:var(--sans); font-size:12.5px; padding:5px 11px; border:1px solid var(--line);
+          border-radius:100px; background:var(--surface); color:var(--ink-soft); cursor:pointer;
+          transition:background 120ms ease,color 120ms ease,border-color 120ms ease; }
+  .chip:hover { border-color:var(--accent); }
+  .chip[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+  .chip .c { font-family:var(--mono); font-size:10.5px; opacity:.7; margin-left:5px; font-variant-numeric:tabular-nums; }
+  select { font-family:var(--sans); font-size:12.5px; padding:5px 8px; border:1px solid var(--line);
+           border-radius:var(--r); background:var(--surface); color:var(--ink); }
+  .count { margin-left:auto; font-family:var(--mono); font-size:11.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+
+  .mapwrap { position:relative; margin:20px 0 0; border:1px solid var(--line); background:var(--surface); overflow:hidden; }
+  .mapwrap svg { display:block; width:100%; height:auto; }
+  .grat { stroke:var(--line-soft); stroke-width:1; fill:none; }
+  .grat-lbl { fill:var(--muted); font-family:var(--mono); font-size:9.5px; }
+  .scale-bar { stroke:var(--ink-soft); stroke-width:2; }
+  .scale-lbl { fill:var(--ink-soft); font-family:var(--mono); font-size:10px; }
+  .barrio-lbl { fill:var(--muted); font-family:var(--sans); font-size:11px; letter-spacing:.03em;
+                text-transform:uppercase; pointer-events:none; }
+  .home-ring { fill:none; stroke:var(--ink-soft); stroke-width:1.2; stroke-dasharray:3 3; }
+  .home-dot { fill:var(--ink-soft); }
+  .home-lbl { fill:var(--ink-soft); font-family:var(--sans); font-size:11px; font-weight:600; }
+  .dot { cursor:pointer; stroke:var(--surface); stroke-width:1.5; }
+  .dot.t-low { fill:var(--ok); } .dot.t-mid { fill:var(--accent); } .dot.t-high { fill:var(--warn); }
+  .dot.is-approx { stroke-dasharray:2 2; stroke:var(--muted); }
+  .dot:hover, .dot.is-focus { stroke:var(--ink); stroke-width:2.5; }
+  .maptip { position:absolute; pointer-events:none; background:var(--ink); color:var(--paper);
+            padding:7px 10px; border-radius:var(--r); font-size:11.5px; line-height:1.4; white-space:nowrap;
+            opacity:0; transform:translate(-50%,-130%); transition:opacity 110ms ease; z-index:5; }
+  .maptip.on { opacity:1; }
+  .maptip b { font-family:var(--mono); font-variant-numeric:tabular-nums; }
+  .map-legend { display:flex; flex-wrap:wrap; gap:6px 18px; padding:12px 2px 0; font-size:11.5px; color:var(--muted); }
+  .map-legend span { display:inline-flex; align-items:center; gap:6px; }
+  .map-legend i { width:10px; height:10px; border-radius:50%; display:inline-block; }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:16px;
+          margin:24px 0 0; padding:0; list-style:none; }
+  .card.is-focus { outline:2px solid var(--accent); outline-offset:2px; }
+  .card { background:var(--surface); border:1px solid var(--line); border-top-width:3px; border-top-color:var(--muted);
+          display:flex; flex-direction:column; gap:12px; padding:16px 17px 15px; }
+  .card.t-low { border-top-color:var(--ok); } .card.t-mid { border-top-color:var(--accent); }
+  .card.t-high { border-top-color:var(--warn); }
+  .card-head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .barrio { font-family:var(--serif); font-size:1.24rem; line-height:1.15; letter-spacing:-.01em; }
+  .estrato { font-family:var(--mono); font-size:10.5px; color:var(--muted); white-space:nowrap; }
+  .money { display:flex; flex-direction:column; gap:2px; padding-bottom:11px; border-bottom:1px solid var(--line-soft); }
+  .total { font-family:var(--mono); font-size:1.72rem; line-height:1; font-variant-numeric:tabular-nums; letter-spacing:-.035em; }
+  .money .breakdown { font-family:var(--mono); font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .specs { display:flex; flex-wrap:wrap; gap:6px; list-style:none; margin:0; padding:0; }
+  .specs li { font-family:var(--mono); font-size:11px; font-variant-numeric:tabular-nums; background:var(--surface-2);
+              border-radius:var(--r); padding:3px 7px; color:var(--ink-soft); }
+  .specs li.plus { color:var(--ok); font-weight:600; }
+  .specs li.unk { color:var(--warn); background:var(--warn-bg); }
+  .note { font-size:13.5px; line-height:1.5; color:var(--ink-soft); margin:0; }
+  .flags { display:flex; flex-direction:column; gap:4px; list-style:none; margin:0; padding:0; }
+  .flags li { font-size:12px; line-height:1.4; padding:4px 8px; border-radius:var(--r); background:var(--warn-bg); color:var(--warn); }
+  .flags li.sev-crit { background:var(--crit-bg); color:var(--crit); }
+  .flags li.sev-ok { background:var(--ok-bg); color:var(--ok); }
+  .card-foot { margin-top:auto; padding-top:11px; border-top:1px solid var(--line-soft);
+               display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  .pub { font-size:11.5px; color:var(--muted); line-height:1.3; }
+  .pub .date { font-family:var(--mono); font-variant-numeric:tabular-nums; }
+  .go { font-size:12.5px; font-weight:600; text-decoration:none; color:var(--accent); white-space:nowrap;
+        border-bottom:1px solid currentColor; padding-bottom:1px; }
+  .go:hover { color:var(--ink); }
+  .empty { grid-column:1/-1; padding:44px 0; text-align:center; color:var(--muted); font-size:14px; }
+
+  section.block { margin:72px 0 0; }
+  section.block > h2 { font-family:var(--serif); font-weight:400; font-size:1.55rem; letter-spacing:-.015em; margin:0 0 6px; }
+  section.block > p.lede { margin:0 0 20px; color:var(--ink-soft); max-width:70ch; font-size:.96rem; }
+  .table-scroll { overflow-x:auto; border:1px solid var(--line); }
+  table { border-collapse:collapse; width:100%; min-width:620px; background:var(--surface); font-size:13.5px; }
+  th, td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--line-soft); vertical-align:top; }
+  thead th { font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+             color:var(--muted); font-weight:400; background:var(--surface-2); border-bottom:1px solid var(--line); }
+  tbody tr:last-child td { border-bottom:none; }
+  td.num { font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap; }
+  td.over { color:var(--crit); }
+  .barrio-list { display:flex; flex-wrap:wrap; gap:7px; list-style:none; margin:0; padding:0; }
+  .barrio-list li { font-size:13px; padding:5px 11px; border:1px dashed var(--line); border-radius:100px;
+                    color:var(--muted); background:var(--surface); }
+  .method { margin:72px 0 0; padding-top:22px; border-top:1px solid var(--line); font-size:13.5px;
+            color:var(--muted); display:flex; flex-direction:column; gap:9px; }
+  .method p { margin:0; max-width:78ch; }
+  .method strong { color:var(--ink-soft); }
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; animation:none !important; } }
+  @media (max-width:640px) { .masthead { padding-top:36px; } .controls { position:static; } .grid { grid-template-columns:1fr; } }
+
+  /* ---------- mapa real ---------- */
+  /* La regla .mapwrap svg del plano de coordenadas rompe el SVG interno de Leaflet: acotarla. */
+  .mapwrap svg { width:auto; height:auto; }
+  .mapwrap > svg { display:block; width:100%; height:auto; }
+  .map-switch { display:flex; gap:6px; margin:0 0 12px; }
+  #leafmap { height:min(80vh,760px); width:100%; }
+  .leaflet-container { background:var(--surface-2); font-family:var(--sans); }
+  .leaflet-popup-content-wrapper { background:var(--surface); color:var(--ink);
+    border-radius:var(--r); box-shadow:0 2px 14px rgba(0,0,0,.22); }
+  .leaflet-popup-tip { background:var(--surface); }
+  .leaflet-popup-content { margin:12px 14px; font-size:13px; line-height:1.5; }
+  .leaflet-popup-content .pt { font-family:var(--mono); font-size:1.15rem;
+    font-variant-numeric:tabular-nums; letter-spacing:-.03em; display:block; }
+  .leaflet-popup-content .pb { font-family:var(--serif); font-size:1.05rem; display:block; margin-bottom:4px; }
+  .leaflet-popup-content .pm { color:var(--muted); font-family:var(--mono); font-size:11px; }
+  .leaflet-control-attribution { background:rgba(255,255,255,.75) !important; font-size:10px !important; }
+  :root[data-theme="dark"] .leaflet-control-attribution,
+  :root:not([data-theme="light"]) .leaflet-control-attribution { background:rgba(0,0,0,.55) !important; }
+  :root[data-theme="dark"] .leaflet-tile,
+  :root:not([data-theme="light"]) .leaflet-tile { filter:brightness(.78) contrast(1.05) saturate(.85); }
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">Búsqueda de arriendo · Bogotá norte · 4 portales · actualizado 7 ago 2026</div>
+    <h1>Quince avisos <em>se cayeron</em> en siete días</h1>
+    <p class="deck">
+      Segundo barrido completo de Fincaraíz, Metrocuadrado, Ciencuadras y Properati sobre tus barrios,
+      ahora con <strong>el racimo Country</strong> incluido. Faltan 65 días para la entrega del
+      apartamento actual, el <strong>11 de octubre de 2026</strong>.
+    </p>
+    <ul class="criteria">
+      <li>arriendo</li><li>≥ 100 m²</li><li>3+ habitaciones</li><li>≥ 1 parqueadero</li>
+      <li>canon + admin ≤ $4.500.000</li><li>con ascensor</li>
+    </ul>
+  </header>
+
+  <div class="tiles">
+    <div class="tile is-key"><div class="n">34</div><div class="l">candidatos vigentes hoy</div></div>
+    <div class="tile"><div class="n">12</div><div class="l">no estaban en el barrido del 31 de julio</div></div>
+    <div class="tile"><div class="n">10</div><div class="l">a menos de 2 km de tu casa actual</div></div>
+    <div class="tile"><div class="n">12</div><div class="l">con ascensor confirmado en la ficha</div></div>
+  </div>
+
+  <div class="verdict">
+    <h2>Qué cambió en siete días</h2>
+    <p>
+      Tenías razón. De los 38 candidatos del 31 de julio, <strong>15 desaparecieron de los cuatro
+      portales</strong>, 22 siguen vivos y hay 12 nuevos. Se cayeron el dúplex de 200 m² de Alhambra,
+      <strong>cuatro de los cinco de La Calleja</strong>, el de $3.200.000 de Versalles Reservado, el de
+      San Patricio con ascensor y depósito, y los de 127 y 170 m² de Niza. La rotación de este mercado
+      se mide en semanas, no en meses.
+    </p>
+    <p>
+      <strong>El racimo Country dio un solo resultado en cuatro portales.</strong> Barrí Country Club,
+      Nuevo Country, Recodo del Country, Portales del Country y Multicentro: solo apareció un
+      apartamento de 130 m² sobre la Carrera 19 con Calle 128, a 1,5 km de tu casa, a $4.500.000 y sin
+      administración informada. Fincaraíz ni siquiera reconoce esos barrios como ubicación. Lo que sí
+      hay cerca son Santa Bárbara y Santa Bárbara Central, con cuatro avisos entre 1,5 y 1,8 km.
+    </p>
+    <p>
+      Se estrenaron barrios: <strong>Atabanza</strong> —vacío en los dos barridos anteriores— tiene uno
+      de 116 m² con dos garajes por $4.000.000, publicado hace dos días y cruzado en Fincaraíz y
+      Metrocuadrado. Y en Mónaco, pegado a Alhambra, salió ayer uno de 100 m² <strong>con ascensor y dos
+      garajes por $3.200.000</strong>, que hoy es el mejor precio por metro de la lista. En contra:
+      <strong>San Patricio volvió a quedar vacío</strong> y el ascensor sigue siendo el dato peor
+      publicado: solo 12 de 34 lo declaran.
+    </p>
+  </div>
+
+  <div class="controls">
+    <div class="control-row">
+      <span class="control-label">Barrio</span>
+      <div id="barrio-chips" class="control-row" style="gap:6px"></div>
+    </div>
+    <div class="control-row">
+      <span class="control-label">Filtrar</span>
+      <button class="chip" type="button" data-toggle="parq2" aria-pressed="false">2+ parqueaderos</button>
+      <button class="chip" type="button" data-toggle="lift" aria-pressed="false">Solo ascensor confirmado</button>
+      <button class="chip" type="button" data-toggle="near" aria-pressed="false">A menos de 2 km</button>
+      <button class="chip" type="button" data-toggle="adm" aria-pressed="false">Con administración informada</button>
+      <span class="control-label" style="margin-left:12px">Portal</span>
+      <div id="portal-chips" class="control-row" style="gap:6px"></div>
+      <span class="control-label" style="margin-left:12px">Ordenar</span>
+      <select id="sort" aria-label="Ordenar resultados">
+        <option value="total">Costo total, menor primero</option>
+        <option value="km">Distancia a tu casa</option>
+        <option value="m2">Área, mayor primero</option>
+        <option value="value">Precio por m², menor primero</option>
+      </select>
+      <span class="count" id="count"></span>
+    </div>
+  </div>
+
+  <section class="block" id="map-block" style="margin-top:36px">
+    <h2>Dónde quedan</h2>
+    <p class="lede">
+      Coordenadas reales de cada ficha, sobre el callejero de OpenStreetMap. Los dos mapas obedecen
+      los filtros de arriba. El cuadrado es
+      <strong>Portales del Country</strong> y los círculos punteados son anillos de 1 a 5 km. Fíjate en
+      el punto solitario de Country sobre la Carrera 19: es todo lo que dio esa zona.
+    </p>
+    <div class="map-switch">
+      <button class="chip" type="button" id="v-real" aria-pressed="true">Mapa real</button>
+      <button class="chip" type="button" id="v-plot" aria-pressed="false">Plano de coordenadas</button>
+    </div>
+    <div class="mapwrap" id="wrap-real"><div id="leafmap"></div></div>
+    <div class="mapwrap hidden" id="wrap-plot">
+      <svg id="map" viewBox="0 0 700 743" role="img" aria-label="Ubicación de los candidatos en el norte de Bogotá"></svg>
+      <div class="maptip" id="maptip" aria-hidden="true"></div>
+    </div>
+    <div class="map-legend">
+      <span><i style="background:var(--ok)"></i> hasta $3,7 M</span>
+      <span><i style="background:var(--accent)"></i> $3,7 – $4,2 M</span>
+      <span><i style="background:var(--warn)"></i> más de $4,2 M</span>
+      <span>El tamaño del punto es el área</span>
+      <span>Borde punteado = ubicación aproximada al barrio</span>
+    </div>
+  </section>
+
+  <ul class="grid" id="grid"></ul>
+
+  <section class="block">
+    <h2>Se cayeron esta semana</h2>
+    <p class="lede">
+      Los quince que estaban en la lista del 31 de julio y hoy no aparecen en ninguno de los cuatro
+      portales. Los dejo para que veas el ritmo de rotación: si algo te gusta, no lo dejes más de unos
+      días. Dos casos aparte que no cuento aquí: el de Pontevedra cambió de Fincaraíz a Metrocuadrado y
+      el de Iberia al revés, pero los dos siguen en el mercado.
+    </p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Barrio</th><th>Total /mes</th><th>Área</th><th>Qué era</th></tr></thead>
+        <tbody id="gone-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Descartados por no tener ascensor</h2>
+    <p class="lede">
+      Siguen publicados y cumplen todo lo demás, pero el aviso dice expresamente que el edificio no
+      tiene ascensor. El de Córdoba incluso <strong>bajó de precio</strong> esta semana.
+    </p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Barrio</th><th>Total /mes</th><th>Área</th><th>Por qué se cae</th><th>Ficha</th></tr></thead>
+        <tbody id="desc-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Barrios sin oferta hoy</h2>
+    <p class="lede">
+      Doce de tus veintinueve barrios, más Portales del Country, no tienen ni un apartamento publicado
+      que cumpla los criterios. San Patricio y Potosí entraron y salieron: San Patricio perdió su único
+      aviso esta semana, Potosí conserva el suyo.
+    </p>
+    <ul class="barrio-list">
+      <li>Portales del Country</li><li>Multicentro</li><li>Recodo del Country</li><li>Nuevo Country</li>
+      <li>San Patricio</li><li>El Recreo de los Frailes</li><li>Malibú</li><li>Las Villas</li>
+      <li>Ciudad Jardín Norte</li><li>Casigua</li><li>La Alborada</li><li>Morato</li>
+      <li>Santa Ana Oriental</li>
+    </ul>
+  </section>
+
+  <div class="method">
+    <p>
+      <strong>Cómo se armó.</strong> Barrido del 7 de agosto de 2026 sobre los cuatro portales.
+      Fincaraíz y Properati se recorrieron por localidad (Usaquén y Suba, todas las páginas);
+      Metrocuadrado y Ciencuadras, barrio por barrio, porque su buscador no entiende localidades.
+      De cada aviso se leyeron los campos estructurados —canon, administración, áreas, habitaciones,
+      garajes, estrato, piso, amenidades y coordenadas— en vez de la descripción.
+    </p>
+    <p>
+      <strong>Cómo se detectan los caídos.</strong> Fincaraíz marca el aviso con
+      <code>"status":"deactivated"</code> y lo muestra como "No disponible" sin cambiar el código HTTP,
+      así que un enlace que abre no significa que el inmueble siga en el mercado. Por eso la lista se
+      rehízo desde cero en vez de revisar los 38 anteriores uno por uno.
+    </p>
+    <p>
+      <strong>Sobre la administración.</strong> En Metrocuadrado y Ciencuadras un valor en cero
+      significa <em>no informada</em>, no <em>incluida</em>: lo verifiqué contra fichas conocidas.
+      Diecisiete de los 38 avisos no la publican, y en esos el total mostrado es solo el canon —
+      están marcados y los puedes esconder con el filtro "con administración informada".
+    </p>
+    <p>
+      <strong>Ruido que hubo que limpiar.</strong> Ciencuadras devuelve una búsqueda de toda la ciudad
+      (908 resultados) cuando no reconoce el barrio, y coló hasta un apartamento de Laureles, Medellín,
+      bajo la búsqueda de La Calleja. Properati responde 403 al fetch normal y su paginación va en la
+      ruta, no en un parámetro. Los precios y la disponibilidad cambian a diario: verifica antes de llamar.
+    </p>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var BASES = { "Fincaraíz":"https://fincaraiz.com.co", "Metrocuadrado":"https://www.metrocuadrado.com",
+                "Ciencuadras":"https://www.ciencuadras.com", "Properati":"https://www.properati.com.co" };
+  function linkOf(d) { return (BASES[d.src] || BASES["Fincaraíz"]) + d.url; }
+
+  var DATA = [
+    { barrio:"Iberia", canon:3100000, admin:10000, m2:100, hab:3, ban:2, parq:1, dep:true,
+      estrato:5, piso:4, asc:"nd", src:"Fincaraíz", date:"2026-07-30", pub:"Century 21 Total Services",
+      lat:4.7206652, lon:-74.0668202, approx:false, url:"/apartamento-en-arriendo-en-iberia-bogota/194055704",
+      note:"Reformado, con vista al parque, estudio y lavandería independiente. Parqueadero cubierto y depósito.",
+      flags:[{t:"La administración figura en $10.000, que parece un dato de relleno. Confírmala.", s:"crit"}] },
+    { barrio:"Alhambra", canon:2365000, admin:835000, m2:100, hab:3, ban:2, parq:2, dep:null,
+      estrato:5, piso:2, asc:"si", src:"Fincaraíz", date:"2026-08-06", pub:"ZALA Colombia Consultores",
+      lat:4.701292, lon:-74.0646081, approx:false, url:"/apartamento-en-arriendo-en-monaco-bogota/194085024",
+      note:"Urbanización Mónaco, en el borde de Alhambra: piso 2 con ascensor, dos garajes y cien metros exactos.",
+      flags:[{t:"Publicado ayer. Ascensor confirmado y dos garajes por $3.200.000.", s:"ok"}] },
+    { barrio:"Pasadena", canon:3500000, admin:0, m2:105, hab:4, ban:4, parq:1, dep:null,
+      estrato:5, piso:3, asc:"nd", src:"Fincaraíz", date:"2026-07-31", pub:"Área IN SAS",
+      lat:4.6943317, lon:-74.0612682, approx:false, url:"/apartamento-en-arriendo-en-pasadena-bogota/194057154",
+      note:"Cuatro habitaciones y cuatro baños en 105 m², administración incluida.",
+      flags:[] },
+    { barrio:"Niza", canon:3617000, admin:0, m2:115, hab:3, ban:3, parq:1, dep:true,
+      estrato:5, piso:3, asc:"si", src:"Fincaraíz", date:"2026-08-07", pub:"Mubrick SAS",
+      lat:4.7115868, lon:-74.0681586, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/194088848",
+      note:"Estudio, comedor independiente, cocina cerrada y cuarto de servicio. Republicado hoy por la misma inmobiliaria.",
+      flags:[{t:"Publicado hoy.", s:"ok"},{t:"El aviso anterior de este mismo apartamento decía 'piso 3 sin ascensor'; el nuevo marca ascensor. Pregúntalo.", s:"crit"}] },
+    { barrio:"La Calleja", canon:3730000, admin:null, m2:100, hab:3, ban:2, parq:2, dep:true,
+      estrato:5, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Alma Analida Delgado",
+      lat:4.71086, lon:-74.04742, approx:false, url:"/inmueble/arriendo-apartamento-bogota-country-club-3-habitaciones-2-banos-2-garajes/15942-M6883981",
+      note:"La Calleja Alta, frente a parque: sin amoblar, sala-comedor amplia, cocina abierta, dos parqueaderos y depósito.",
+      flags:[{t:"Bajó $100.000 desde el barrido anterior.", s:"ok"},{t:"Único sobreviviente de los cinco de La Calleja: los otros cuatro se cayeron.", s:"warn"},{t:"El aviso no informa la administración.", s:"warn"}] },
+    { barrio:"Santa Bárbara Central", canon:3750000, admin:null, m2:135, hab:3, ban:3, parq:1, dep:null,
+      estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
+      lat:4.694824, lon:-74.035454, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3381963",
+      note:"Ciento treinta y cinco metros en Santa Bárbara Central, a menos de dos kilómetros de tu casa actual.",
+      flags:[{t:"El aviso no informa la administración.", s:"warn"}] },
+    { barrio:"Colina Campestre", canon:3900000, admin:null, m2:110, hab:3, ban:2, parq:1, dep:null,
+      estrato:4, piso:11, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado (sin inmobiliaria)",
+      lat:4.74399, lon:-74.06473, approx:false, url:"/inmueble/arriendo-apartamento-bogota-gilmar-3-habitaciones-2-banos-1-garajes/MC6701135",
+      note:"Penthouse esquinero en piso 11 con vistas panorámicas y doble balcón. Piscina climatizada y gimnasio.",
+      flags:[{t:"El aviso no informa la administración.", s:"warn"},{t:"No lista ascensor, pero es un piso 11: casi seguro lo tiene.", s:"warn"}] },
+    { barrio:"Colina Campestre", canon:3300000, admin:632500, m2:107, hab:3, ban:3, parq:2, dep:true,
+      estrato:4, piso:5, asc:"nd", src:"Metrocuadrado", date:null, pub:"Gerardo Gómez",
+      lat:4.73953, lon:-74.06634, approx:false, url:"/inmueble/arriendo-apartamento-bogota-el-plan-3-habitaciones-3-banos-2-garajes/17016-M6821923",
+      note:"Torres de Sevilla, piso 5: sala comedor, cocina, lavandería y cuarto de servicio.",
+      flags:[{t:"Dos parqueaderos y depósito por $3.932.500.", s:"ok"},{t:"Los 107 m² son construidos; el área privada es de 88 m².", s:"warn"},{t:"Piso 5 y el aviso no menciona ascensor.", s:"crit"}] },
+    { barrio:"Atabanza", canon:3400000, admin:600000, m2:116, hab:3, ban:3, parq:2, dep:null,
+      estrato:5, piso:4, asc:"nd", src:"Fincaraíz", date:"2026-08-05", pub:"Inmobiliaria Peña Marín",
+      lat:4.708644, lon:-74.0613903, approx:false, url:"/apartamento-en-arriendo-en-atabanza-bogota/194081684",
+      note:"Piso 4 con 116 m², tres baños y dos garajes. También publicado en Metrocuadrado como Lagos de Córdoba–Atabanza.",
+      flags:[{t:"Primer aviso de Atabanza en toda la búsqueda: el barrio estaba vacío.", s:"ok"}] },
+    { barrio:"Santa Bárbara", canon:4000000, admin:0, m2:115, hab:3, ban:3, parq:1, dep:null,
+      estrato:6, piso:null, asc:"si", src:"Fincaraíz", date:"2026-07-27", pub:"MAFER Inversiones",
+      lat:4.6942787, lon:-74.0366395, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/194039195",
+      note:"Ciento quince metros con tres baños y ascensor confirmado, administración incluida, a 1,7 km de tu casa.",
+      flags:[{t:"Ascensor confirmado y administración incluida.", s:"ok"}] },
+    { barrio:"Santa Bárbara Central", canon:4000000, admin:null, m2:105, hab:3, ban:2, parq:1, dep:null,
+      estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
+      lat:4.69569, lon:-74.036324, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3775992",
+      note:"Ciento cinco metros en Santa Bárbara Central, a 1,6 km de Portales del Country.",
+      flags:[{t:"El aviso no informa la administración.", s:"warn"}] },
+    { barrio:"Colina Campestre", canon:4000000, admin:0, m2:102, hab:3, ban:2, parq:2, dep:true,
+      estrato:5, piso:11, asc:"si", src:"Fincaraíz", date:"2024-04-16", pub:"Andrés Romero",
+      lat:4.7309545, lon:-74.0607856, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/10786125",
+      note:"Vistas al oriente y al norte, recién pintado. Piso 11 con ascensor y dos garajes.",
+      flags:[{t:"Aviso de abril de 2024 que lleva más de dos años publicado: verifica que siga vigente.", s:"crit"}] },
+    { barrio:"Colina Campestre", canon:4000000, admin:null, m2:116, hab:3, ban:3, parq:2, dep:true,
+      estrato:5, piso:3, asc:"si", src:"Fincaraíz", date:"2026-07-24", pub:"RTM Inmobiliaria",
+      lat:4.7234462, lon:-74.0635419, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194032770",
+      note:"Parques de Áticos: completamente exterior con vista abierta, cuarto de servicio con baño y principal con walk-in closet.",
+      flags:[{t:"Ascensor confirmado, dos parqueaderos y depósito.", s:"ok"},{t:"El aviso no informa la administración.", s:"warn"}] },
+    { barrio:"Niza", canon:4000000, admin:0, m2:115, hab:3, ban:3, parq:2, dep:null,
+      estrato:5, piso:null, asc:"si", src:"Ciencuadras", date:null, pub:"Lateral Colombia",
+      lat:4.711777, lon:-74.078308, approx:false, url:"/inmueble/apartamento-en-arriendo-en-niza-norte-bogota-3799709",
+      note:"Niza Norte: exterior esquinero con vista a parque, conjunto de cuatro torres con portería 24 horas y garaje doble.",
+      flags:[{t:"Bajó de $4.200.000 a $4.000.000 desde el barrido anterior.", s:"ok"},{t:"Ascensor confirmado y dos parqueaderos.", s:"ok"}] },
+    { barrio:"Molinos Norte", canon:3234000, admin:766000, m2:113.59, hab:3, ban:3, parq:1, dep:null,
+      estrato:6, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Díaz Castro",
+      lat:4.694804, lon:-74.037558, approx:false, url:"/inmueble/apartamento-en-arriendo-en-molinos-norte-bogota-3631175",
+      note:"Interior con acabados de calidad, espacios amplios y muy buena iluminación natural.",
+      flags:[] },
+    { barrio:"Alhambra", canon:4000000, admin:null, m2:120, hab:3, ban:3, parq:2, dep:true,
+      estrato:5, piso:null, asc:"nd", src:"Properati", date:null, pub:"Properati (sin inmobiliaria)",
+      lat:4.7026269, lon:-74.0609083, approx:true, url:"/detalle/14032-32-81e6-6b80e5383ed4-3ddee326-9e57-3da3",
+      note:"Dos parqueaderos, trastero, gas natural y seguridad privada.",
+      flags:[{t:"El aviso no informa la administración.", s:"warn"},{t:"Ubicación aproximada al centroide del barrio.", s:"warn"}] },
+    { barrio:"Potosí", canon:4100000, admin:null, m2:100, hab:3, ban:2, parq:2, dep:false,
+      estrato:4, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"BEMSA S.A.S",
+      lat:4.701064, lon:-74.077744, approx:false, url:"/inmueble/apartamento-en-arriendo-en-potosi-bogota-3425626",
+      note:"Espacioso y bien ventilado: sala, comedor, tres habitaciones, biblioteca y cocina.",
+      flags:[{t:"Único aviso de Potosí en los cuatro portales.", s:"ok"},{t:"El aviso no informa la administración.", s:"warn"}] },
+    { barrio:"Colina Campestre", canon:4100000, admin:0, m2:100, hab:3, ban:3, parq:2, dep:true,
+      estrato:5, piso:10, asc:"si", src:"Fincaraíz", date:"2026-07-21", pub:"Cesar Blanco",
+      lat:4.7263653, lon:-74.0669404, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194016468",
+      note:"Totalmente remodelado, chimenea funcional, iluminación inteligente y vista al norte. Coworking y zona de niños.",
+      flags:[{t:"Ascensor confirmado, dos parqueaderos y depósito.", s:"ok"}] },
+    { barrio:"Pasadena", canon:4100000, admin:0, m2:110, hab:3, ban:4, parq:1, dep:null,
+      estrato:5, piso:3, asc:"si", src:"Fincaraíz", date:"2026-07-21", pub:"Aurora Vásquez",
+      lat:4.6959186, lon:-74.062562, approx:false, url:"/apartamento-en-arriendo-en-pasadena-bogota/194014077",
+      note:"A pocos minutos de la Autopista Norte y la Calle 100, rodeado de parques y comercio.",
+      flags:[] },
+    { barrio:"Molinos Norte", canon:4200000, admin:0, m2:101, hab:3, ban:3, parq:1, dep:null,
+      estrato:6, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Mil Predios",
+      lat:4.69476, lon:-74.04265, approx:false, url:"/inmueble/arriendo-apartamento-bogota-molinos-norte-3-habitaciones-3-banos-1-garajes/2832-M6608378",
+      note:"Santa Bárbara Central–Molinos: dos habitaciones más estudio que el aviso cuenta como tercera, baño de servicio y patio de ropas.",
+      flags:[{t:"La tercera habitación es un estudio: verifícalo si necesitas tres alcobas reales.", s:"warn"},{t:"El aviso no informa la administración.", s:"warn"}] },
+    { barrio:"Niza", canon:4200000, admin:0, m2:110, hab:3, ban:2, parq:2, dep:null,
+      estrato:5, piso:4, asc:"si", src:"Fincaraíz", date:"2026-07-02", pub:"Metropolis Inmobiliaria",
+      lat:4.7086137, lon:-74.081396, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/193947250",
+      note:"Sala comedor amplia con chimenea y zona de ropas independiente. Piso 4 del Mirador del Puerto III.",
+      flags:[{t:"Ascensor confirmado y dos parqueaderos.", s:"ok"}] },
+    { barrio:"Niza", canon:4200000, admin:0, m2:112, hab:3, ban:2, parq:2, dep:true,
+      estrato:6, piso:4, asc:"nd", src:"Fincaraíz", date:"2025-09-23", pub:"Adriana Bayona",
+      lat:4.7080813, lon:-74.0816419, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/192906101",
+      note:"Sala con chimenea y principal con walk-in closet y tina. Reconocimiento facial, gimnasio, squash y tenis.",
+      flags:[{t:"Aviso de septiembre de 2025 que sigue publicado once meses después.", s:"crit"}] },
+    { barrio:"Pontevedra", canon:3766000, admin:534000, m2:104, hab:3, ban:3, parq:1, dep:true,
+      estrato:4, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Inmobiliarias Aliadas",
+      lat:4.69414, lon:-74.08197, approx:false, url:"/inmueble/arriendo-apartamento-bogota-pontevedra-3-habitaciones-3-banos-1-garajes/183-M6885957",
+      note:"Acabados modernos, cocina integral a gas y zona de ropas independiente. Gimnasio, cancha de fútbol, squash y terraza BBQ.",
+      flags:[{t:"Cambió de portal: antes estaba en Fincaraíz, ahora aparece en Metrocuadrado.", s:"warn"}] },
+    { barrio:"Iberia", canon:4300000, admin:null, m2:114, hab:3, ban:3, parq:2, dep:null,
+      estrato:5, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Ruth Yolanda Caro",
+      lat:4.72802, lon:-74.06848, approx:false, url:"/inmueble/arriendo-apartamento-bogota-iberia-4-habitaciones-3-banos-2-garajes/20041-M6803263",
+      note:"Atalaya Iberia: suite principal con vestier y estudio, balcones con buena luz y dos parqueaderos. Gimnasio, sauna y salones.",
+      flags:[{t:"El aviso no informa la administración y el canon ya está en $4,3 M.", s:"crit"}] },
+    { barrio:"Pasadena", canon:3800000, admin:500000, m2:103, hab:3, ban:3, parq:1, dep:null,
+      estrato:5, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Houm Colombia",
+      lat:4.691749, lon:-74.065923, approx:false, url:"/inmueble/apartamento-en-arriendo-en-pasadena-bogota-3361704",
+      note:"Sin amoblar, admite mascotas, con vigilancia 24 horas y lavandería. Edificio de 1991.",
+      flags:[{t:"Acepta mascotas.", s:"ok"}] },
+    { barrio:"Santa Ana", canon:4400000, admin:null, m2:110, hab:3, ban:2, parq:1, dep:null,
+      estrato:5, piso:3, asc:"si", src:"Fincaraíz", date:"2026-07-07", pub:"Promotora Inmobiliaria",
+      lat:4.6858094, lon:-74.0356915, approx:false, url:"/apartamento-en-arriendo-en-santa-ana-bogota/193963218",
+      note:"Amoblado, con pisos en porcelanato, cocina integral, garaje cubierto y hall de entrada.",
+      flags:[{t:"Ascensor confirmado.", s:"ok"},{t:"El aviso no informa la administración y el canon ya está en $4,4 M. Se entrega amoblado.", s:"crit"}] },
+    { barrio:"Lagos de Córdoba", canon:3650000, admin:786000, m2:103, hab:3, ban:3, parq:2, dep:false,
+      estrato:5, piso:null, asc:"si", src:"Metrocuadrado", date:null, pub:"ESTYVAR Enterprises",
+      lat:4.70485, lon:-74.06744, approx:false, url:"/inmueble/arriendo-apartamento-bogota-lagos-de-cordoba-3-habitaciones-3-banos-2-garajes/399-M6820539",
+      note:"Tres dormitorios con vista sobre el lago y los cerros, estudio y zona de ropas.",
+      flags:[{t:"Ascensor confirmado y dos parqueaderos.", s:"ok"}] },
+    { barrio:"Country", canon:4500000, admin:null, m2:130.59, hab:3, ban:3, parq:1, dep:null,
+      estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado (sin inmobiliaria)",
+      lat:4.71344, lon:-74.04756, approx:false, url:"/inmueble/arriendo-apartamento-bogota-contry-3-habitaciones-3-banos-1-garajes/MC6666465",
+      note:"Ciento treinta metros en el sector Country, sobre la Carrera 19 con Calle 128, a kilómetro y medio de tu casa.",
+      flags:[{t:"Único aviso del racimo Country en los cuatro portales.", s:"ok"},{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"}] },
+    { barrio:"Molinos Norte", canon:4500000, admin:null, m2:121.95, hab:3, ban:2, parq:2, dep:true,
+      estrato:6, piso:5, asc:"nd", src:"Ciencuadras", date:null, pub:"JCO Inversiones",
+      lat:4.691807, lon:-74.044304, approx:false, url:"/inmueble/apartamento-en-arriendo-en-molinos-norte-bogota-3819436",
+      note:"Sector Santa Paula, quinto piso: cocina integral, zona de lavado y sala comedor con chimenea.",
+      flags:[{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"}] },
+    { barrio:"Molinos Norte", canon:4500000, admin:null, m2:100, hab:3, ban:2, parq:1, dep:null,
+      estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado (sin inmobiliaria)",
+      lat:4.69343, lon:-74.0381, approx:false, url:"/inmueble/arriendo-apartamento-bogota-molinos-del-norte-3-habitaciones-2-banos-1-garajes/164-M6821227",
+      note:"Cien metros en Molinos del Norte, a 1,8 km de tu casa actual.",
+      flags:[{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"}] },
+    { barrio:"Bella Suiza", canon:4500000, admin:null, m2:115, hab:3, ban:3, parq:2, dep:true,
+      estrato:5, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"MAFER Inversiones",
+      lat:4.70302, lon:-74.03016, approx:false, url:"/inmueble/arriendo-apartamento-bogota-bella-suiza-3-habitaciones-3-banos-2-garajes/18758-M6864019",
+      note:"Cocina cerrada y terraza cubierta, edificio automatizado con portería. Dos parqueaderos y depósito.",
+      flags:[{t:"Lo más cerca de tu casa actual: 0,9 km.", s:"ok"},{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"}] },
+    { barrio:"Navarra", canon:4500000, admin:0, m2:103, hab:3, ban:2, parq:2, dep:null,
+      estrato:6, piso:3, asc:"nd", src:"Fincaraíz", date:"2026-07-30", pub:"Óscar García",
+      lat:4.6926622, lon:-74.0501092, approx:false, url:"/apartamento-en-arriendo-en-chico-navarra-bogota/194054894",
+      note:"Chicó Navarra, edificio inteligente con ventanería termoacústica, piso 3. Cocina con lavavajillas y todero 8 horas.",
+      flags:[{t:"Queda exactamente en tu tope.", s:"warn"}] },
+    { barrio:"Santa Bárbara", canon:4500000, admin:null, m2:121, hab:3, ban:3, parq:1, dep:null,
+      estrato:null, piso:null, asc:"nd", src:"Properati", date:null, pub:"Properati (sin inmobiliaria)",
+      lat:4.6960375, lon:-74.0349189, approx:true, url:"/detalle/14032-32-b18f-c4d1a0d6e5ee-19fb50b-b110-7558",
+      note:"Ciento veintiún metros en Santa Bárbara, a 1,5 km de Portales del Country.",
+      flags:[{t:"El aviso no informa la administración y el canon ya está en tu tope.", s:"crit"},{t:"Ubicación aproximada al centroide del barrio.", s:"warn"}] },
+    { barrio:"Colina Campestre", canon:4500000, admin:0, m2:107, hab:3, ban:3, parq:2, dep:true,
+      estrato:4, piso:2, asc:"si", src:"Fincaraíz", date:"2026-07-13", pub:"Tatiana Méndez",
+      lat:4.7395278, lon:-74.066336, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/193985240",
+      note:"Alcoba principal con baño privado y walk-in closet, más zona de servicio con baño. Piscina cubierta, squash y vigilancia 24/7 junto a Parque La Colina.",
+      flags:[{t:"Ascensor confirmado, dos parqueaderos y depósito.", s:"ok"},{t:"Queda exactamente en tu tope.", s:"warn"}] }
+  ];
+
+  var GONE = [
+    ["Colina Campestre","$3.200.000","103 m²","Versalles Reservado amoblado, el más barato de la lista anterior"],
+    ["Niza","$3.800.000","170 m²","90 m² privados más terraza de 22 y jardín de 58"],
+    ["Lagos de Córdoba","$3.800.000","105 m²","4 habitaciones, administración del 32 %"],
+    ["Niza","$3.900.000","127 m²","Tres habitaciones más alcoba de servicio"],
+    ["La Calleja","$4.000.000","106 m²","Prados de La Calleja, 3 baños y 2 parqueaderos"],
+    ["Alhambra","$4.200.000","200 m²","Dúplex con dos terrazas, 2 parqueaderos y depósito"],
+    ["Colina Campestre","$4.200.000","120 m²","Piso 10 de 12, gimnasio y salones"],
+    ["Colina Campestre","$4.200.000","116 m²","Remodelado con vigilancia 24/7"],
+    ["La Calleja","$4.300.000","132 m²","Piso 3 con chimenea, piscina y gimnasio"],
+    ["La Calleja","$4.300.000","132 m²","Mismo conjunto, otro reparto canon/administración"],
+    ["La Calleja","$4.400.000","110 m²","Cerca de la Carrera 19 y Unicentro"],
+    ["Bella Suiza","$4.500.000","115 m²","Aviso de Fincaraíz; el de Metrocuadrado sí sigue vivo"],
+    ["Molinos Norte","$4.500.000","100 m²","Amoblado, a pasos de Unicentro"],
+    ["San Patricio","$4.500.000","114 m²","2 parqueaderos, depósito y ascensor confirmado"],
+    ["Colina Campestre","$4.500.000","100 m²","Santa Helena, piso 7 con ascensor y 2 parqueaderos"]
+  ];
+
+  var DESCARTADOS = [
+    { barrio:"Córdoba", total:3500000, m2:"113,6", motivo:"Dúplex pisos 3 y 4, edificio sin ascensor",
+      src:"Fincaraíz", url:"/apartamento-en-arriendo-en-ub-cordoba-niza-bogota/193624073" },
+    { barrio:"Niza VIII", total:3800000, m2:"105", motivo:"Piso 5 sin ascensor",
+      src:"Metrocuadrado", url:"/inmueble/arriendo-apartamento-bogota-ub.-cordoba-3-habitaciones-3-banos-1-garajes/MC6740494" },
+    { barrio:"Colina Campestre", total:4200000, m2:"125", motivo:"Conjunto de 12 edificios sin ascensor",
+      src:"Fincaraíz", url:"/apartamento-en-arriendo-en-colina-campestre-bogota/193832290" }
+  ];
+
+  var HOME = { lat: 4.7093816, lon: -74.0345729 };
+  var KM_LAT = 110.574, KM_LON = 111.320 * Math.cos(4.718 * Math.PI / 180);
+  function distKm(lat, lon) {
+    var dy = (lat - HOME.lat) * KM_LAT, dx = (lon - HOME.lon) * KM_LON;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  DATA.forEach(function (d) { d.km = distKm(d.lat, d.lon); });
+
+  var MONTHS = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  function cop(n) { return "$" + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+  function total(d) { return d.canon + (d.admin || 0); }
+  function fmtDate(iso) { var p = iso.split("-"); return Number(p[2]) + " " + MONTHS[Number(p[1]) - 1] + " " + p[0]; }
+  function tier(t) { return t <= 3700000 ? "t-low" : t <= 4200000 ? "t-mid" : "t-high"; }
+  function nice(n) { return String(n).replace(".", ","); }
+
+  var state = { barrio:"all", portal:"all", parq2:false, lift:false, near:false, adm:false, sort:"total" };
+  var grid = document.getElementById("grid");
+  var countEl = document.getElementById("count");
+
+  var counts = {};
+  DATA.forEach(function (d) { counts[d.barrio] = (counts[d.barrio] || 0) + 1; });
+  var chipBox = document.getElementById("barrio-chips");
+  function addChip(box, label, value, n, key) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "chip";
+    b.setAttribute("aria-pressed", String(state[key] === value));
+    b.innerHTML = label + '<span class="c">' + n + "</span>";
+    b.addEventListener("click", function () {
+      state[key] = value;
+      Array.prototype.forEach.call(box.children, function (c) { c.setAttribute("aria-pressed", "false"); });
+      b.setAttribute("aria-pressed", "true");
+      render();
+    });
+    box.appendChild(b);
+  }
+  addChip(chipBox, "Todos", "all", DATA.length, "barrio");
+  Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a] || a.localeCompare(b, "es"); })
+    .forEach(function (n) { addChip(chipBox, n, n, counts[n], "barrio"); });
+
+  var portalBox = document.getElementById("portal-chips");
+  addChip(portalBox, "Todos", "all", DATA.length, "portal");
+  ["Fincaraíz","Metrocuadrado","Ciencuadras","Properati"].forEach(function (p) {
+    addChip(portalBox, p, p, DATA.filter(function (d) { return d.src === p; }).length, "portal");
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-toggle]"), function (btn) {
+    btn.addEventListener("click", function () {
+      var k = btn.getAttribute("data-toggle");
+      state[k] = !state[k];
+      btn.setAttribute("aria-pressed", String(state[k]));
+      render();
+    });
+  });
+  document.getElementById("sort").addEventListener("change", function (e) { state.sort = e.target.value; render(); });
+
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var mapEl = document.getElementById("map"), tipEl = document.getElementById("maptip");
+  var LAT0 = 4.6810, LAT1 = 4.7495, LON0 = -74.0865, LON1 = -74.0230;
+  var PAD = 42, MW = 700 - PAD * 2, MH = 743 - PAD * 2;
+  function mx(lon) { return PAD + (lon - LON0) / (LON1 - LON0) * MW; }
+  function my(lat) { return PAD + (LAT1 - lat) / (LAT1 - LAT0) * MH; }
+  var PX_PER_KM = MW / ((LON1 - LON0) * KM_LON);
+  function el(name, attrs) {
+    var n = document.createElementNS(SVGNS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  function drawMap(rows) {
+    mapEl.textContent = "";
+    var defs = el("defs", {}), clip = el("clipPath", { id: "plotclip" });
+    clip.appendChild(el("rect", { x: PAD, y: PAD, width: MW, height: MH }));
+    defs.appendChild(clip); mapEl.appendChild(defs);
+    var plot = el("g", { "clip-path": "url(#plotclip)" }), i, g;
+
+    for (i = -74.08; i < LON1; i += 0.01) {
+      mapEl.appendChild(el("line", { class:"grat", x1:mx(i), y1:PAD, x2:mx(i), y2:PAD + MH }));
+      g = el("text", { class:"grat-lbl", x:mx(i) + 3, y:PAD + MH + 13 }); g.textContent = i.toFixed(2) + "°";
+      mapEl.appendChild(g);
+    }
+    for (i = 4.69; i < LAT1; i += 0.01) {
+      mapEl.appendChild(el("line", { class:"grat", x1:PAD, y1:my(i), x2:PAD + MW, y2:my(i) }));
+      g = el("text", { class:"grat-lbl", x:6, y:my(i) - 4 }); g.textContent = i.toFixed(2) + "°";
+      mapEl.appendChild(g);
+    }
+    [1,2,3,4,5].forEach(function (km) {
+      plot.appendChild(el("circle", { class:"home-ring", cx:mx(HOME.lon), cy:my(HOME.lat), r:km * PX_PER_KM }));
+      var lx = mx(HOME.lon) - km * PX_PER_KM * 0.84, ly = my(HOME.lat) - km * PX_PER_KM * 0.54;
+      if (lx > PAD + 6 && ly > PAD + 10) {
+        var t = el("text", { class:"grat-lbl", x:lx, y:ly, "text-anchor":"middle" });
+        t.textContent = km + " km"; plot.appendChild(t);
+      }
+    });
+    plot.appendChild(el("rect", { class:"home-dot", x:mx(HOME.lon) - 5, y:my(HOME.lat) - 5, width:10, height:10 }));
+    var hl = el("text", { class:"home-lbl", x:mx(HOME.lon) - 9, y:my(HOME.lat) + 4, "text-anchor":"end" });
+    hl.textContent = "Apto actual"; plot.appendChild(hl);
+
+    var byBarrio = {};
+    rows.forEach(function (d) { (byBarrio[d.barrio] = byBarrio[d.barrio] || []).push(d); });
+    var labels = Object.keys(byBarrio).map(function (b) {
+      var arr = byBarrio[b];
+      var la = arr.reduce(function (s, d) { return s + d.lat; }, 0) / arr.length;
+      var lo = arr.reduce(function (s, d) { return s + d.lon; }, 0) / arr.length;
+      var w = b.length * 6.6;
+      return { text:b, x:Math.min(Math.max(mx(lo), PAD + w/2 + 4), PAD + MW - w/2 - 4), y:my(la) - 26, w:w };
+    }).sort(function (a, b) { return a.y - b.y; });
+    labels.forEach(function (l, k) {
+      for (var j = 0; j < k; j++) {
+        var p = labels[j];
+        if (Math.abs(p.x - l.x) < (p.w + l.w) / 2 && Math.abs(p.y - l.y) < 15) { l.y = p.y + 15; j = -1; }
+      }
+      var t = el("text", { class:"barrio-lbl", x:l.x, y:l.y, "text-anchor":"middle" });
+      t.textContent = l.text; plot.appendChild(t);
+    });
+    mapEl.appendChild(plot);
+
+    var sx = PAD + 8, sy = PAD + MH - 14;
+    mapEl.appendChild(el("line", { class:"scale-bar", x1:sx, y1:sy, x2:sx + PX_PER_KM, y2:sy }));
+    mapEl.appendChild(el("line", { class:"scale-bar", x1:sx, y1:sy - 4, x2:sx, y2:sy + 4 }));
+    mapEl.appendChild(el("line", { class:"scale-bar", x1:sx + PX_PER_KM, y1:sy - 4, x2:sx + PX_PER_KM, y2:sy + 4 }));
+    var sl = el("text", { class:"scale-lbl", x:sx + PX_PER_KM + 7, y:sy + 4 }); sl.textContent = "1 km";
+    mapEl.appendChild(sl);
+    mapEl.appendChild(el("line", { class:"scale-bar", x1:PAD + MW - 14, y1:PAD + 34, x2:PAD + MW - 14, y2:PAD + 8 }));
+    mapEl.appendChild(el("path", { class:"home-dot", d:"M" + (PAD + MW - 14) + " " + (PAD + 4) + " l-4 9 l4 -3 l4 3 z" }));
+    var nl = el("text", { class:"scale-lbl", x:PAD + MW - 14, y:PAD + 46, "text-anchor":"middle" });
+    nl.textContent = "N"; mapEl.appendChild(nl);
+
+    var placed = [];
+    rows.forEach(function (d) {
+      var t = total(d), r = 6 + (Math.sqrt(d.m2) - 10) * 1.15;
+      var px = mx(d.lon), py = my(d.lat), tries = 0;
+      while (placed.some(function (p) { return Math.hypot(p.x - px, p.y - py) < (p.r + r) * 0.72; }) && tries < 14) {
+        var ang = tries * 1.05;
+        px = mx(d.lon) + Math.cos(ang) * (r + 5) * (1 + tries * 0.18);
+        py = my(d.lat) + Math.sin(ang) * (r + 5) * (1 + tries * 0.18);
+        tries++;
+      }
+      placed.push({ x:px, y:py, r:r });
+      var c = el("circle", { class:"dot " + tier(t) + (d.approx ? " is-approx" : ""),
+                             cx:px, cy:py, r:r, tabindex:"0", role:"button" });
+      c.appendChild(el("title", {})).textContent =
+        d.barrio + " · " + cop(t) + " · " + nice(d.m2) + " m² · a " + d.km.toFixed(1).replace(".", ",") + " km";
+      c.addEventListener("mouseenter", function () {
+        tipEl.innerHTML = "<b>" + cop(t) + "</b> · " + nice(d.m2) + " m²<br>" + d.barrio +
+          " · a " + d.km.toFixed(1).replace(".", ",") + " km del apto actual";
+        var box = mapEl.getBoundingClientRect();
+        tipEl.style.left = (px / 700 * box.width) + "px";
+        tipEl.style.top = (py / 743 * box.height) + "px";
+        tipEl.classList.add("on");
+      });
+      c.addEventListener("mouseleave", function () { tipEl.classList.remove("on"); });
+      c.addEventListener("click", function () { focusCard(d.url); });
+      c.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); focusCard(d.url); }
+      });
+      mapEl.appendChild(c);
+    });
+  }
+
+  function focusCard(url) {
+    var card = grid.querySelector('[data-id="' + url + '"]');
+    if (!card) return;
+    Array.prototype.forEach.call(grid.children, function (c) { c.classList.remove("is-focus"); });
+    card.classList.add("is-focus");
+    card.scrollIntoView({ behavior:"smooth", block:"center" });
+  }
+
+
+  /* ---------- mapa real con Leaflet ---------- */
+  var lmap = L.map("leafmap", { scrollWheelZoom:false, zoomSnap:0.5 })
+    .setView([(HOME.lat + 4.716) / 2, -74.056], 13);
+  L.control.scale({ imperial:false }).addTo(lmap);
+  var calles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' });
+  var satelite = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+    maxZoom:19, attribution:"Imagery &copy; Esri" });
+  calles.addTo(lmap);
+  L.control.layers({ "Calles": calles, "Satélite": satelite }, null, { position:"topright" }).addTo(lmap);
+
+  var TIER_COLOR = { "t-low":"--ok", "t-mid":"--accent", "t-high":"--warn" };
+  function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+  var homeLayer = L.layerGroup().addTo(lmap);
+  L.circleMarker([HOME.lat, HOME.lon], { radius:7, color:cssVar("--ink"), weight:2,
+      fillColor:cssVar("--ink"), fillOpacity:.9 })
+    .bindTooltip("Tu apartamento actual · Portales del Country", { permanent:false })
+    .addTo(homeLayer);
+  [1,2,3].forEach(function (km) {
+    L.circle([HOME.lat, HOME.lon], { radius:km * 1000, color:cssVar("--ink-soft"), weight:1,
+      dashArray:"4 5", fill:false, interactive:false }).addTo(homeLayer);
+  });
+
+  var markerLayer = L.layerGroup().addTo(lmap);
+  var lastBounds = null;
+  function refit() { lmap.invalidateSize(); if (lastBounds) lmap.fitBounds(lastBounds, { animate:false }); }
+  function drawLeaflet(rows) {
+    markerLayer.clearLayers();
+    var pts = [[HOME.lat, HOME.lon]];
+    rows.forEach(function (d) {
+      var t = total(d);
+      var m = L.circleMarker([d.lat, d.lon], {
+        radius: 6 + (Math.sqrt(d.m2) - 10) * 1.1,
+        color: cssVar("--surface"), weight: 1.5,
+        fillColor: cssVar(TIER_COLOR[tier(t)]), fillOpacity: .92,
+        dashArray: d.approx ? "2 2" : null
+      });
+      m.bindPopup(
+        '<span class="pb">' + d.barrio + "</span>" +
+        '<span class="pt">' + cop(t) + "</span>" +
+        '<span class="pm">' + (d.admin === null ? "canon " + cop(d.canon) + " · admin no informada"
+          : d.admin === 0 ? "canon " + cop(d.canon) + " · admin incluida"
+          : "canon " + cop(d.canon) + " + admin " + cop(d.admin)) + "</span><br>" +
+        nice(d.m2) + " m² · " + d.hab + " hab · " + d.parq + " parq · " +
+        (d.asc === "si" ? "ascensor" : "ascensor ?") + "<br>" +
+        '<span class="pm">a ' + d.km.toFixed(1).replace(".", ",") + " km de tu casa · " + d.src + "</span><br>" +
+        '<a class="go" href="' + linkOf(d) + '" target="_blank" rel="noopener noreferrer">Ver ficha →</a>'
+      );
+      m.on("click", function () { focusCard(d.url); });
+      m.addTo(markerLayer);
+      pts.push([d.lat, d.lon]);
+    });
+    lastBounds = pts.length > 1 ? L.latLngBounds(pts).pad(0.04) : null;
+    if (lastBounds) lmap.fitBounds(lastBounds, { animate:false });
+  }
+
+  var vReal = document.getElementById("v-real"), vPlot = document.getElementById("v-plot");
+  var wReal = document.getElementById("wrap-real"), wPlot = document.getElementById("wrap-plot");
+  function switchView(real) {
+    vReal.setAttribute("aria-pressed", String(real));
+    vPlot.setAttribute("aria-pressed", String(!real));
+    wReal.classList.toggle("hidden", !real);
+    wPlot.classList.toggle("hidden", real);
+    if (real) setTimeout(refit, 40);
+  }
+  vReal.addEventListener("click", function () { switchView(true); });
+  vPlot.addEventListener("click", function () { switchView(false); });
+
+  function render() {
+    var rows = DATA.filter(function (d) {
+      if (state.barrio !== "all" && d.barrio !== state.barrio) return false;
+      if (state.portal !== "all" && d.src !== state.portal) return false;
+      if (state.parq2 && d.parq < 2) return false;
+      if (state.lift && d.asc !== "si") return false;
+      if (state.near && d.km >= 2) return false;
+      if (state.adm && d.admin === null) return false;
+      return true;
+    });
+    rows.sort(function (a, b) {
+      if (state.sort === "km") return a.km - b.km;
+      if (state.sort === "m2") return b.m2 - a.m2;
+      if (state.sort === "value") return total(a) / a.m2 - total(b) / b.m2;
+      return total(a) - total(b);
+    });
+    countEl.textContent = rows.length + " de " + DATA.length;
+    grid.innerHTML = "";
+    drawMap(rows);
+    drawLeaflet(rows);
+    if (!rows.length) {
+      var li = document.createElement("li");
+      li.className = "empty";
+      li.textContent = "Ningún apartamento cumple esa combinación de filtros.";
+      grid.appendChild(li);
+      return;
+    }
+    rows.forEach(function (d) {
+      var t = total(d);
+      var li = document.createElement("li");
+      li.className = "card " + tier(t);
+      li.setAttribute("data-id", d.url);
+      var breakdown = d.admin === null ? "canon " + cop(d.canon) + " · administración no informada"
+        : d.admin === 0 ? "canon " + cop(d.canon) + " · administración incluida"
+        : "canon " + cop(d.canon) + " + admin " + cop(d.admin);
+      var specs = [
+        "<li>" + nice(d.m2) + " m²</li>",
+        "<li>" + d.hab + " hab</li>",
+        "<li>" + d.ban + " baños</li>",
+        '<li class="' + (d.parq >= 2 ? "plus" : "") + '">' + d.parq + " parq</li>"
+      ];
+      if (d.dep === true) specs.push('<li class="plus">depósito</li>');
+      specs.push("<li>" + Math.round(t / d.m2 / 1000) + " k/m²</li>");
+      specs.push("<li>a " + d.km.toFixed(1).replace(".", ",") + " km" + (d.approx ? " aprox." : "") + "</li>");
+      specs.push(d.asc === "si" ? '<li class="plus">ascensor</li>'
+        : '<li class="unk">ascensor ?' + (d.piso ? " · piso " + d.piso : "") + "</li>");
+      var flags = d.flags.map(function (f) { return '<li class="sev-' + f.s + '">' + f.t + "</li>"; }).join("");
+      li.innerHTML =
+        '<div class="card-head"><span class="barrio">' + d.barrio + "</span>" +
+          '<span class="estrato">' + (d.estrato ? "estrato " + d.estrato : "estrato n/d") + "</span></div>" +
+        '<div class="money"><span class="total">' + cop(t) + "</span>" +
+          '<span class="breakdown">' + breakdown + "</span></div>" +
+        '<ul class="specs">' + specs.join("") + "</ul>" +
+        '<p class="note">' + d.note + "</p>" +
+        (flags ? '<ul class="flags">' + flags + "</ul>" : "") +
+        '<div class="card-foot"><span class="pub">' + d.pub + '<br><span class="date">' +
+          (d.date ? fmtDate(d.date) : "fecha n/d") + " · " + d.src + "</span></span>" +
+        '<a class="go" href="' + linkOf(d) + '" target="_blank" rel="noopener noreferrer">Ver ficha →</a></div>';
+      grid.appendChild(li);
+    });
+  }
+
+  var gb = document.getElementById("gone-body");
+  GONE.forEach(function (r) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + r[0] + '</td><td class="num over">' + r[1] + '</td><td class="num">' +
+                   r[2] + "</td><td>" + r[3] + "</td>";
+    gb.appendChild(tr);
+  });
+
+  var db = document.getElementById("desc-body");
+  DESCARTADOS.sort(function (a, b) { return a.total - b.total; });
+  DESCARTADOS.forEach(function (o) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + o.barrio + '</td><td class="num">' + cop(o.total) + '</td><td class="num">' +
+      o.m2 + ' m²</td><td class="over">' + o.motivo + "</td>" +
+      '<td><a class="go" href="' + BASES[o.src] + o.url + '" target="_blank" rel="noopener noreferrer">' +
+      o.src.slice(0, 2).toUpperCase() + " →</a></td>";
+    db.appendChild(tr);
+  });
+
+  render();
+  setTimeout(refit, 80);
+  window.addEventListener('resize', function () { lmap.invalidateSize(); });
+})();
+</script>
+</body>
+</html>
