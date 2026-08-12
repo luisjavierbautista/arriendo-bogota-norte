@@ -84,11 +84,21 @@ def get(url, intentos=2):
     return ""
 
 
+def clave(d):
+    """Identidad del inmueble: coordenada redondeada + área.
+
+    El diff usa esto y no la URL a propósito: un mismo apartamento cambia de
+    portal o se republica con otro id cada pocos dias, y comparar por URL lo
+    reportaria como caido y nuevo el mismo dia.
+    """
+    return "%.4f|%.4f|%d" % (d["lat"], d["lon"], int(d["m2"]))
+
+
 def add(res, d):
     """Deduplica por coordenada redondeada + área."""
     if not d.get("lat"):
         return
-    k = ("%.4f" % d["lat"], "%.4f" % d["lon"], int(d["m2"]))
+    k = clave(d)
     prev = res.get(k)
     # nos quedamos con el que informe administración
     if prev and prev["admin"] is not None and d["admin"] is None:
@@ -317,10 +327,10 @@ def main():
     if os.path.exists(ruta):
         with open(ruta, encoding="utf-8") as fh:
             previo = json.load(fh).get("avisos", [])
-    antes = {a["url"] for a in previo}
-    ahora = {a["url"] for a in filas}
-    nuevos = [a for a in filas if a["url"] not in antes]
-    caidos = [a for a in previo if a["url"] not in ahora]
+    antes = {clave(a) for a in previo if a.get("lat")}
+    ahora = {clave(a) for a in filas}
+    nuevos = [a for a in filas if clave(a) not in antes]
+    caidos = [a for a in previo if a.get("lat") and clave(a) not in ahora]
 
     print("=" * 62)
     print("Candidatos vigentes:      %d" % len(filas))
