@@ -49,3 +49,18 @@ python3 tools/viajes.py --recalcular  # rehace todo
   entre sí; la ruta real recoge a otros niños y depende de cuál asignen.
 - Los destinos y sus horarios están en `DESTINOS`, dentro de `tools/viajes.py`.
 - La llave nunca se guarda en el repo. `viajes.json` solo contiene minutos y kilómetros.
+
+## Quién corre qué
+
+| Cuándo | Quién | Qué hace |
+|---|---|---|
+| 07:00 Bogotá, diario | Agente programado en la nube | `barrido.py` + `render.py`, commit y push. **No tiene la llave**: los edificios nuevos quedan marcados como "sin tiempos de viaje todavía". |
+| 07:35 Bogotá, diario | GitHub Actions (`.github/workflows/viajes.yml`) | Completa los tiempos que falten con la llave de Secrets, vuelve a renderizar y publica. |
+
+La llave vive en **Secrets del repo** (`GOOGLE_MAPS_API_KEY`), nunca en el código. Para rotarla:
+
+```
+gh secret set GOOGLE_MAPS_API_KEY --repo luisjavierbautista/arriendo-bogota-norte
+```
+
+Si el workflow no encuentra la llave, no falla: deja los edificios sin tiempos y lo anota como aviso.

@@ -1,0 +1,75 @@
+name: Completar tiempos de viaje
+
+# Corre 35 minutos después del barrido diario (07:00 Bogotá) para que data.json
+# ya tenga los edificios nuevos. La llave vive en Secrets del repo, nunca en el
+# código: ni el agente programado ni la página la ven.
+on:
+  schedule:
+    - cron: "35 12 * * *"      # 07:35 en Bogotá
+  workflow_dispatch:            # también se puede lanzar a mano
+
+permissions:
+  contents: write
+
+concurrency:
+  group: actualizar-sitio       # nunca dos escrituras a la vez
+  cancel-in-progress: false
+
+jobs:
+  viajes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Edificios sin tiempos de viaje
+        id: faltan
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          avisos = json.load(open("data.json", encoding="utf-8"))["avisos"]
+          cache = {}
+          if os.path.exists("viajes.json"):
+              cache = json.load(open("viajes.json", encoding="utf-8")).get("edificios", {})
+          faltan = {"%.4f|%.4f" % (a["lat"], a["lon"]) for a in avisos} - set(cache)
+          print("n=%d" % len(faltan))
+          PY
+
+      - name: Calcular los que falten
+        if: steps.faltan.outputs.n != '0'
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: |
+          if [ -z "$GOOGLE_MAPS_API_KEY" ]; then
+            echo "::warning::No hay llave en Secrets; los edificios nuevos quedan sin tiempos."
+            exit 0
+          fi
+          python3 tools/viajes.py --limite 60
+
+      - name: Regenerar la página
+        run: python3 tools/render.py
+
+      - name: Verificar que no se filtren credenciales
+        run: |
+          if grep -rl 'AIzaSy' . --exclude-dir=.git; then
+            echo "::error::Se coló una credencial en el repo. No se empuja."
+            exit 1
+          fi
+          echo "sin llaves en el árbol"
+
+      - name: Publicar si hubo cambios
+        run: |
+          if git diff --quiet; then
+            echo "nada que publicar"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          N=$(python3 -c "import json;print(len(json.load(open('viajes.json',encoding='utf-8'))['edificios']))")
+          git add viajes.json index.html
+          git commit -m "Tiempos de viaje al día: $N edificios en caché [skip ci]"
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main
