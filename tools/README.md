@@ -64,3 +64,6 @@ gh secret set GOOGLE_MAPS_API_KEY --repo luisjavierbautista/arriendo-bogota-nort
 ```
 
 Si el workflow no encuentra la llave, no falla: deja los edificios sin tiempos y lo anota como aviso.
+Antes de publicar verifica que no se haya colado ninguna credencial, buscando por la **forma** de una
+llave de Google (`AIza` + 35 caracteres) y no por su prefijo literal, que si no el chequeo se detecta
+a sí mismo y siempre falla.

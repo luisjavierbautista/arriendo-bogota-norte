@@ -54,7 +54,9 @@ jobs:
 
       - name: Verificar que no se filtren credenciales
         run: |
-          if grep -rl 'AIzaSy' . --exclude-dir=.git; then
+          # El patrón describe la forma de una llave (AIza + 35 caracteres) en vez de
+          # su prefijo literal: así el propio workflow no se detecta a sí mismo.
+          if grep -rlE 'AIza[0-9A-Za-z_-]{35}' . --exclude-dir=.git; then
             echo "::error::Se coló una credencial en el repo. No se empuja."
             exit 1
           fi
