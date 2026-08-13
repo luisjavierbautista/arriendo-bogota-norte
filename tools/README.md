@@ -66,7 +66,23 @@ exista, se guarda como *variable* del repo (no secreto, porque va al HTML):
 gh variable set SV_EMBED_KEY --repo luisjavierbautista/arriendo-bogota-norte
 ```
 
-Sin esa variable el sitio funciona igual, solo que abriendo en otra pestaña.
+Sin esa variable el sitio funciona igual, solo que abriendo en otra pestaña. **La variable ya está
+configurada.**
+
+Antes de publicar una llave de embed, comprueba que solo pueda hacer lo gratuito. Estos cuatro
+chequeos deben dar exactamente esto:
+
+| Petición | Esperado |
+|---|---|
+| Maps Embed con `Referer` de tu dominio | 200 y responde |
+| Maps Embed sin `Referer` | 403 |
+| `maps/api/streetview` (imagen, se cobra) sin `Referer` | 403 |
+| Routes API | negada |
+
+Si la imagen de Street View devuelve 200 sin referente, la llave todavía tiene esa API habilitada y
+**no se puede publicar**: la restricción por dominio no la protege. Hay que quitar Street View Static
+API de las restricciones de la llave y dejar solo Maps Embed API. Los cambios tardan unos minutos en
+propagar.
 
 ## Quién corre qué
 

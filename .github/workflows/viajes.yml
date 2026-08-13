@@ -65,14 +65,33 @@ jobs:
         run: python3 tools/render.py
 
       - name: Verificar que no se filtren credenciales
+        env:
+          SV_EMBED_KEY: ${{ vars.SV_EMBED_KEY }}
         run: |
-          # El patrón describe la forma de una llave (AIza + 35 caracteres) en vez de
-          # su prefijo literal: así el propio workflow no se detecta a sí mismo.
-          if grep -rlE 'AIza[0-9A-Za-z_-]{35}' . --exclude-dir=.git; then
-            echo "::error::Se coló una credencial en el repo. No se empuja."
-            exit 1
-          fi
-          echo "sin llaves en el árbol"
+          # Busca por la forma de una llave (AIza + 35 caracteres), no por su prefijo
+          # literal, para que el propio workflow no se detecte a si mismo. La llave de
+          # Maps Embed es publica por diseno y esta restringida por dominio, asi que
+          # es la unica permitida: cualquier otra que aparezca detiene la publicacion.
+          python3 - <<'PY'
+          import os, re, subprocess, sys
+          permitida = os.environ.get("SV_EMBED_KEY", "").strip()
+          patron = re.compile(r"AIza[0-9A-Za-z_-]{35}")
+          archivos = subprocess.run(["git", "ls-files"], capture_output=True, text=True).stdout.split()
+          malos = {}
+          for f in archivos:
+              try:
+                  t = open(f, encoding="utf-8", errors="ignore").read()
+              except OSError:
+                  continue
+              for k in set(patron.findall(t)):
+                  if k != permitida:
+                      malos.setdefault(f, set()).add(k[:10] + "...")
+          if malos:
+              for f, ks in malos.items():
+                  print("::error file=%s::llave no autorizada %s" % (f, ", ".join(sorted(ks))))
+              sys.exit(1)
+          print("sin llaves indebidas" + (" (la de Maps Embed es publica y esta permitida)" if permitida else ""))
+          PY
 
       - name: Publicar si hubo cambios
         run: |
