@@ -21,7 +21,7 @@ CAB = ["-H", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;
        "-H", "Upgrade-Insecure-Requests: 1"]
 
 # ---------------------------------------------------------------- criterios
-MIN_M2, MIN_HAB, MIN_PARQ, TOPE = 100, 3, 1, 4_500_000
+MIN_M2, MIN_HAB, MIN_PARQ, TOPE = 100, 3, 1, 5_000_000
 HOME = (4.7093816, -74.0345729)          # Portales del Country
 KM_LAT, KM_LON = 110.574, 111.320 * math.cos(math.radians(4.718))
 
@@ -108,7 +108,7 @@ def add(res, d):
 
 # ---------------------------------------------------------------- Fincaraíz
 FR_BASE = ("https://www.fincaraiz.com.co/arriendo/apartamentos/%s/bogota/"
-           "3-o-mas-habitaciones/hasta-4500000/m2-desde-100/edificados")
+           "3-o-mas-habitaciones/hasta-5000000/m2-desde-100/edificados")
 LINK_FR = re.compile(r'"link":"(/apartamento-en-arriendo[^"]+)"')
 
 

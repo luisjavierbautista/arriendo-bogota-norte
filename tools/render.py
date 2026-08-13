@@ -42,8 +42,8 @@ def flags(a):
         f.append(("A %s km de tu casa actual." % ("%.1f" % a["km"]).replace(".", ","), "ok"))
     if a["asc"] == "si":
         f.append(("Ascensor confirmado en la ficha.", "ok"))
-    if a["canon"] + (a["admin"] or 0) >= 4_450_000:
-        f.append(("Queda en el tope de $4.500.000.", "warn"))
+    if a["canon"] + (a["admin"] or 0) >= 4_950_000:
+        f.append(("Queda en el tope de $5.000.000.", "warn"))
     return f
 
 
