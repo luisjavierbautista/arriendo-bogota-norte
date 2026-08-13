@@ -1,0 +1,5 @@
+
+# credenciales, nunca en el repo
+*.key
+gmaps.key
+.env

@@ -28,3 +28,24 @@ Imprime **NUEVO** y **CAYÓ** comparando contra el `data.json` anterior, así qu
 
 `data.json` es la fuente. `index.html` lleva el arreglo `DATA` embebido: hay que regenerarlo
 desde `data.json` y volver a empujar. El agente programado hace ese paso.
+
+## Tiempos de viaje
+
+`python3 tools/viajes.py` calcula, para cada edificio, cuánto toma llegar en carro a los cinco
+destinos fijos, con el tráfico previsto por Google para **el día y la hora reales** de cada
+compromiso (no una franja genérica). Escribe `viajes.json`.
+
+```
+export GOOGLE_MAPS_API_KEY=...        # o ~/.config/arriendo/gmaps.key
+python3 tools/viajes.py               # solo consulta los edificios que faltan
+python3 tools/viajes.py --recalcular  # rehace todo
+```
+
+- El caché está **por coordenada de edificio**, no por aviso: un mismo edificio se consulta una
+  sola vez aunque su aviso cambie de portal, de precio o de id. El barrido diario no gasta cuota.
+- El agente programado **no necesita la llave**: usa `viajes.json` tal como está y las fichas de
+  edificios nuevos salen marcadas como "sin tiempos de viaje todavía".
+- **El tiempo al colegio es en carro**, no el de la ruta escolar. Sirve para comparar apartamentos
+  entre sí; la ruta real recoge a otros niños y depende de cuál asignen.
+- Los destinos y sus horarios están en `DESTINOS`, dentro de `tools/viajes.py`.
+- La llave nunca se guarda en el repo. `viajes.json` solo contiene minutos y kilómetros.

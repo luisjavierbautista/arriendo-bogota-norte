@@ -36,6 +36,12 @@ def nota(a):
 
 def flags(a):
     f = []
+    v, sem = a.get("_via"), a.get("_semana")
+    if v:
+        if v.get("colegio") is not None and v["colegio"] <= 26:
+            f.append(("Colegio a %d minutos, de lo mejor de la lista." % v["colegio"], "ok"))
+        if v.get("oficina") is not None and v["oficina"] >= 38:
+            f.append(("La oficina en Fontibón queda a %d minutos en pico." % v["oficina"], "warn"))
     if a.get("admin") is None:
         f.append(("El aviso no informa la administración.", "crit"))
     if a["km"] < 2:
@@ -47,8 +53,20 @@ def flags(a):
     return f
 
 
+# Cuántas veces por semana se hace cada trayecto, para el índice de viaje semanal.
+FRECUENCIA = {"gimnasio": 2, "musica": 1, "teatro": 1, "colegio": 5, "oficina": 2.5}
+
+
+def viajes():
+    ruta = os.path.join(RAIZ, "viajes.json")
+    if not os.path.exists(ruta):
+        return {}
+    return json.load(io.open(ruta, encoding="utf-8")).get("edificios", {})
+
+
 def main():
     d = json.load(io.open(os.path.join(RAIZ, "data.json"), encoding="utf-8"))
+    VIA = viajes()
     avisos, caidos = d["avisos"], d.get("caidos", [])
     nuevos = set(d.get("nuevos", []))
     gen = d.get("generado", "")
@@ -57,6 +75,12 @@ def main():
         fecha = "%d %s %s" % (int(day), MESES[int(m) - 1], y)
     except Exception:
         fecha = gen
+
+    for a in avisos:
+        v = VIA.get("%.4f|%.4f" % (a["lat"], a["lon"]))
+        a["_via"] = {k: v[k]["min"] for k in FRECUENCIA if k in v} if v else None
+        a["_semana"] = (round(sum(a["_via"][k] * FRECUENCIA[k] for k in a["_via"]))
+                        if a["_via"] else None)
 
     out = ["  var DATA = ["]
     for a in avisos:
@@ -69,6 +93,10 @@ def main():
                       js(a.get("date")), js(a.get("pub") or a["src"])))
         out.append('      lat:%s, lon:%s, approx:false, url:%s, img:%s,'
                    % (a["lat"], a["lon"], js(a["url"]), js(a.get("img") or "")))
+        if a["_via"]:
+            out.append('      via:{%s}, semana:%d,'
+                       % (",".join("%s:%d" % (k, a["_via"][k]) for k in FRECUENCIA if k in a["_via"]),
+                          a["_semana"]))
         out.append('      note:%s,' % js(nota(a)))
         out.append('      flags:[%s] },' % fl)
     out[-1] = out[-1][:-1]
@@ -98,12 +126,15 @@ def main():
 
     n_asc = sum(1 for a in avisos if a["asc"] == "si")
     n_km = sum(1 for a in avisos if a["km"] < 2)
+    con_via = [a for a in avisos if a.get("_semana") is not None]
+    mejor = min(con_via, key=lambda a: a["_semana"]) if con_via else None
     tiles = ('  <div class="tiles">\n'
              '    <div class="tile is-key"><div class="n">%d</div><div class="l">candidatos vigentes hoy</div></div>\n'
              '    <div class="tile"><div class="n">%d</div><div class="l">no estaban en el barrido anterior</div></div>\n'
-             '    <div class="tile"><div class="n">%d</div><div class="l">a menos de 2 km de tu casa actual</div></div>\n'
              '    <div class="tile"><div class="n">%d</div><div class="l">con ascensor confirmado en la ficha</div></div>\n'
-             '  </div>') % (len(avisos), len(nuevos), n_km, n_asc)
+             '    <div class="tile"><div class="n">%s</div><div class="l">el mejor viaje semanal, solo ida</div></div>\n'
+             '  </div>') % (len(avisos), len(nuevos), n_asc,
+                            ("%dh%02d" % (mejor["_semana"] // 60, mejor["_semana"] % 60)) if mejor else "n/d")
     s = re.sub(r'  <div class="tiles">.*?\n  </div>', lambda _m: tiles, s, count=1, flags=re.S)
 
     s = re.sub(r'<div class="eyebrow">[^<]*</div>',
@@ -133,13 +164,21 @@ def main():
         frases.append("Ninguno de los nuevos baja de $3.500.000 ni queda a menos de 2 km.")
     frases.append("Solo <strong>%d de %d</strong> declaran ascensor en la ficha: el resto quedan marcados "
                   "como sin confirmar, no como sin ascensor." % (n_asc, len(avisos)))
+    if mejor:
+        frases.append("En tiempos de viaje, el mejor ubicado es <strong>%s</strong>: %d minutos al colegio "
+                      "y %d a la oficina, para un total de %dh%02d por semana solo de ida."
+                      % (mejor["barrio"], mejor["_via"]["colegio"], mejor["_via"]["oficina"],
+                         mejor["_semana"] // 60, mejor["_semana"] % 60))
     # El bloque .verdict se reescribe entero en cada corrida: si solo se agregara
     # el resumen, los párrafos de corridas viejas quedarían contradiciendo los datos.
     evergreen = (
         "      Los cuatro portales publican el mismo apartamento con precios y datos distintos, así que "
         "cada aviso se deduplica por coordenada y área, no por enlace. La cifra grande de cada ficha es "
         "el <strong>costo mensual total</strong>: en Suba la mayoría incluye la administración en el "
-        "canon y en Usaquén casi siempre va aparte, y compararlos por canon llevaría a escoger mal.")
+        "canon y en Usaquén casi siempre va aparte, y compararlos por canon llevaría a escoger mal. "
+        "Los tiempos de viaje son en carro, con el tráfico previsto por Google para el día y la hora "
+        "reales de cada compromiso. El del colegio es referencia comparativa entre apartamentos, no el "
+        "tiempo de la ruta escolar, que recoge a otros niños y depende de cuál les asignen.")
     verdict = ('  <div class="verdict">\n    <h2>Qué cambió</h2>\n'
                '    <p id="auto-resumen">\n      ' + " ".join(frases) + "\n    </p>\n"
                "    <p>\n" + evergreen + "\n    </p>\n  </div>")
