@@ -64,9 +64,16 @@ def viajes():
     return json.load(io.open(ruta, encoding="utf-8")).get("edificios", {})
 
 
+def street():
+    ruta = os.path.join(RAIZ, "streetview.json")
+    if not os.path.exists(ruta):
+        return {}
+    return json.load(io.open(ruta, encoding="utf-8")).get("edificios", {})
+
+
 def main():
     d = json.load(io.open(os.path.join(RAIZ, "data.json"), encoding="utf-8"))
-    VIA = viajes()
+    VIA, SV = viajes(), street()
     avisos, caidos = d["avisos"], d.get("caidos", [])
     nuevos = set(d.get("nuevos", []))
     gen = d.get("generado", "")
@@ -81,6 +88,7 @@ def main():
         a["_via"] = {k: v[k]["min"] for k in FRECUENCIA if k in v} if v else None
         a["_semana"] = (round(sum(a["_via"][k] * FRECUENCIA[k] for k in a["_via"]))
                         if a["_via"] else None)
+        a["_sv"] = SV.get("%.4f|%.4f" % (a["lat"], a["lon"]))
 
     out = ["  var DATA = ["]
     for a in avisos:
@@ -97,6 +105,12 @@ def main():
             out.append('      via:{%s}, semana:%d,'
                        % (",".join("%s:%d" % (k, a["_via"][k]) for k in FRECUENCIA if k in a["_via"]),
                           a["_semana"]))
+        sv = a.get("_sv")
+        if sv and sv.get("hay"):
+            out.append('      sv:{f:%s, lat:%s, lon:%s},'
+                       % (js(sv.get("fecha", "")), sv["lat"], sv["lon"]))
+        elif sv:
+            out.append("      sv:false,")
         out.append('      note:%s,' % js(nota(a)))
         out.append('      flags:[%s] },' % fl)
     out[-1] = out[-1][:-1]
@@ -120,6 +134,15 @@ def main():
         i = txt.index(ini)
         j = txt.index("\n  ];", i) + len("\n  ];")
         return txt[:i] + nuevo + txt[j:]
+
+    # Llave de Maps Embed API: es publica por diseno y debe estar restringida por
+    # dominio en Google Cloud. Si no esta configurada, la ficha abre Street View
+    # en otra pestana en vez de incrustarlo.
+    sv = os.environ.get("SV_EMBED_KEY", "").strip()
+    if re.search(r'var SV_KEY = "[^"]*";', s):
+        s = re.sub(r'var SV_KEY = "[^"]*";', 'var SV_KEY = "%s";' % sv, s, count=1)
+    else:
+        s = s.replace("  var DATA = [", '  var SV_KEY = "%s";\n\n  var DATA = [' % sv, 1)
 
     s = swap(s, "  var DATA = [", bloque)
     s = swap(s, "  var GONE = [", gone)

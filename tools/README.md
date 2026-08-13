@@ -50,6 +50,24 @@ python3 tools/viajes.py --recalcular  # rehace todo
 - Los destinos y sus horarios están en `DESTINOS`, dentro de `tools/viajes.py`.
 - La llave nunca se guarda en el repo. `viajes.json` solo contiene minutos y kilómetros.
 
+## Fachadas
+
+`python3 tools/streetview.py` consulta el endpoint de **metadatos** de Street View, que **no se cobra**:
+solo dice si hay panorama en ese punto, dónde está exactamente y de cuándo es la foto. Escribe
+`streetview.json`. La ficha usa la coordenada real del panorama, muestra el mes de la foto y esconde
+el botón donde no hay cobertura.
+
+Por defecto el botón **abre Street View en otra pestaña**, sin llave y sin costo. Para verlo
+incrustado en la ficha hace falta una llave de **Maps Embed API**, que es pública por diseño y por
+eso debe ser **una llave aparte, restringida por referente HTTP** al dominio del sitio. Cuando
+exista, se guarda como *variable* del repo (no secreto, porque va al HTML):
+
+```
+gh variable set SV_EMBED_KEY --repo luisjavierbautista/arriendo-bogota-norte
+```
+
+Sin esa variable el sitio funciona igual, solo que abriendo en otra pestaña.
+
 ## Quién corre qué
 
 | Cuándo | Quién | Qué hace |
