@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Busqueda de apartamento en arriendo en el norte de Bogota: 60 candidatos vigentes en cuatro portales, con mapa y filtros.">
+<meta name="description" content="Busqueda de apartamento en arriendo en el norte de Bogota: 61 candidatos vigentes en cuatro portales, con mapa y filtros.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#127970;</text></svg>">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<title>Arriendo Bogotá norte — 60 candidatos, 14 ago 2026</title>
+<title>Arriendo Bogotá norte — 61 candidatos, 15 ago 2026</title>
 <style>
   :root {
     --paper:#E8EBE8; --surface:#F5F7F4; --surface-2:#DFE4DF; --ink:#141715; --ink-soft:#3A423C;
@@ -243,7 +243,7 @@
 
 <div class="wrap">
   <header class="masthead">
-    <div class="eyebrow">Búsqueda de arriendo · Bogotá norte · 4 portales · actualizado 14 ago 2026</div>
+    <div class="eyebrow">Búsqueda de arriendo · Bogotá norte · 4 portales · actualizado 15 ago 2026</div>
     <h1>Cinco avisos <em>se cayeron</em>, tres llegaron en tres días</h1>
     <p class="deck">
       Nuevo barrido completo de Fincaraíz, Metrocuadrado, Ciencuadras y Properati sobre tus barrios.
@@ -257,8 +257,8 @@
   </header>
 
   <div class="tiles">
-    <div class="tile is-key"><div class="n">60</div><div class="l">candidatos vigentes hoy</div></div>
-    <div class="tile"><div class="n">3</div><div class="l">no estaban en el barrido anterior</div></div>
+    <div class="tile is-key"><div class="n">61</div><div class="l">candidatos vigentes hoy</div></div>
+    <div class="tile"><div class="n">7</div><div class="l">no estaban en el barrido anterior</div></div>
     <div class="tile"><div class="n">23</div><div class="l">con ascensor confirmado en la ficha</div></div>
     <div class="tile"><div class="n">3h50</div><div class="l">el mejor viaje semanal, solo ida</div></div>
   </div>
@@ -266,7 +266,7 @@
   <div class="verdict">
     <h2>Qué cambió</h2>
     <p id="auto-resumen">
-      El barrido del 14 ago 2026 deja <strong>60 candidatos vigentes</strong>: 3 que no estaban en la corrida anterior y 5 que se cayeron de los portales. Entre los nuevos hay uno en <strong>Molinos Norte a 1,6 km</strong> de tu casa, por $4.000.000 al mes. Solo <strong>23 de 60</strong> declaran ascensor en la ficha: el resto quedan marcados como sin confirmar, no como sin ascensor. En tiempos de viaje, el mejor ubicado es <strong>Molinos Norte</strong>: 28 minutos al colegio y 27 a la oficina, para un total de 3h50 por semana solo de ida.
+      El barrido del 15 ago 2026 deja <strong>61 candidatos vigentes</strong>: 7 que no estaban en la corrida anterior y 6 que se cayeron de los portales. Entre los nuevos hay uno en <strong>Recodo Del Country a 0,1 km</strong> de tu casa, por $5.000.000 al mes. Solo <strong>23 de 61</strong> declaran ascensor en la ficha: el resto quedan marcados como sin confirmar, no como sin ascensor. En tiempos de viaje, el mejor ubicado es <strong>Molinos Norte</strong>: 28 minutos al colegio y 27 a la oficina, para un total de 3h50 por semana solo de ida.
     </p>
     <p>
       Los cuatro portales publican el mismo apartamento con precios y datos distintos, así que cada aviso se deduplica por coordenada y área, no por enlace. La cifra grande de cada ficha es el <strong>costo mensual total</strong>: en Suba la mayoría incluye la administración en el canon y en Usaquén casi siempre va aparte, y compararlos por canon llevaría a escoger mal. Los tiempos de viaje son en carro, con el tráfico previsto por Google para el día y la hora reales de cada compromiso. El del colegio es referencia comparativa entre apartamentos, no el tiempo de la ruta escolar, que recoge a otros niños y depende de cuál les asignen.
@@ -417,7 +417,7 @@
                 "Ciencuadras":"https://www.ciencuadras.com", "Properati":"https://www.properati.com.co" };
   function linkOf(d) { return (BASES[d.src] || BASES["Fincaraíz"]) + d.url; }
 
-  var SV_KEY = "AIzaSyBf-KHphnkdiM0rLRysrLwcFeQgm1937k8";
+  var SV_KEY = "";
 
   var DATA = [
     { barrio:"Alhambra", canon:2900000, admin:null, m2:100, hab:3, ban:3, parq:1, dep:null,
@@ -448,20 +448,6 @@
       sv:{f:"2025-02", lat:4.690767, lon:-74.051341},
       note:"103 m² con 3 habitaciones, 2 baños, 1 parqueadero en Navarra. Piso 2.",
       flags:[{t:"Colegio a 26 minutos, de lo mejor de la lista.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
-    { barrio:"Pasadena", canon:3500000, admin:0, m2:105, hab:4, ban:4, parq:1, dep:null,
-      estrato:"5", piso:"3", asc:"nd", src:"Fincaraíz", date:"2026-07-31", pub:"Area IN SAS",
-      lat:4.6943317, lon:-74.0612682, approx:false, url:"/apartamento-en-arriendo-en-pasadena-bogota/194057154", img:"https://cdn2.infocasas.com.uy/repo/img/6a6c296d74e1d_infocdn__i9dnzlijjzkrdkxooefdjblotc0q6at2rgrnmfizjpg.jpg",
-      via:{gimnasio:18,musica:11,teatro:4,colegio:30,oficina:27}, semana:268,
-      sv:{f:"2025-03", lat:4.694394, lon:-74.061449},
-      note:"105 m² con 4 habitaciones, 4 baños, 1 parqueadero en Pasadena. Piso 3.",
-      flags:[] },
-    { barrio:"Colina Campestre", canon:3550000, admin:0, m2:100, hab:3, ban:2, parq:2, dep:null,
-      estrato:"4", piso:"4", asc:"si", src:"Fincaraíz", date:"2026-08-13", pub:"Cáceres \\u0026 Ferro Finca Raíz S.A",
-      lat:4.7402345, lon:-74.0663975, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194112554", img:"",
-      via:{gimnasio:26,musica:22,teatro:24,colegio:26,oficina:36}, semana:318,
-      sv:{f:"2025-01", lat:4.740104, lon:-74.066411},
-      note:"100 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Colina Campestre. Piso 4.",
-      flags:[{t:"Colegio a 26 minutos, de lo mejor de la lista.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { barrio:"Lagos de Córdoba", canon:3700000, admin:0, m2:100, hab:3, ban:2, parq:1, dep:null,
       estrato:"5", piso:"2", asc:"nd", src:"Fincaraíz", date:"2026-08-12", pub:"MARIA ELSA GIRALDO BELTRAN ASESOR INMOBILIARIO",
       lat:4.7037275, lon:-74.0693257, approx:false, url:"/apartamento-en-arriendo-en-lagos-de-cordoba-bogota/194110750", img:"https://cdn2.infocasas.com.uy/repo/img/6a7d2991eda06_infocdn__kmztxpgpc5paohbhaoj7z7m86dcghpsenadpinmmjpg.jpg",
@@ -469,20 +455,11 @@
       sv:{f:"2025-01", lat:4.703715, lon:-74.069507},
       note:"100 m² con 3 habitaciones, 2 baños, 1 parqueadero en Lagos de Córdoba. Piso 2.",
       flags:[] },
-    { barrio:"La Calleja", canon:3730000, admin:null, m2:100, hab:3, ban:2, parq:2, dep:null,
-      estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
-      lat:4.710859298706055, lon:-74.04742431640625, approx:false, url:"/inmueble/arriendo-apartamento-bogota-country-club-3-habitaciones-2-banos-2-garajes/15942-M6883981", img:"https://multimedia.metrocuadrado.com/15942-M6883981/15942-M6883981_1_x.jpg",
-      via:{gimnasio:17,musica:17,teatro:20,colegio:23,oficina:42}, semana:291,
-      sv:{f:"2023-06", lat:4.710687, lon:-74.047493},
-      note:"100 m² con 3 habitaciones, 2 baños, 2 parqueaderos en La Calleja.",
-      flags:[{t:"Colegio a 23 minutos, de lo mejor de la lista.", s:"ok"},{t:"La oficina en Fontibón queda a 42 minutos en pico.", s:"warn"},{t:"El aviso no informa la administración.", s:"crit"},{t:"A 1,4 km de tu casa actual.", s:"ok"}] },
-    { barrio:"Santa Bárbara Central", canon:3750000, admin:null, m2:135, hab:3, ban:3, parq:1, dep:null,
-      estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
-      lat:4.694824, lon:-74.035454, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3381963", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3381963/beac175372438666_plana.jpeg",
-      via:{gimnasio:8,musica:10,teatro:14,colegio:29,oficina:30}, semana:260,
-      sv:{f:"2024-03", lat:4.694652, lon:-74.035523},
-      note:"135 m² con 3 habitaciones, 3 baños, 1 parqueadero en Santa Bárbara Central.",
-      flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"A 1,6 km de tu casa actual.", s:"ok"}] },
+    { barrio:"Colina Campestre", canon:3800000, admin:0, m2:106, hab:3, ban:3, parq:1, dep:null,
+      estrato:"4", piso:"2", asc:"si", src:"Fincaraíz", date:"2026-08-14", pub:"Profesionales Inmobiliarios",
+      lat:4.7367181, lon:-74.0611976, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194118939", img:"https://cdn2.infocasas.com.uy/repo/img/6a7f5576d3610_infocdn__tos85gj6qpofikfirjmnoz6qno83ulatc1pikd9cjpg.jpg",
+      note:"106 m² con 3 habitaciones, 3 baños, 1 parqueadero en Colina Campestre. Piso 2.",
+      flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { barrio:"Santa Bárbara", canon:3800000, admin:null, m2:110, hab:3, ban:3, parq:2, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
       lat:4.723007, lon:-74.03596, approx:false, url:"/inmueble/arriendo-apartamento-bogota-acacias-usaquen-3-habitaciones-3-banos-2-garajes/MC6727230", img:"https://multimedia.metrocuadrado.com/MC6727230/MC6727230_1_x.jpg",
@@ -567,13 +544,6 @@
       sv:{f:"2025-03", lat:4.708736, lon:-74.081543},
       note:"110 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Niza. Piso 4.",
       flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
-    { barrio:"Niza", canon:4200000, admin:0, m2:112, hab:3, ban:2, parq:2, dep:null,
-      estrato:"6", piso:"4", asc:"nd", src:"Fincaraíz", date:"2025-09-23", pub:"Adriana Bayona",
-      lat:4.7080813, lon:-74.0816419, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/192906101", img:"https://cdn2.infocasas.com.uy/repo/img/6a0e37a864df7_infocdn__fbywcadwyalhu1hlpt5qzvq5otzsbegmjcstau85jpg.jpg",
-      via:{gimnasio:27,musica:22,teatro:25,colegio:42,oficina:26}, semana:376,
-      sv:{f:"2025-03", lat:4.708149, lon:-74.081834},
-      note:"112 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Niza. Piso 4.",
-      flags:[] },
     { barrio:"Colina Campestre", canon:4200000, admin:0, m2:125, hab:3, ban:3, parq:2, dep:null,
       estrato:"4", piso:"4", asc:"nd", src:"Fincaraíz", date:"2026-06-02", pub:"Jeanette Garzon",
       lat:4.731874145883, lon:-74.064892926984, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/193832290", img:"https://cdn2.infocasas.com.uy/repo/img/6a1f560151f48_infocdn__ejfhbspnjuxuwkm30vhc81asktflpj8kgdwcbcfkjpg.jpg",
@@ -588,6 +558,13 @@
       sv:{f:"2025-01", lat:4.741028, lon:-74.066905},
       note:"110 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Colina Campestre.",
       flags:[{t:"Colegio a 26 minutos, de lo mejor de la lista.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
+    { barrio:"Niza", canon:4200000, admin:0, m2:112, hab:3, ban:2, parq:2, dep:null,
+      estrato:"6", piso:"4", asc:"nd", src:"Fincaraíz", date:"2025-09-23", pub:"Adriana Bayona",
+      lat:4.7080813, lon:-74.0816419, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/192906101", img:"https://cdn2.infocasas.com.uy/repo/img/6a0e37a864df7_infocdn__fbywcadwyalhu1hlpt5qzvq5otzsbegmjcstau85jpg.jpg",
+      via:{gimnasio:27,musica:22,teatro:25,colegio:42,oficina:26}, semana:376,
+      sv:{f:"2025-03", lat:4.708149, lon:-74.081834},
+      note:"112 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Niza. Piso 4.",
+      flags:[] },
     { barrio:"Santa Bárbara Central", canon:4200000, admin:null, m2:101, hab:3, ban:3, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
       lat:4.694761753082275, lon:-74.04264831542969, approx:false, url:"/inmueble/arriendo-apartamento-bogota-molinos-norte-3-habitaciones-3-banos-1-garajes/2832-M6608378", img:"https://multimedia.metrocuadrado.com/2832-M6608378/2832-M6608378_22_x.jpg",
@@ -595,6 +572,11 @@
       sv:{f:"2025-02", lat:4.694788, lon:-74.042615},
       note:"101 m² con 3 habitaciones, 3 baños, 1 parqueadero en Santa Bárbara Central.",
       flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"A 1,9 km de tu casa actual.", s:"ok"}] },
+    { barrio:"Colina Campestre", canon:3600000, admin:693000, m2:105, hab:4, ban:3, parq:2, dep:null,
+      estrato:"4", piso:"8", asc:"si", src:"Fincaraíz", date:"2026-08-14", pub:"INMOBILIARIA SOLUCIONES INTEGRALES SAS",
+      lat:4.7352963, lon:-74.058033, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194120186", img:"https://cdn2.infocasas.com.uy/repo/img/6a7f9f6e089a8_infocdn__image-1786747102-yxvdayjpg.jpg",
+      note:"105 m² con 4 habitaciones, 3 baños, 2 parqueaderos en Colina Campestre. Piso 8.",
+      flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { barrio:"Iberia", canon:4300000, admin:null, m2:114, hab:4, ban:3, parq:2, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
       lat:4.728023529052734, lon:-74.0684814453125, approx:false, url:"/inmueble/arriendo-apartamento-bogota-iberia-4-habitaciones-3-banos-2-garajes/20041-M6803263", img:"https://multimedia.metrocuadrado.com/20041-M6803263/20041-M6803263_2_x.jpg",
@@ -637,13 +619,6 @@
       sv:{f:"2025-02", lat:4.69244, lon:-74.050251},
       note:"103 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Navarra. Piso 3.",
       flags:[{t:"Colegio a 26 minutos, de lo mejor de la lista.", s:"ok"}] },
-    { barrio:"Colina Campestre", canon:4500000, admin:0, m2:114, hab:3, ban:4, parq:2, dep:null,
-      estrato:"5", piso:"8", asc:"si", src:"Fincaraíz", date:"2026-08-02", pub:"Solarium Inmobiliaria Asesores Inmobiliarios",
-      lat:4.7241237, lon:-74.0648272, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194064826", img:"https://cdn2.infocasas.com.uy/repo/img/69e3a273c12ac_infocdn__3718-1-1753896150jpg.jpg",
-      via:{gimnasio:22,musica:19,teatro:19,colegio:27,oficina:34}, semana:302,
-      sv:{f:"2025-02", lat:4.72429, lon:-74.064742},
-      note:"114 m² con 3 habitaciones, 4 baños, 2 parqueaderos en Colina Campestre. Piso 8.",
-      flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { barrio:"Pontevedra", canon:4500000, admin:0, m2:117, hab:3, ban:3, parq:2, dep:null,
       estrato:"5", piso:"6", asc:"si", src:"Fincaraíz", date:"2026-07-25", pub:"Cazus propiedades",
       lat:4.6999788, lon:-74.0781614, approx:false, url:"/apartamento-en-arriendo-en-pontevedra-bogota/194034597", img:"https://cdn2.infocasas.com.uy/repo/img/6a654309c6e4f_infocdn__a5galbyb27te4zjtloqywbtzb8vsyfjklyjrglxpjpg.jpg",
@@ -653,10 +628,17 @@
       flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { barrio:"Niza", canon:4500000, admin:0, m2:100, hab:3, ban:3, parq:2, dep:null,
       estrato:"5", piso:"10", asc:"si", src:"Fincaraíz", date:"2026-08-11", pub:"URIBIENES",
-      lat:4.704854034216, lon:-74.067438679779, approx:false, url:"/apartamento-en-arriendo-en-niza-suba-bogota/194103028", img:"https://cdn2.infocasas.com.uy/repo/img/6a7b6a85e0766_infocdn__218382-1-1786472130jpg.jpg",
+      lat:4.704854034216, lon:-74.067438679779, approx:false, url:"/apartamento-en-arriendo-en-niza-suba-bogota/194103028", img:"https://cdn2.infocasas.com.uy/repo/img/6a7fd50b65375_infocdn__218382-1-1786472130jpg.jpg",
       via:{gimnasio:21,musica:16,teatro:19,colegio:31,oficina:29}, semana:304,
       sv:{f:"2025-01", lat:4.704924, lon:-74.067399},
       note:"100 m² con 3 habitaciones, 3 baños, 2 parqueaderos en Niza. Piso 10.",
+      flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
+    { barrio:"Colina Campestre", canon:4500000, admin:0, m2:114, hab:3, ban:4, parq:2, dep:null,
+      estrato:"5", piso:"8", asc:"si", src:"Fincaraíz", date:"2026-08-02", pub:"Solarium Inmobiliaria Asesores Inmobiliarios",
+      lat:4.7241237, lon:-74.0648272, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194064826", img:"https://cdn2.infocasas.com.uy/repo/img/69e3a273c12ac_infocdn__3718-1-1753896150jpg.jpg",
+      via:{gimnasio:22,musica:19,teatro:19,colegio:27,oficina:34}, semana:302,
+      sv:{f:"2025-02", lat:4.72429, lon:-74.064742},
+      note:"114 m² con 3 habitaciones, 4 baños, 2 parqueaderos en Colina Campestre. Piso 8.",
       flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { barrio:"Bella Suiza", canon:4500000, admin:null, m2:115, hab:3, ban:3, parq:2, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
@@ -679,6 +661,11 @@
       sv:{f:"2025-01", lat:4.694424, lon:-74.052203},
       note:"107 m² con 3 habitaciones, 2 baños, 1 parqueadero en San Patricio.",
       flags:[{t:"Colegio a 25 minutos, de lo mejor de la lista.", s:"ok"},{t:"El aviso no informa la administración.", s:"crit"}] },
+    { barrio:"Bella Suiza", canon:4500000, admin:null, m2:130, hab:3, ban:3, parq:1, dep:null,
+      estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
+      lat:4.70602, lon:-74.029343, approx:false, url:"/inmueble/apartamento-en-arriendo-en-bella-suiza-bogota-3159354", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3159354/dfddac_173101461759_plana.jpeg",
+      note:"130 m² con 3 habitaciones, 3 baños, 1 parqueadero en Bella Suiza.",
+      flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"A 0,7 km de tu casa actual.", s:"ok"}] },
     { barrio:"Molinos Norte", canon:4500000, admin:null, m2:121.95, hab:3, ban:2, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
       lat:4.691807, lon:-74.044304, approx:false, url:"/inmueble/apartamento-en-arriendo-en-molinos-norte-bogota-3819436", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3819436/aaca__1785360577100_plana.jpeg",
@@ -763,13 +750,11 @@
       sv:{f:"2025-01", lat:4.701103, lon:-74.051229},
       note:"123 m² con 3 habitaciones, 3 baños, 2 parqueaderos en Santa Bárbara.",
       flags:[{t:"Colegio a 23 minutos, de lo mejor de la lista.", s:"ok"}] },
-    { barrio:"Colina Campestre", canon:4875000, admin:0, m2:112, hab:3, ban:3, parq:2, dep:null,
-      estrato:"5", piso:"10", asc:"si", src:"Fincaraíz", date:"2026-08-07", pub:"Mubrick SAS",
-      lat:4.7294485546717, lon:-74.059760570526, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194088857", img:"",
-      via:{gimnasio:23,musica:20,teatro:21,colegio:29,oficina:37}, semana:324,
-      sv:false,
-      note:"112 m² con 3 habitaciones, 3 baños, 2 parqueaderos en Colina Campestre. Piso 10.",
-      flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
+    { barrio:"San Patricio", canon:4800000, admin:null, m2:127, hab:3, ban:2, parq:2, dep:null,
+      estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
+      lat:4.69867, lon:-74.05223, approx:false, url:"/inmueble/arriendo-apartamento-bogota-san-patricio-3-habitaciones-2-banos-2-garajes/897-M6099476", img:"https://multimedia.metrocuadrado.com/897-M6099476/897-M6099476_181_x.jpg",
+      note:"127 m² con 3 habitaciones, 2 baños, 2 parqueaderos en San Patricio.",
+      flags:[{t:"El aviso no informa la administración.", s:"crit"}] },
     { barrio:"Bella Suiza", canon:4200000, admin:700000, m2:132, hab:3, ban:2, parq:2, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
       lat:4.704215049743652, lon:-74.03166198730469, approx:false, url:"/inmueble/arriendo-apartamento-bogota-bella-suiza-3-habitaciones-2-banos-2-garajes/3340-M6586210", img:"https://multimedia.metrocuadrado.com/3340-M6586210/3340-M6586210_1_x.jpg",
@@ -805,6 +790,13 @@
       sv:{f:"2025-02", lat:4.695466, lon:-74.037777},
       note:"120 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Santa Bárbara. Piso 5.",
       flags:[{t:"A 1,6 km de tu casa actual.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
+    { barrio:"Santa Bárbara Central", canon:4950000, admin:null, m2:156, hab:3, ban:3, parq:1, dep:null,
+      estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
+      lat:4.699623, lon:-74.041445, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3666870", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3666870/acdbf__178413666264_plana.png",
+      via:{gimnasio:6,musica:11,teatro:15,colegio:28,oficina:35}, semana:266,
+      sv:{f:"2025-02", lat:4.699599, lon:-74.041384},
+      note:"156 m² con 3 habitaciones, 3 baños, 1 parqueadero en Santa Bárbara Central.",
+      flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"A 1,3 km de tu casa actual.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
     { barrio:"Colina Campestre", canon:4990000, admin:0, m2:100, hab:3, ban:3, parq:2, dep:null,
       estrato:"4", piso:"11", asc:"nd", src:"Fincaraíz", date:"2026-08-10", pub:"Juan camilo echeverry",
       lat:4.7394161, lon:-74.0598117, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194096861", img:"https://cdn2.infocasas.com.uy/repo/img/6a7a3ab204632_infocdn__dupbydhyktdacz3yv1yowlcztzfprkfmuxo1yzxrjpg.jpg",
@@ -820,12 +812,12 @@
       note:"138,34 m² con 3 habitaciones, 3 baños, 1 parqueadero en Santa Bárbara. Piso 3.",
       flags:[{t:"Colegio a 24 minutos, de lo mejor de la lista.", s:"ok"},{t:"A 1,8 km de tu casa actual.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
     { barrio:"Santa Bárbara", canon:3440000, admin:1560000, m2:110, hab:3, ban:2, parq:2, dep:null,
-      estrato:"6", piso:"3", asc:"si", src:"Fincaraíz", date:"2026-03-26", pub:"PADS",
-      lat:4.693901, lon:-74.036628, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/193568939", img:"https://cdn2.infocasas.com.uy/repo/img/6a219d80e1167_infocdn__100705243-1-1780587364jpg.jpg",
+      estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
+      lat:4.693901, lon:-74.036628, approx:false, url:"/inmueble/arriendo-apartamento-bogota-santa-barbara-oriental-3-habitaciones-2-banos-2-garajes/847-M6521574", img:"https://multimedia.metrocuadrado.com/847-M6521574/847-M6521574_201_x.jpg",
       via:{gimnasio:7,musica:12,teatro:13,colegio:33,oficina:29}, semana:276,
       sv:{f:"2025-02", lat:4.693982, lon:-74.036715},
-      note:"110 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Santa Bárbara. Piso 3.",
-      flags:[{t:"A 1,7 km de tu casa actual.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
+      note:"110 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Santa Bárbara.",
+      flags:[{t:"A 1,7 km de tu casa actual.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
     { barrio:"Santa Bárbara", canon:5000000, admin:0, m2:145, hab:3, ban:3, parq:2, dep:null,
       estrato:"6", piso:"1", asc:"si", src:"Fincaraíz", date:"2026-08-07", pub:"GRUPO A12 Expertos Inmobiliarios",
       lat:4.6981679, lon:-74.0450319, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/194090107", img:"https://cdn2.infocasas.com.uy/repo/img/6a769381ab0ac_infocdn__gr30403320260807085248jpg.jpg",
@@ -833,21 +825,25 @@
       sv:{f:"2025-02", lat:4.697964, lon:-74.045146},
       note:"145 m² con 3 habitaciones, 3 baños, 2 parqueaderos en Santa Bárbara. Piso 1.",
       flags:[{t:"Colegio a 26 minutos, de lo mejor de la lista.", s:"ok"},{t:"A 1,7 km de tu casa actual.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
-    { barrio:"Santa Bárbara", canon:5000000, admin:null, m2:140, hab:3, ban:3, parq:1, dep:null,
+    { barrio:"Recodo Del Country", canon:5000000, admin:0, m2:126, hab:3, ban:3, parq:2, dep:null,
+      estrato:"5", piso:"4", asc:"si", src:"Fincaraíz", date:"2026-08-14", pub:"Sara Castillo",
+      lat:4.7090723, lon:-74.0339942, approx:false, url:"/apartamento-en-arriendo-en-recodo-del-country-bogota/194120475", img:"https://cdn2.infocasas.com.uy/repo/img/6a7fbc14889e8_infocdn__pfhadgucjwyx3kmm3pnmouciluggh584ybiu5ytljpg.jpg",
+      note:"126 m² con 3 habitaciones, 3 baños, 2 parqueaderos en Recodo Del Country. Piso 4.",
+      flags:[{t:"A 0,1 km de tu casa actual.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
+    { barrio:"Bella Suiza", canon:5000000, admin:null, m2:105, hab:3, ban:3, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
-      lat:4.704896, lon:-74.049667, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-occidental-bogota-3822199", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3822199/abeadce__178545722927_plana.jpeg",
-      via:{gimnasio:11,musica:12,teatro:14,colegio:24,oficina:33}, semana:250,
-      sv:{f:"2025-01", lat:4.704882, lon:-74.049784},
-      note:"140 m² con 3 habitaciones, 3 baños, 1 parqueadero en Santa Bárbara.",
-      flags:[{t:"Colegio a 24 minutos, de lo mejor de la lista.", s:"ok"},{t:"El aviso no informa la administración.", s:"crit"},{t:"A 1,8 km de tu casa actual.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] }
+      lat:4.70495, lon:-74.03031, approx:false, url:"/inmueble/apartamento-en-arriendo-en-bella-suiza-bogota-3748534", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3748534/aab__178115111579_plana.jpeg",
+      note:"105 m² con 3 habitaciones, 3 baños, 1 parqueadero en Bella Suiza.",
+      flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"A 0,7 km de tu casa actual.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] }
   ];
 
   var GONE = [
-    ["Niza","$3.617.000","115 m²","3 hab · 1 parq · Fincaraíz"],
-    ["Pontevedra","$4.000.000","108,6 m²","4 hab · 2 parq · Metrocuadrado"],
-    ["Niza","$4.000.000","115 m²","3 hab · 1 parq · Ciencuadras"],
-    ["Potosí","$4.100.000","100 m²","3 hab · 1 parq · Ciencuadras"],
-    ["Bella Suiza","$5.000.000","152 m²","3 hab · 2 parq · Fincaraíz"]
+    ["Pasadena","$3.500.000","105 m²","4 hab · 1 parq · Fincaraíz"],
+    ["Colina Campestre","$3.550.000","100 m²","3 hab · 2 parq · Fincaraíz"],
+    ["La Calleja","$3.730.000","100 m²","3 hab · 2 parq · Metrocuadrado"],
+    ["Santa Bárbara Central","$3.750.000","135 m²","3 hab · 1 parq · Ciencuadras"],
+    ["Colina Campestre","$4.875.000","112 m²","3 hab · 2 parq · Fincaraíz"],
+    ["Santa Bárbara","$5.000.000","140 m²","3 hab · 1 parq · Ciencuadras"]
   ];
 
   var DESCARTADOS = [
