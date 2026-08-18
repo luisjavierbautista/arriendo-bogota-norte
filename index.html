@@ -417,7 +417,7 @@
                 "Ciencuadras":"https://www.ciencuadras.com", "Properati":"https://www.properati.com.co" };
   function linkOf(d) { return (BASES[d.src] || BASES["Fincaraíz"]) + d.url; }
 
-  var SV_KEY = "";
+  var SV_KEY = "AIzaSyBf-KHphnkdiM0rLRysrLwcFeQgm1937k8";
 
   var DATA = [
     { barrio:"Alhambra", canon:2900000, admin:null, m2:100, hab:3, ban:3, parq:1, dep:null,
@@ -437,8 +437,10 @@
     { barrio:"Colina Campestre", canon:2800000, admin:400000, m2:105, hab:3, ban:2, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
       lat:4.739686489105225, lon:-74.05949401855469, approx:false, url:"/inmueble/arriendo-apartamento-bogota-cjr-versalles-reservado-3-habitaciones-2-banos-1-garajes/4058-M5414776", img:"https://multimedia.metrocuadrado.com/4058-M5414776/4058-M5414776_13_x.jpg",
+      via:{gimnasio:22,musica:20,teatro:21,colegio:21,oficina:40}, semana:290,
+      sv:{f:"2025-01", lat:4.739669, lon:-74.059542},
       note:"105 m² con 3 habitaciones, 2 baños, 1 parqueadero en Colina Campestre.",
-      flags:[] },
+      flags:[{t:"Colegio a 21 minutos, de lo mejor de la lista.", s:"ok"},{t:"La oficina en Fontibón queda a 40 minutos en pico.", s:"warn"}] },
     { barrio:"Navarra", canon:3104050, admin:192100, m2:103, hab:3, ban:2, parq:1, dep:null,
       estrato:"4", piso:"2", asc:"si", src:"Fincaraíz", date:"2026-08-12", pub:"GRUPO EMPRESARIAL OIKOS S.A.S",
       lat:4.690821, lon:-74.051442, approx:false, url:"/apartamento-en-arriendo-en-chico-navarra-bogota/194106985", img:"",
