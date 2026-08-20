@@ -84,6 +84,16 @@ Si la imagen de Street View devuelve 200 sin referente, la llave todavía tiene 
 API de las restricciones de la llave y dejar solo Maps Embed API. Los cambios tardan unos minutos en
 propagar.
 
+## Recién aparecidos
+
+`data.json` guarda en `nuevos` las URLs que no estaban en la corrida anterior, comparando por
+**inmueble** (coordenada + área) y no por enlace, para que un aviso que cambia de portal no cuente
+como nuevo. `render.py` los marca con `nuevo:true` y la página los distingue en tres lugares: una
+insignia junto al barrio, un borde de acento en la ficha y un aro en la pastilla del mapa. El filtro
+"Solo los nuevos" deja únicamente esos.
+
+La marca dura hasta la siguiente corrida: al día siguiente, los de hoy dejan de estar marcados.
+
 ## Quién corre qué
 
 | Cuándo | Quién | Qué hace |

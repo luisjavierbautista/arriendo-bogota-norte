@@ -225,6 +225,17 @@
   .sin-viajes { font-size:11.5px; color:var(--warn); background:var(--warn-bg);
                 padding:5px 8px; border-radius:var(--r); }
 
+  /* ---------- recién aparecidos ---------- */
+  .card.es-nuevo { border-top-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+  .nuevo-tag { font:600 9.5px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase;
+               background:var(--accent); color:var(--accent-ink); padding:4px 7px;
+               border-radius:100px; white-space:nowrap; }
+  .card-head .nuevo-tag { margin-left:6px; }
+  /* La pastilla nueva lleva un aro del color de acento, para que salte en el mapa
+     sin cambiarle el color, que ya significa tramo de precio. */
+  .pin.nuevo { box-shadow:0 0 0 2px var(--accent), 0 1px 3px rgba(0,0,0,.2), 0 5px 12px rgba(0,0,0,.1); }
+  .leaflet-marker-icon:hover .pin.nuevo, .pin.nuevo.on { box-shadow:0 0 0 2px var(--accent); }
+
   /* ---------- fachada en Street View ---------- */
   .fachada { display:flex; align-items:center; gap:8px; }
   .fachada button { font:600 12px/1 var(--sans); padding:6px 11px; border:1px solid var(--line);
@@ -282,6 +293,7 @@
       <span class="control-label">Filtrar</span>
       <button class="chip" type="button" data-toggle="parq2" aria-pressed="false">2+ parqueaderos</button>
       <button class="chip" type="button" data-toggle="lift" aria-pressed="false">Solo ascensor confirmado</button>
+      <button class="chip" type="button" data-toggle="soloNuevos" aria-pressed="false">Solo los nuevos</button>
       <button class="chip" type="button" data-toggle="near" aria-pressed="false">A menos de 2 km</button>
       <button class="chip" type="button" data-toggle="cole" aria-pressed="false">Colegio ≤ 28 min</button>
       <button class="chip" type="button" data-toggle="ofi" aria-pressed="false">Oficina ≤ 30 min</button>
@@ -329,6 +341,7 @@
       <span><i style="background:var(--ok)"></i> hasta $3,7 M</span>
       <span><i style="background:var(--accent)"></i> $3,7 – $4,2 M</span>
       <span><i style="background:var(--warn)"></i> más de $4,2 M</span>
+      <span><i style="background:transparent;box-shadow:0 0 0 2px var(--accent)"></i> apareció en la última corrida</span>
       <span>La pastilla muestra el costo mensual total</span>
       <span>En el plano de coordenadas, el tamaño del punto es el área</span>
     </div>
@@ -417,7 +430,9 @@
                 "Ciencuadras":"https://www.ciencuadras.com", "Properati":"https://www.properati.com.co" };
   function linkOf(d) { return (BASES[d.src] || BASES["Fincaraíz"]) + d.url; }
 
-  var SV_KEY = "";
+  var SV_KEY = "AIzaSyBf-KHphnkdiM0rLRysrLwcFeQgm1937k8";
+
+  var FECHA_CORRIDA = "20 ago 2026";
 
   var DATA = [
     { barrio:"Colina Campestre", canon:2800000, admin:400000, m2:105, hab:3, ban:2, parq:1, dep:null,
@@ -430,6 +445,7 @@
     { barrio:"Santa Bárbara", canon:2492178, admin:800000, m2:100, hab:3, ban:2, parq:2, dep:null,
       estrato:"5", piso:"7", asc:"si", src:"Fincaraíz", date:"2026-08-19", pub:"Houm",
       lat:4.6992477, lon:-74.0522003, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/194137207", img:"https://cdn2.infocasas.com.uy/repo/img/6a8694d412007_infocdn__6a1c4a17-ec22-4a3c-8cf1-2e969aaf1450ajpg.jpg",
+      nuevo:true,
       note:"100 m² con 3 habitaciones, 2 baños, 2 parqueaderos en Santa Bárbara. Piso 7.",
       flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { barrio:"Lagos de Córdoba", canon:3700000, admin:0, m2:100, hab:3, ban:2, parq:1, dep:null,
@@ -477,6 +493,7 @@
     { barrio:"Santa Bárbara", canon:4000000, admin:null, m2:101.4, hab:3, ban:3, parq:2, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
       lat:4.700269, lon:-74.05886, approx:false, url:"/inmueble/arriendo-apartamento-bogota-monaco-3-habitaciones-3-banos-2-garajes/MC6968168", img:"https://multimedia.metrocuadrado.com/MC6968168/MC6968168_1_x.jpg",
+      nuevo:true,
       note:"101,4 m² con 3 habitaciones, 3 baños, 2 parqueaderos en Santa Bárbara.",
       flags:[{t:"El aviso no informa la administración.", s:"crit"}] },
     { barrio:"Santa Bárbara Central", canon:4000000, admin:null, m2:104.56, hab:3, ban:2, parq:1, dep:null,
@@ -484,6 +501,7 @@
       lat:4.69569, lon:-74.036324, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3775992", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3775992/aad__178719271472_plana.jpeg",
       via:{gimnasio:7,musica:11,teatro:13,colegio:30,oficina:29}, semana:260,
       sv:{f:"2025-02", lat:4.695837, lon:-74.036239},
+      nuevo:true,
       note:"104,56 m² con 3 habitaciones, 2 baños, 1 parqueadero en Santa Bárbara Central.",
       flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"A 1,5 km de tu casa actual.", s:"ok"}] },
     { barrio:"Niza", canon:4000000, admin:null, m2:115, hab:3, ban:3, parq:1, dep:null,
@@ -545,6 +563,7 @@
     { barrio:"Alhambra", canon:4200000, admin:0, m2:105, hab:3, ban:2, parq:1, dep:null,
       estrato:"4", piso:"1", asc:"nd", src:"Fincaraíz", date:"2026-08-19", pub:"Administradora Aaval Ltda",
       lat:4.700053163633, lon:-74.057767365572, approx:false, url:"/apartamento-en-arriendo-en-alhambra-bogota/194133136", img:"https://cdn2.infocasas.com.uy/repo/img/6a85bdfa2c2b0_infocdn__52-1-1787084457jpg.jpg",
+      nuevo:true,
       note:"105 m² con 3 habitaciones, 2 baños, 1 parqueadero en Alhambra. Piso 1.",
       flags:[] },
     { barrio:"Santa Bárbara Central", canon:4200000, admin:null, m2:101, hab:3, ban:3, parq:1, dep:null,
@@ -557,6 +576,7 @@
     { barrio:"Navarra", canon:4200000, admin:null, m2:122.48, hab:3, ban:3, parq:2, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
       lat:4.689913, lon:-74.05323, approx:false, url:"/inmueble/arriendo-apartamento-bogota-santa-bibiana-3-habitaciones-3-banos-2-garajes/MC6967869", img:"https://multimedia.metrocuadrado.com/MC6967869/MC6967869_1_x.jpg",
+      nuevo:true,
       note:"122,48 m² con 3 habitaciones, 3 baños, 2 parqueaderos en Navarra.",
       flags:[{t:"El aviso no informa la administración.", s:"crit"}] },
     { barrio:"Colina Campestre", canon:3600000, admin:693000, m2:105, hab:4, ban:3, parq:2, dep:null,
@@ -648,6 +668,7 @@
       lat:4.694913, lon:-74.035939, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3440298", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3440298/bbbd175647598565_plana.jpeg",
       via:{gimnasio:8,musica:10,teatro:13,colegio:28,oficina:30}, semana:254,
       sv:{f:"2025-02", lat:4.694765, lon:-74.035977},
+      nuevo:true,
       note:"110 m² con 3 habitaciones, 3 baños, 1 parqueadero en Santa Bárbara Central.",
       flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"A 1,6 km de tu casa actual.", s:"ok"}] },
     { barrio:"Bella Suiza", canon:4500000, admin:null, m2:130, hab:3, ban:3, parq:1, dep:null,
@@ -716,6 +737,7 @@
     { barrio:"Santa Bárbara Central", canon:4700000, admin:null, m2:102, hab:3, ban:3, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras",
       lat:4.702979, lon:-74.034123, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3842816", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3842816/acadf_178708757554_plana.jpeg",
+      nuevo:true,
       note:"102 m² con 3 habitaciones, 3 baños, 1 parqueadero en Santa Bárbara Central.",
       flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"A 0,7 km de tu casa actual.", s:"ok"}] },
     { barrio:"Colina Campestre", canon:4750000, admin:0, m2:112, hab:3, ban:3, parq:2, dep:null,
@@ -728,6 +750,7 @@
     { barrio:"Santa Bárbara", canon:3418000, admin:1382000, m2:129, hab:3, ban:3, parq:3, dep:null,
       estrato:"6", piso:"18", asc:"si", src:"Fincaraíz", date:"2026-04-27", pub:"GRUPO EMPRESARIAL OIKOS S.A.S",
       lat:4.6966269, lon:-74.0451195, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/193681191", img:"",
+      nuevo:true,
       note:"129 m² con 3 habitaciones, 3 baños, 3 parqueaderos en Santa Bárbara. Piso 18.",
       flags:[{t:"A 1,8 km de tu casa actual.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { barrio:"Santa Bárbara", canon:4800000, admin:0, m2:155, hab:4, ban:3, parq:2, dep:null,
@@ -791,6 +814,7 @@
       lat:4.699623, lon:-74.041445, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/193541787", img:"",
       via:{gimnasio:6,musica:11,teatro:15,colegio:28,oficina:35}, semana:266,
       sv:{f:"2025-02", lat:4.699599, lon:-74.041384},
+      nuevo:true,
       note:"156 m² con 4 habitaciones, 3 baños, 2 parqueaderos en Santa Bárbara.",
       flags:[{t:"A 1,3 km de tu casa actual.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
     { barrio:"Santa Bárbara", canon:4950000, admin:0, m2:120, hab:3, ban:2, parq:2, dep:null,
@@ -803,6 +827,7 @@
     { barrio:"Navarra", canon:3800000, admin:1190000, m2:121.92, hab:3, ban:3, parq:1, dep:null,
       estrato:"6", piso:"1", asc:"nd", src:"Fincaraíz", date:"2026-07-21", pub:"Inmobiliaria Peña Marin SAS",
       lat:4.6883405, lon:-74.053499, approx:false, url:"/apartamento-en-arriendo-en-chico-navarra-bogota/194014291", img:"https://cdn2.infocasas.com.uy/repo/img/6a5fb18b987cf_infocdn__1vuph2dkm8bpz29gsd1jol67hvysqjfusyu2ddcjjpg.jpg",
+      nuevo:true,
       note:"121,92 m² con 3 habitaciones, 3 baños, 1 parqueadero en Navarra. Piso 1.",
       flags:[{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
     { barrio:"Colina Campestre", canon:4990000, admin:0, m2:100, hab:3, ban:3, parq:2, dep:null,
@@ -892,7 +917,7 @@
   function via(d, k) { return d.via && d.via[k] != null ? d.via[k] : null; }
   function hhmm(m) { return m >= 60 ? Math.floor(m / 60) + " h " + (m % 60) + " min" : m + " min"; }
   var state = { barrio:"all", portal:"all", parq2:false, lift:false, near:false, adm:false,
-                cole:false, ofi:false, sort:"total" };
+                cole:false, ofi:false, soloNuevos:false, sort:"total" };
   var grid = document.getElementById("grid");
   var countEl = document.getElementById("count");
 
@@ -1126,14 +1151,15 @@
     rows.slice().sort(function (a, b) { return b.lat - a.lat; }).forEach(function (d) {
       var t = total(d);
       var m = L.marker([d.lat, d.lon], { icon: L.divIcon({ className:"", iconSize:null,
-        html:'<span class="pin"><i class="d-' + tier(t).slice(2) + '"></i>' +
-             shortCop(t) + "</span>" }) });
+        html:'<span class="pin' + (d.nuevo ? " nuevo" : "") + '"><i class="d-' +
+             tier(t).slice(2) + '"></i>' + shortCop(t) + "</span>" }) });
       var foto = d.img
         ? '<img class="ph" src="' + d.img + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
         : '<div class="noph">sin foto en el aviso</div>';
       m.bindPopup(
         '<div class="pcard">' + foto + '<div class="body">' +
-        '<span class="pb">' + d.barrio + "</span>" +
+        '<span class="pb">' + d.barrio +
+          (d.nuevo ? ' <span class="nuevo-tag" title="Apareció en el barrido del ' + FECHA_CORRIDA + '">nuevo</span>' : "") + "</span>" +
         '<span class="pt">' + cop(t) + "</span>" +
         '<span class="pm">' + (d.admin === null ? "canon " + cop(d.canon) + " &middot; admin no informada"
           : d.admin === 0 ? "canon " + cop(d.canon) + " &middot; admin incluida"
@@ -1199,6 +1225,7 @@
       if (state.portal !== "all" && d.src !== state.portal) return false;
       if (state.parq2 && d.parq < 2) return false;
       if (state.lift && d.asc !== "si") return false;
+      if (state.soloNuevos && !d.nuevo) return false;
       if (state.near && d.km >= 2) return false;
       if (state.cole && !(via(d, "colegio") !== null && via(d, "colegio") <= 28)) return false;
       if (state.ofi && !(via(d, "oficina") !== null && via(d, "oficina") <= 30)) return false;
@@ -1233,7 +1260,7 @@
     rows.forEach(function (d) {
       var t = total(d);
       var li = document.createElement("li");
-      li.className = "card " + tier(t);
+      li.className = "card " + tier(t) + (d.nuevo ? " es-nuevo" : "");
       li.setAttribute("data-id", d.url);
       var breakdown = d.admin === null ? "canon " + cop(d.canon) + " · administración no informada"
         : d.admin === 0 ? "canon " + cop(d.canon) + " · administración incluida"
@@ -1272,7 +1299,8 @@
           (SV_KEY ? "" : (d.sv && d.sv.f ? " · " : "") + "abre en otra pestaña") + "</span></div>";
       }
       li.innerHTML =
-        '<div class="card-head"><span class="barrio">' + d.barrio + "</span>" +
+        '<div class="card-head"><span class="barrio">' + d.barrio +
+          (d.nuevo ? ' <span class="nuevo-tag" title="Apareció en el barrido del ' + FECHA_CORRIDA + '">nuevo</span>' : "") + "</span>" +
           '<span class="estrato">' + (d.estrato ? "estrato " + d.estrato : "estrato n/d") + "</span></div>" +
         '<div class="money"><span class="total">' + cop(t) + "</span>" +
           '<span class="breakdown">' + breakdown + "</span></div>" +

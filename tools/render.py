@@ -111,6 +111,8 @@ def main():
                        % (js(sv.get("fecha", "")), sv["lat"], sv["lon"]))
         elif sv:
             out.append("      sv:false,")
+        if a["url"] in nuevos:
+            out.append("      nuevo:true,")
         out.append('      note:%s,' % js(nota(a)))
         out.append('      flags:[%s] },' % fl)
     out[-1] = out[-1][:-1]
@@ -143,6 +145,11 @@ def main():
         s = re.sub(r'var SV_KEY = "[^"]*";', 'var SV_KEY = "%s";' % sv, s, count=1)
     else:
         s = s.replace("  var DATA = [", '  var SV_KEY = "%s";\n\n  var DATA = [' % sv, 1)
+
+    if re.search(r'var FECHA_CORRIDA = "[^"]*";', s):
+        s = re.sub(r'var FECHA_CORRIDA = "[^"]*";', 'var FECHA_CORRIDA = "%s";' % fecha, s, count=1)
+    else:
+        s = s.replace("  var DATA = [", '  var FECHA_CORRIDA = "%s";\n\n  var DATA = [' % fecha, 1)
 
     s = swap(s, "  var DATA = [", bloque)
     s = swap(s, "  var GONE = [", gone)
