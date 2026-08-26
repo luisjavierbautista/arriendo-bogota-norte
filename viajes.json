@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-08-25",
+ "actualizado": "2026-08-26",
  "destinos": [
   {
    "clave": "gimnasio",
@@ -2516,6 +2516,60 @@
     "min": 27,
     "min_libre": 26,
     "km": 12.0
+   }
+  },
+  "4.7119|-74.0744": {
+   "gimnasio": {
+    "min": 18,
+    "min_libre": 16,
+    "km": 5.6
+   },
+   "musica": {
+    "min": 19,
+    "min_libre": 19,
+    "km": 6.5
+   },
+   "teatro": {
+    "min": 18,
+    "min_libre": 14,
+    "km": 5.5
+   },
+   "colegio": {
+    "min": 31,
+    "min_libre": 25,
+    "km": 14.1
+   },
+   "oficina": {
+    "min": 28,
+    "min_libre": 20,
+    "km": 8.9
+   }
+  },
+  "4.7291|-74.0640": {
+   "gimnasio": {
+    "min": 23,
+    "min_libre": 20,
+    "km": 7.1
+   },
+   "musica": {
+    "min": 21,
+    "min_libre": 21,
+    "km": 8.7
+   },
+   "teatro": {
+    "min": 21,
+    "min_libre": 17,
+    "km": 6.7
+   },
+   "colegio": {
+    "min": 27,
+    "min_libre": 23,
+    "km": 10.4
+   },
+   "oficina": {
+    "min": 36,
+    "min_libre": 26,
+    "km": 11.1
    }
   }
  }
