@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-08-26",
+ "actualizado": "2026-08-27",
  "destinos": [
   {
    "clave": "gimnasio",
@@ -2570,6 +2570,114 @@
     "min": 36,
     "min_libre": 26,
     "km": 11.1
+   }
+  },
+  "4.7050|-74.0690": {
+   "gimnasio": {
+    "min": 17,
+    "min_libre": 15,
+    "km": 5.8
+   },
+   "musica": {
+    "min": 17,
+    "min_libre": 18,
+    "km": 7.7
+   },
+   "teatro": {
+    "min": 17,
+    "min_libre": 14,
+    "km": 5.7
+   },
+   "colegio": {
+    "min": 30,
+    "min_libre": 25,
+    "km": 14.2
+   },
+   "oficina": {
+    "min": 27,
+    "min_libre": 22,
+    "km": 8.9
+   }
+  },
+  "4.6917|-74.0506": {
+   "gimnasio": {
+    "min": 4,
+    "min_libre": 4,
+    "km": 0.9
+   },
+   "musica": {
+    "min": 9,
+    "min_libre": 10,
+    "km": 2.4
+   },
+   "teatro": {
+    "min": 10,
+    "min_libre": 9,
+    "km": 2.6
+   },
+   "colegio": {
+    "min": 28,
+    "min_libre": 25,
+    "km": 13.6
+   },
+   "oficina": {
+    "min": 31,
+    "min_libre": 27,
+    "km": 12.1
+   }
+  },
+  "4.7058|-74.0566": {
+   "gimnasio": {
+    "min": 15,
+    "min_libre": 11,
+    "km": 3.2
+   },
+   "musica": {
+    "min": 13,
+    "min_libre": 13,
+    "km": 4.9
+   },
+   "teatro": {
+    "min": 11,
+    "min_libre": 9,
+    "km": 2.9
+   },
+   "colegio": {
+    "min": 24,
+    "min_libre": 20,
+    "km": 11.9
+   },
+   "oficina": {
+    "min": 33,
+    "min_libre": 27,
+    "km": 10.2
+   }
+  },
+  "4.6950|-74.0358": {
+   "gimnasio": {
+    "min": 8,
+    "min_libre": 7,
+    "km": 1.9
+   },
+   "musica": {
+    "min": 10,
+    "min_libre": 10,
+    "km": 3.0
+   },
+   "teatro": {
+    "min": 13,
+    "min_libre": 13,
+    "km": 4.7
+   },
+   "colegio": {
+    "min": 29,
+    "min_libre": 26,
+    "km": 14.0
+   },
+   "oficina": {
+    "min": 30,
+    "min_libre": 28,
+    "km": 14.0
    }
   }
  }
