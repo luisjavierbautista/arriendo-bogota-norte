@@ -3,3 +3,7 @@
 *.key
 gmaps.key
 .env
+
+# bytecode de Python
+__pycache__/
+*.pyc
