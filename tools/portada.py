@@ -1,10 +1,107 @@
-<!doctype html>
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Escribe la portada del sitio: una tarjeta por búsqueda, con sus cifras del día.
+
+    python3 tools/portada.py
+
+Se regenera entera en cada corrida a partir de busquedas/*.json y sus data.json,
+así que nunca queda anunciando cifras viejas. Toma las búsquedas en el orden en
+que se listan aquí.
+"""
+import io, json, os, sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import comun
+from comun import RAIZ
+
+ORDEN = ["norte", "occidente"]
+MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
+         "septiembre", "octubre", "noviembre", "diciembre"]
+
+
+def cop(n):
+    return "$" + format(int(round(n)), ",d").replace(",", ".")
+
+
+def millones(n):
+    m = n / 1e6
+    return "$%s millones" % (("%.0f" % m) if m >= 10 else ("%.1f" % m).replace(".", ","))
+
+
+def fecha_larga(iso):
+    try:
+        y, m, d = iso.split("-")
+        return "%d de %s de %s" % (int(d), MESES[int(m) - 1], y)
+    except Exception:
+        return iso
+
+
+TARJETA = """    <a class="busqueda" href="%(carpeta)s/">
+      <span class="para">%(para)s</span>
+      <h2>%(titulo)s</h2>
+      <p class="que">%(que)s</p>
+      <ul class="cifras">%(cifras)s</ul>
+      <span class="ir">Ver la búsqueda →</span>
+    </a>"""
+
+
+def tarjeta(nombre):
+    cfg = comun.cargar(["--busqueda", nombre])
+    p = os.path.join(RAIZ, cfg["salida"]["datos"])
+    if not os.path.exists(p):
+        return None, ""
+    d = json.load(io.open(p, encoding="utf-8"))
+    avisos = d["avisos"]
+    for a in avisos:
+        a.setdefault("op", "arriendo")
+        a.setdefault("total", a["canon"] + (a.get("admin") or 0))
+    cifras = []
+    for op in cfg["operaciones"]:
+        sel = [a for a in avisos if a["op"] == op]
+        if not sel:
+            continue
+        b = min(a["total"] for a in sel)
+        cifras.append("<li><b>%d</b> en %s <span>desde %s</span></li>"
+                      % (len(sel), op, millones(b) if op == "venta" else cop(b)))
+    nuevos = len(d.get("nuevos", []))
+    if nuevos and nuevos != len(avisos):
+        cifras.append("<li><b>%d</b> nuevo%s <span>en el último barrido</span></li>"
+                      % (nuevos, "s" if nuevos != 1 else ""))
+    datos = {
+        "carpeta": os.path.dirname(cfg["salida"]["pagina"]),
+        "para": cfg["portada"]["para"],
+        "titulo": cfg["portada"]["titulo"],
+        "que": cfg["portada"]["que"],
+        "cifras": "".join(cifras),
+    }
+    return d.get("generado", ""), TARJETA % datos
+
+
+def main():
+    fechas, tarjetas = [], []
+    for n in ORDEN:
+        f, html = tarjeta(n)
+        if html:
+            fechas.append(f)
+            tarjetas.append(html)
+    if not tarjetas:
+        sys.exit("no encontré datos de ninguna búsqueda")
+    fecha = fecha_larga(max(fechas))
+
+    pagina = PLANTILLA % {"tarjetas": "\n".join(tarjetas), "fecha": fecha}
+    with io.open(os.path.join(RAIZ, "index.html"), "w", encoding="utf-8") as fh:
+        fh.write(pagina)
+    print("portada escrita con %d búsquedas, datos del %s" % (len(tarjetas), fecha))
+
+
+PLANTILLA = """<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Dos busquedas de apartamento en Bogota, actualizadas todos los dias sobre tres portales.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#127968;</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%%22http://www.w3.org/2000/svg%%22 viewBox=%%220 0 100 100%%22><text y=%%22.9em%%22 font-size=%%2290%%22>&#127968;</text></svg>">
 <title>Búsquedas de apartamento en Bogotá</title>
 <style>
   :root {
@@ -63,27 +160,18 @@
   </p>
 
   <div class="lista">
-    <a class="busqueda" href="norte/">
-      <span class="para">Para Luis</span>
-      <h2>Arriendo en el norte</h2>
-      <p class="que">Mínimo 100 m², 3 habitaciones, parqueadero y ascensor, hasta $5.000.000 de canon más administración. Con tiempos de viaje al colegio, la oficina, el gimnasio, música y teatro.</p>
-      <ul class="cifras"><li><b>65</b> en arriendo <span>desde $2.900.000</span></li><li><b>6</b> nuevos <span>en el último barrido</span></li></ul>
-      <span class="ir">Ver la búsqueda →</span>
-    </a>
-    <a class="busqueda" href="occidente/">
-      <span class="para">Para su hermana</span>
-      <h2>Calle 26 y Kennedy</h2>
-      <p class="que">Apartamentos pequeños desde 45 m², 2 o 3 habitaciones, dentro de 3 km del edificio de El Tiempo o 2,5 km de la casa de la familia en Kennedy.</p>
-      <ul class="cifras"><li><b>113</b> en arriendo <span>desde $900.000</span></li><li><b>282</b> en venta <span>desde $200 millones</span></li></ul>
-      <span class="ir">Ver la búsqueda →</span>
-    </a>
+%(tarjetas)s
   </div>
 
   <p class="pie">
-    Datos del 28 de agosto de 2026. Lo que un aviso no publica queda como <em>sin dato</em>, nunca como cero:
+    Datos del %(fecha)s. Lo que un aviso no publica queda como <em>sin dato</em>, nunca como cero:
     una administración en blanco no es una administración incluida, y un ascensor no declarado no es
     un edificio sin ascensor. Los precios cambian a diario; verifica antes de llamar.
   </p>
 </div>
 </body>
 </html>
+"""
+
+if __name__ == "__main__":
+    main()

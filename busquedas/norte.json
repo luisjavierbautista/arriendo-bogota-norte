@@ -3,10 +3,10 @@
  "titulo": "Arriendo Bogotá norte",
  "descripcion": "Apartamentos en arriendo en el norte de Bogotá para Luis Javier.",
  "salida": {
-  "datos": "data.json",
-  "pagina": "index.html",
-  "viajes": "viajes.json",
-  "streetview": "streetview.json"
+  "datos": "norte/data.json",
+  "pagina": "norte/index.html",
+  "viajes": "norte/viajes.json",
+  "streetview": "norte/streetview.json"
  },
  "operaciones": [
   "arriendo"
@@ -210,5 +210,10 @@
    4200000
   ]
  },
- "resumen_ascensor": true
+ "resumen_ascensor": true,
+ "portada": {
+  "para": "Para Luis",
+  "titulo": "Arriendo en el norte",
+  "que": "Mínimo 100 m², 3 habitaciones, parqueadero y ascensor, hasta $5.000.000 de canon más administración. Con tiempos de viaje al colegio, la oficina, el gimnasio, música y teatro."
+ }
 }

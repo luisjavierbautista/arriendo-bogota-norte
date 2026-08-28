@@ -5,7 +5,7 @@ El repo sirve **dos búsquedas**, descritas en `busquedas/*.json`. Todas las her
 
 | Búsqueda | Qué busca | Zona | Publica en |
 |---|---|---|---|
-| `norte` | arriendo, ≥100 m², 3+ hab, ≥1 parqueadero, ≤$5.000.000 | lista de barrios del norte, ≤8 km de Portales del Country | `/` |
+| `norte` | arriendo, ≥100 m², 3+ hab, ≥1 parqueadero, ≤$5.000.000 | lista de barrios del norte, ≤8 km de Portales del Country | `/norte/` |
 | `occidente` | arriendo ≤$2.000.000 **y** venta ≤$500.000.000, ≥45 m², 2–3 hab | 3 km alrededor de El Tiempo (Calle 26) o 2,5 km de la casa en Kennedy | `/occidente/` |
 
 Cada búsqueda declara sus topes, criterios, anclas, destinos de viaje, umbrales de color, reglas de
@@ -44,9 +44,14 @@ Imprime **NUEVO** y **CAYÓ** comparando contra el `data.json` anterior, así qu
 El `data.json` de cada búsqueda es la fuente; su página lleva el arreglo `DATA` embebido.
 
 ```
-python3 tools/render.py --busqueda norte        # reescribe index.html
+python3 tools/render.py --busqueda norte        # reescribe norte/index.html
 python3 tools/render.py --busqueda occidente    # reescribe occidente/index.html
+python3 tools/portada.py                        # reescribe la portada del sitio
 ```
+
+La portada de la raíz (`index.html`) la escribe entera `tools/portada.py` a partir de los
+`busquedas/*.json` y sus datos, así que nunca queda anunciando cifras viejas. Los datos y cachés de
+cada búsqueda viven en su carpeta (`norte/`, `occidente/`).
 
 `render.py` solo toca los bloques marcados (`DATA`, `GONE`, `.tiles`, `.verdict`, título, descripción
 y eyebrow). El diseño y el JavaScript de cada página se editan a mano en su HTML. El resumen se
