@@ -1,0 +1,214 @@
+{
+ "id": "norte",
+ "titulo": "Arriendo Bogotá norte",
+ "descripcion": "Apartamentos en arriendo en el norte de Bogotá para Luis Javier.",
+ "salida": {
+  "datos": "data.json",
+  "pagina": "index.html",
+  "viajes": "viajes.json",
+  "streetview": "streetview.json"
+ },
+ "operaciones": [
+  "arriendo"
+ ],
+ "topes": {
+  "arriendo": 5000000
+ },
+ "criterios": {
+  "m2_min": 100,
+  "hab_min": 3,
+  "hab_max": 99,
+  "parq_min": 1
+ },
+ "filtro": "barrios",
+ "recorte_km": 8,
+ "anclas": [
+  {
+   "clave": "casa",
+   "nombre": "Portales del Country",
+   "lat": 4.7093816,
+   "lon": -74.0345729,
+   "principal": true
+  }
+ ],
+ "localidades": [
+  "usaquen",
+  "suba"
+ ],
+ "barrios": [
+  "multicentro",
+  "recodo del country",
+  "nuevo country",
+  "portales del country",
+  "country",
+  "santa barbara",
+  "santa barbara central",
+  "santa barbara oriental",
+  "santa barbara occidental",
+  "san patricio",
+  "navarra",
+  "chico navarra",
+  "la calleja",
+  "atabanza",
+  "el recreo de los frailes",
+  "malibu",
+  "alhambra",
+  "monaco",
+  "pasadena",
+  "las villas",
+  "iberia",
+  "ciudad jardin norte",
+  "casigua",
+  "cordoba",
+  "lagos de cordoba",
+  "niza",
+  "pontevedra",
+  "potosi",
+  "la alborada",
+  "morato",
+  "colina campestre",
+  "bella suiza",
+  "molinos norte",
+  "santa ana",
+  "santa ana oriental"
+ ],
+ "caja": [
+  4.66,
+  4.8,
+  -74.12,
+  -74.01
+ ],
+ "destinos": [
+  [
+   "gimnasio",
+   "Gimnasio",
+   4.69303710255897,
+   -74.04503808903183,
+   [
+    0,
+    4
+   ],
+   "16:30"
+  ],
+  [
+   "musica",
+   "Música",
+   4.680695121068617,
+   -74.04778755833742,
+   [
+    5
+   ],
+   "08:15"
+  ],
+  [
+   "teatro",
+   "Teatro y música",
+   4.691391936030174,
+   -74.0621500231654,
+   [
+    5
+   ],
+   "10:00"
+  ],
+  [
+   "colegio",
+   "Colegio",
+   4.791606282797884,
+   -74.04790371605132,
+   [
+    0,
+    4
+   ],
+   "07:15"
+  ],
+  [
+   "oficina",
+   "Oficina",
+   4.659585482746221,
+   -74.10831628903188,
+   [
+    0,
+    4
+   ],
+   "07:00"
+  ]
+ ],
+ "frecuencia": {
+  "gimnasio": 2,
+  "musica": 1,
+  "teatro": 1,
+  "colegio": 5,
+  "oficina": 2.5
+ },
+ "textos": {
+  "eyebrow": "Búsqueda de arriendo · Bogotá norte · 3 portales · actualizado {fecha}",
+  "titulo_html": "Arriendo Bogotá norte — {n} candidatos, {fecha}",
+  "descripcion_meta": "Busqueda de apartamento en arriendo en el norte de Bogota: {n} candidatos vigentes, con mapa y filtros.",
+  "evergreen": "Los portales publican el mismo apartamento con precios y datos distintos, así que cada aviso se deduplica por coordenada y área, no por enlace. La cifra grande de cada ficha es el <strong>costo mensual total</strong>: en Suba la mayoría incluye la administración en el canon y en Usaquén casi siempre va aparte, y compararlos por canon llevaría a escoger mal. Los tiempos de viaje son en carro, con el tráfico previsto por Google para el día y la hora reales de cada compromiso. El del colegio es referencia comparativa entre apartamentos, no el tiempo de la ruta escolar, que recoge a otros niños y depende de cuál les asignen.",
+  "unidad": "candidatos"
+ },
+ "reglas": [
+  {
+   "tipo": "viaje",
+   "clave": "colegio",
+   "max": 26,
+   "sev": "ok",
+   "texto": "Colegio a {v} minutos, de lo mejor de la lista."
+  },
+  {
+   "tipo": "viaje",
+   "clave": "oficina",
+   "min": 38,
+   "sev": "warn",
+   "texto": "La oficina en Fontibón queda a {v} minutos en pico."
+  },
+  {
+   "tipo": "admin_faltante",
+   "sev": "crit",
+   "texto": "El aviso no informa la administración."
+  },
+  {
+   "tipo": "cerca",
+   "ancla": "casa",
+   "max_km": 2,
+   "sev": "ok",
+   "texto": "A {km} km de tu casa actual."
+  },
+  {
+   "tipo": "ascensor",
+   "sev": "ok",
+   "texto": "Ascensor confirmado en la ficha."
+  },
+  {
+   "tipo": "tope",
+   "fraccion": 0.99,
+   "sev": "warn",
+   "texto": "Queda en el tope de {tope}."
+  }
+ ],
+ "tiles": [
+  [
+   "total",
+   "candidatos vigentes hoy"
+  ],
+  [
+   "nuevos",
+   "no estaban en el barrido anterior"
+  ],
+  [
+   "ascensor",
+   "con ascensor confirmado en la ficha"
+  ],
+  [
+   "mejor_semana",
+   "el mejor viaje semanal, solo ida"
+  ]
+ ],
+ "umbrales": {
+  "arriendo": [
+   3700000,
+   4200000
+  ]
+ },
+ "resumen_ascensor": true
+}

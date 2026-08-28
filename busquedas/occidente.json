@@ -1,0 +1,209 @@
+{
+ "id": "occidente",
+ "titulo": "Arriendo y venta — corredor Calle 26 · Kennedy",
+ "descripcion": "Apartamentos pequeños en arriendo y venta entre el Edificio El Tiempo y Kennedy.",
+ "salida": {
+  "datos": "occidente/data.json",
+  "pagina": "occidente/index.html",
+  "viajes": "occidente/viajes.json",
+  "streetview": "occidente/streetview.json"
+ },
+ "operaciones": [
+  "arriendo",
+  "venta"
+ ],
+ "topes": {
+  "arriendo": 2000000,
+  "venta": 500000000
+ },
+ "criterios": {
+  "m2_min": 45,
+  "hab_min": 2,
+  "hab_max": 3,
+  "parq_min": 0
+ },
+ "filtro": "radio",
+ "recorte_km": 99,
+ "anclas": [
+  {
+   "clave": "tiempo",
+   "nombre": "El Tiempo (Calle 26)",
+   "lat": 4.658082,
+   "lon": -74.103835,
+   "radio_km": 3.0,
+   "principal": true
+  },
+  {
+   "clave": "familia",
+   "nombre": "Casa de la familia (Kennedy)",
+   "lat": 4.623261,
+   "lon": -74.141257,
+   "radio_km": 2.5
+  }
+ ],
+ "localidades": [
+  "kennedy",
+  "fontibon",
+  "engativa",
+  "teusaquillo",
+  "puente-aranda"
+ ],
+ "barrios": [
+  "kennedy",
+  "castilla",
+  "modelia",
+  "fontibon",
+  "hayuelos",
+  "salitre",
+  "ciudad salitre",
+  "normandia",
+  "banderas",
+  "marsella",
+  "mandalay",
+  "timiza",
+  "techo",
+  "villa alsacia",
+  "tintal",
+  "carvajal",
+  "boyaca real",
+  "capellania",
+  "ciudad montes",
+  "el ejido",
+  "americas",
+  "galan",
+  "la felicidad",
+  "puente aranda",
+  "montevideo",
+  "alamos",
+  "villa luz",
+  "florencia",
+  "santa helenita",
+  "la estrada",
+  "quinta paredes",
+  "la esmeralda",
+  "pablo vi",
+  "el tintal",
+  "patio bonito",
+  "class roma"
+ ],
+ "caja": [
+  4.57,
+  4.73,
+  -74.22,
+  -74.05
+ ],
+ "destinos": [
+  [
+   "tiempo",
+   "El Tiempo",
+   4.658082,
+   -74.103835,
+   [
+    0,
+    4
+   ],
+   "07:30"
+  ],
+  [
+   "familia",
+   "la casa de la familia",
+   4.623261,
+   -74.141257,
+   [
+    0,
+    4
+   ],
+   "18:00"
+  ]
+ ],
+ "frecuencia": {
+  "tiempo": 5,
+  "familia": 2
+ },
+ "textos": {
+  "eyebrow": "Arriendo y venta · corredor Calle 26 – Kennedy · 3 portales · actualizado {fecha}",
+  "titulo_html": "Apartamentos Calle 26 · Kennedy — {n} opciones, {fecha}",
+  "descripcion_meta": "Apartamentos pequenos en arriendo y venta cerca del edificio de El Tiempo (Calle 26) y de Kennedy: {n} opciones vigentes, con mapa y filtros.",
+  "evergreen": "Cada aviso se deduplica por coordenada y área, no por enlace: los portales republican el mismo apartamento con códigos nuevos. En arriendo, la cifra grande es el <strong>costo mensual total</strong> (canon más administración cuando el aviso la informa); en venta es el precio pedido, que casi siempre se negocia. Los tiempos son en carro con el tráfico previsto por Google, no en transporte público: sobre la Calle 26 y la Avenida Boyacá los minutos y los kilómetros no se parecen. La zona sale de dos anclas —El Tiempo y la casa de la familia— y no de una lista de barrios, así que aparecen barrios que no estabas mirando.",
+  "unidad": "opciones"
+ },
+ "reglas": [
+  {
+   "tipo": "viaje",
+   "clave": "tiempo",
+   "max": 15,
+   "sev": "ok",
+   "texto": "A {v} minutos de El Tiempo en hora pico."
+  },
+  {
+   "tipo": "viaje",
+   "clave": "familia",
+   "max": 15,
+   "sev": "ok",
+   "texto": "A {v} minutos de la casa de la familia."
+  },
+  {
+   "tipo": "viaje",
+   "clave": "tiempo",
+   "min": 30,
+   "sev": "warn",
+   "texto": "El Tiempo queda a {v} minutos en la mañana."
+  },
+  {
+   "tipo": "admin_faltante",
+   "sev": "crit",
+   "texto": "El aviso no informa la administración."
+  },
+  {
+   "tipo": "incierto",
+   "campo": "hab",
+   "sev": "crit",
+   "texto": "El aviso no publica cuántas habitaciones tiene."
+  },
+  {
+   "tipo": "incierto",
+   "campo": "parq",
+   "sev": "warn",
+   "texto": "El aviso no dice si tiene parqueadero."
+  },
+  {
+   "tipo": "ascensor",
+   "sev": "ok",
+   "texto": "Ascensor confirmado en la ficha."
+  },
+  {
+   "tipo": "tope",
+   "fraccion": 0.97,
+   "sev": "warn",
+   "texto": "Queda en el tope de {tope}."
+  }
+ ],
+ "tiles": [
+  [
+   "arriendo",
+   "en arriendo hasta $2.000.000"
+  ],
+  [
+   "venta",
+   "en venta hasta $500 millones"
+  ],
+  [
+   "nuevos",
+   "no estaban en el barrido anterior"
+  ],
+  [
+   "cerca_principal",
+   "a menos de 20 minutos de El Tiempo"
+  ]
+ ],
+ "umbrales": {
+  "arriendo": [
+   1200000,
+   1600000
+  ],
+  "venta": [
+   300000000,
+   400000000
+  ]
+ }
+}

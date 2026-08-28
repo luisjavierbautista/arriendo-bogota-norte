@@ -1,8 +1,11 @@
 name: Completar tiempos de viaje y fachadas
 
-# Corre 35 minutos después del barrido diario (07:00 Bogotá) para que data.json
-# ya tenga los edificios nuevos. La llave vive en Secrets del repo, nunca en el
-# código: ni el agente programado ni la página la ven.
+# Corre 35 minutos después del barrido diario (07:00 Bogotá) para que los data.json
+# ya tengan los edificios nuevos. La llave vive en Secrets del repo, nunca en el
+# código: ni el agente programado ni las páginas la ven.
+#
+# Atiende las dos búsquedas de busquedas/: la del norte (arriendo de Luis) y la del
+# occidente (arriendo y venta cerca de El Tiempo y Kennedy).
 on:
   schedule:
     - cron: "35 12 * * *"      # 07:35 en Bogotá
@@ -25,44 +28,30 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Edificios sin tiempos de viaje
-        id: faltan
-        run: |
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
-          import json, os
-          avisos = json.load(open("data.json", encoding="utf-8"))["avisos"]
-          cache = {}
-          if os.path.exists("viajes.json"):
-              cache = json.load(open("viajes.json", encoding="utf-8")).get("edificios", {})
-          faltan = {"%.4f|%.4f" % (a["lat"], a["lon"]) for a in avisos} - set(cache)
-          print("n=%d" % len(faltan))
-          PY
-
-      - name: Calcular los que falten
-        if: steps.faltan.outputs.n != '0'
+      - name: Completar tiempos y fachadas de las dos búsquedas
         env:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: |
           if [ -z "$GOOGLE_MAPS_API_KEY" ]; then
-            echo "::warning::No hay llave en Secrets; los edificios nuevos quedan sin tiempos."
+            echo "::warning::No hay llave en Secrets; los edificios nuevos quedan sin tiempos ni fachadas."
             exit 0
           fi
-          python3 tools/viajes.py --limite 60
+          for b in norte occidente; do
+            echo "::group::$b"
+            # El tope por corrida evita que un barrido con muchos edificios nuevos
+            # se lleve la cuota de golpe; lo que falte se completa al día siguiente.
+            python3 tools/viajes.py --busqueda "$b" --limite 80
+            python3 tools/streetview.py --busqueda "$b"
+            echo "::endgroup::"
+          done
 
-      - name: Cobertura de Street View
-        env:
-          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-        run: |
-          if [ -z "$GOOGLE_MAPS_API_KEY" ]; then
-            echo "::warning::Sin llave; no se revisa la cobertura de Street View."
-            exit 0
-          fi
-          python3 tools/streetview.py
-
-      - name: Regenerar la página
+      - name: Regenerar las páginas
         env:
           SV_EMBED_KEY: ${{ vars.SV_EMBED_KEY }}
-        run: python3 tools/render.py
+        run: |
+          for b in norte occidente; do
+            python3 tools/render.py --busqueda "$b"
+          done
 
       - name: Verificar que no se filtren credenciales
         env:
@@ -101,8 +90,16 @@ jobs:
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          N=$(python3 -c "import json;print(len(json.load(open('viajes.json',encoding='utf-8'))['edificios']))")
-          git add viajes.json streetview.json index.html
+          N=$(python3 - <<'PY'
+          import io, json, os
+          t = 0
+          for p in ("viajes.json", "occidente/viajes.json"):
+              if os.path.exists(p):
+                  t += len(json.load(io.open(p, encoding="utf-8"))["edificios"])
+          print(t)
+          PY
+          )
+          git add -A viajes.json streetview.json index.html occidente
           git commit -m "Tiempos de viaje al día: $N edificios en caché [skip ci]"
           git pull --rebase --autostash origin main
           git push origin HEAD:main
