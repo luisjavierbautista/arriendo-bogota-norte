@@ -277,7 +277,7 @@
   <div class="verdict">
     <h2>Qué cambió</h2>
     <p id="auto-resumen">
-      El barrido del 28 ago 2026 deja <strong>65 candidatos vigentes</strong>: 6 que no estaban en la corrida anterior y 6 que se cayeron de los portales. Ninguno de los nuevos baja de $3.500.000 ni queda a menos de 2 km. Solo <strong>22 de 65</strong> declaran ascensor en la ficha: el resto quedan marcados como sin confirmar, no como sin ascensor. En tiempos de viaje, el mejor ubicado es <strong>Navarra</strong>: 25 minutos al colegio y 28 a la oficina, para un total de 3h42 por semana solo de ida.
+      El barrido del 28 ago 2026 deja <strong>65 candidatos vigentes</strong>: 6 que no estaban en la corrida anterior y 6 que se cayeron de los portales. Ninguno de los nuevos baja de $3.500.000 ni queda a menos de 2 km. Solo <strong>22 de 65</strong> declaran ascensor en la ficha: el resto quedan marcados como sin confirmar, no como sin ascensor. En tiempos de viaje, el mejor ubicado es <strong>Alhambra</strong>: 24 minutos al colegio y 22 a la oficina, para un total de 3h42 por semana solo de ida.
     </p>
     <p>
       Los cuatro portales publican el mismo apartamento con precios y datos distintos, así que cada aviso se deduplica por coordenada y área, no por enlace. La cifra grande de cada ficha es el <strong>costo mensual total</strong>: en Suba la mayoría incluye la administración en el canon y en Usaquén casi siempre va aparte, y compararlos por canon llevaría a escoger mal. Los tiempos de viaje son en carro, con el tráfico previsto por Google para el día y la hora reales de cada compromiso. El del colegio es referencia comparativa entre apartamentos, no el tiempo de la ruta escolar, que recoge a otros niños y depende de cuál les asignen.
@@ -430,7 +430,7 @@
                 "Ciencuadras":"https://www.ciencuadras.com", "Properati":"https://www.properati.com.co" };
   function linkOf(d) { return (BASES[d.src] || BASES["Fincaraíz"]) + d.url; }
 
-  var SV_KEY = "";
+  var SV_KEY = "AIzaSyBf-KHphnkdiM0rLRysrLwcFeQgm1937k8";
 
   var FECHA_CORRIDA = "28 ago 2026";
 
@@ -480,9 +480,11 @@
     { barrio:"Niza", canon:3800000, admin:0, m2:170, hab:3, ban:2, parq:1, dep:null,
       estrato:"4", piso:null, asc:"nd", src:"Fincaraíz", date:"2026-05-04", pub:"Promotora Inmobiliaria",
       lat:4.710548363957, lon:-74.074016043019, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/193705679", img:"https://cdn2.infocasas.com.uy/repo/img/6a569aa166d02_infocdn__13035-1-1777924320-1jpg.jpg",
+      via:{gimnasio:15,musica:17,teatro:16,colegio:26,oficina:23}, semana:250,
+      sv:{f:"2015-02", lat:4.710636, lon:-74.074004},
       nuevo:true,
       note:"170 m² con 3 habitaciones, 2 baños, 1 parqueadero en Niza.",
-      flags:[] },
+      flags:[{t:"Colegio a 26 minutos, de lo mejor de la lista.", s:"ok"}] },
     { barrio:"Lagos de Córdoba", canon:3000000, admin:800000, m2:102, hab:3, ban:3, parq:1, dep:null,
       estrato:"5", piso:null, asc:"nd", src:"Fincaraíz", date:"2026-08-22", pub:"Houm",
       lat:4.7102723, lon:-74.0661163, approx:false, url:"/apartamento-en-arriendo-en-lagos-de-cordoba-bogota/194149573", img:"https://cdn2.infocasas.com.uy/repo/img/6a8b8ab140f6c_infocdn__4e8c901f-21ff-4fa2-9dbc-b4e75dccbe7eproperty4e8c901f21ff4fa29dbcb4e75dccbe7euyrv1nvysifjpg.jpg",
@@ -500,9 +502,11 @@
     { barrio:"Alhambra", canon:3900000, admin:0, m2:117, hab:3, ban:3, parq:1, dep:null,
       estrato:"5", piso:"1", asc:"si", src:"Fincaraíz", date:"2026-08-27", pub:"eliorios",
       lat:4.7010067, lon:-74.0625225, approx:false, url:"/apartamento-en-arriendo-en-alhambra-bogota/194175220", img:"https://cdn2.infocasas.com.uy/repo/img/6a90ebc8ea5aa_infocdn__wfkfu2n3aov6n9nyrtw8pghddw3avehqslxes5xmjpg.jpg",
+      via:{gimnasio:11,musica:14,teatro:11,colegio:24,oficina:22}, semana:222,
+      sv:{f:"2025-01", lat:4.700803, lon:-74.062596},
       nuevo:true,
       note:"117 m² con 3 habitaciones, 3 baños, 1 parqueadero en Alhambra. Piso 1.",
-      flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
+      flags:[{t:"Colegio a 24 minutos, de lo mejor de la lista.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { barrio:"Niza", canon:3900000, admin:0, m2:100, hab:3, ban:2, parq:1, dep:null,
       estrato:"5", piso:"2", asc:"nd", src:"Fincaraíz", date:"2026-08-25", pub:"G15 Grupo Inmobiliario",
       lat:4.711851959448, lon:-74.074420134572, approx:false, url:"/apartamento-en-arriendo-en-niza-norte-bogota/194163354", img:"https://cdn2.infocasas.com.uy/repo/img/6a8e10da2a1d9_infocdn__1144057042-2-1787682233jpg.jpg",
@@ -513,9 +517,11 @@
     { barrio:"Santa Bárbara", canon:3900000, admin:null, m2:117, hab:3, ban:3, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado",
       lat:4.7008843, lon:-74.06252, approx:false, url:"/inmueble/arriendo-apartamento-bogota-monaco-3-habitaciones-3-banos-1-garajes/MC6995849", img:"https://multimedia.metrocuadrado.com/MC6995849/MC6995849_11_x.jpg",
+      via:{gimnasio:11,musica:14,teatro:11,colegio:24,oficina:22}, semana:222,
+      sv:{f:"2025-01", lat:4.700789, lon:-74.062499},
       nuevo:true,
       note:"117 m² con 3 habitaciones, 3 baños, 1 parqueadero en Santa Bárbara.",
-      flags:[{t:"El aviso no informa la administración.", s:"crit"}] },
+      flags:[{t:"Colegio a 24 minutos, de lo mejor de la lista.", s:"ok"},{t:"El aviso no informa la administración.", s:"crit"}] },
     { barrio:"Niza", canon:3980000, admin:0, m2:110, hab:3, ban:2, parq:2, dep:null,
       estrato:"5", piso:"4", asc:"si", src:"Fincaraíz", date:"2026-07-02", pub:"METROPOLIS INMOBILIARIA",
       lat:4.7086137, lon:-74.081396, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/193947250", img:"https://cdn2.infocasas.com.uy/repo/img/6a52cffe3437c_infocdn__nhbazxmkfulvctd1nhtj6ogfluk8k9carivvac1wjpg.jpg",
@@ -674,6 +680,8 @@
     { barrio:"Lagos de Córdoba", canon:3950000, admin:513000, m2:106, hab:3, ban:3, parq:1, dep:null,
       estrato:"5", piso:"6", asc:"si", src:"Fincaraíz", date:"2025-11-11", pub:"Daniel",
       lat:4.7053775, lon:-74.0692331, approx:false, url:"/apartamento-en-arriendo-en-lagos-de-cordoba-bogota/193087001", img:"https://cdn2.infocasas.com.uy/repo/img/6913db6d8cfe2_infocdn__xhv6vsdttq8gecw7qvo5h7e9p4vsr9h2mpn8aerzjpg.jpg",
+      via:{gimnasio:15,musica:17,teatro:17,colegio:27,oficina:23}, semana:256,
+      sv:{f:"2025-01", lat:4.70515, lon:-74.069279},
       nuevo:true,
       note:"106 m² con 3 habitaciones, 3 baños, 1 parqueadero en Lagos de Córdoba. Piso 6.",
       flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
