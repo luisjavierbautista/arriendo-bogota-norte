@@ -156,6 +156,16 @@
   .hermana a { color:var(--accent); font-weight:600; text-decoration:none;
     border-bottom:1px solid currentColor; padding-bottom:1px; }
   .hermana span { color:var(--muted); }
+  /* La lista de barrios se muestra recortada: los más poblados a la vista y el
+     resto detrás de un botón, para que los filtros no se coman la pantalla. */
+  #barrio-chips .extra { display:none; }
+  #barrio-chips.abierto .extra { display:inline-flex; }
+  .masbarrios { font-family:var(--sans); font-size:12.5px; font-weight:600; color:var(--accent);
+    background:none; border:1px dashed var(--line); border-radius:999px; padding:6px 12px;
+    cursor:pointer; }
+  .masbarrios:hover { border-color:var(--accent); }
+  .mapbtns { display:flex; gap:8px; align-items:center; margin:0 0 10px; }
+  .mapbtns .nota { font-family:var(--sans); font-size:12px; color:var(--muted); }
   @media (max-width:640px) { .masthead { padding-top:36px; } .controls { position:static; } .grid { grid-template-columns:1fr; } }
 
   /* ---------- mapa real ---------- */
@@ -361,6 +371,10 @@
       o venta. Los dos puntos oscuros son <strong>El Tiempo</strong> y <strong>la casa de la
       familia</strong>, con anillos de 1, 2 y 3 km.
     </p>
+    <div class="mapbtns">
+      <button class="chip" type="button" id="v-fit">Encuadrar</button>
+      <span class="nota">La rueda hace zoom sobre el mapa; el encuadre se queda como lo dejes.</span>
+    </div>
     <div class="mapwrap is-map" id="wrap-real"><div id="leafmap"></div></div>
     <div class="map-legend" id="leyenda"></div>
   </section>
@@ -3641,16 +3655,42 @@
       render();
     });
     box.appendChild(b);
+    return b;
   }
+  /* Los barrios que más oferta tienen quedan a la vista; el resto se despliega.
+     Con 60 barrios, mostrarlos todos empujaba el mapa fuera de la pantalla. */
+  var BARRIOS_VISIBLES = 8;
+  function llenarBarrios(box, pares, total) {
+    box.textContent = "";
+    box.classList.remove("abierto");
+    addChip(box, "Todos", "all", total, "barrio");
+    pares.forEach(function (p, i) {
+      var b = addChip(box, p[0], p[0], p[1], "barrio");
+      if (i >= BARRIOS_VISIBLES) b.classList.add("extra");
+    });
+    if (pares.length > BARRIOS_VISIBLES) {
+      var mas = document.createElement("button");
+      mas.type = "button";
+      mas.className = "masbarrios";
+      var ocultos = pares.length - BARRIOS_VISIBLES;
+      mas.textContent = "+ " + ocultos + " barrios";
+      mas.addEventListener("click", function () {
+        var abierto = box.classList.toggle("abierto");
+        mas.textContent = abierto ? "− ver menos" : "+ " + ocultos + " barrios";
+      });
+      box.appendChild(mas);
+    }
+  }
+
   /* Los barrios se repintan al cambiar de operación: no son los mismos en venta que en arriendo. */
   function pintarChips() {
     var enOp = DATA.filter(function (d) { return d.op === state.op; });
     var counts = {};
     enOp.forEach(function (d) { counts[d.barrio] = (counts[d.barrio] || 0) + 1; });
-    chipBox.textContent = "";
-    addChip(chipBox, "Todos", "all", enOp.length, "barrio");
-    Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a] || a.localeCompare(b, "es"); })
-      .forEach(function (n) { addChip(chipBox, n, n, counts[n], "barrio"); });
+
+    llenarBarrios(chipBox, Object.keys(counts)
+      .sort(function (a, b) { return counts[b] - counts[a] || a.localeCompare(b, "es"); })
+      .map(function (n) { return [n, counts[n]]; }), enOp.length);
     portalBox.textContent = "";
     addChip(portalBox, "Todos", "all", enOp.length, "portal");
     ["Fincaraíz","Metrocuadrado","Ciencuadras"].forEach(function (p) {
@@ -3717,6 +3757,11 @@
   var CARTO = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
   var lmap = L.map("leafmap", { scrollWheelZoom:false }).setView([ANCLAS[0].lat, ANCLAS[0].lon], 13);
   L.control.scale({ imperial:false }).addTo(lmap);
+  /* La rueda hace zoom solo cuando el puntero está sobre el mapa y ya se hizo clic
+     en él: así se puede explorar sin que la página deje de hacer scroll de largo. */
+  var leafEl = document.getElementById("leafmap");
+  leafEl.addEventListener("mouseenter", function () { lmap.scrollWheelZoom.enable(); });
+  leafEl.addEventListener("mouseleave", function () { lmap.scrollWheelZoom.disable(); });
   /* La llave de CARTO va en la URL del tile: es publica por diseno, como cualquier
      llave de basemap, y debe estar restringida por dominio en el panel de CARTO.
      Sin ella los tiles siguen cargando, pero sin cuota propia ni garantia de servicio. */
@@ -3746,7 +3791,10 @@
 
   var markerLayer = L.layerGroup().addTo(lmap);
   var lastBounds = null, pinById = {};
-  function refit() { lmap.invalidateSize(); if (lastBounds) lmap.fitBounds(lastBounds, { animate:false }); }
+  var yaEncuadrado = false;
+  /* Cambiar de pestaña o de tamaño no debe tirar el encuadre que el usuario eligió. */
+  function refit() { lmap.invalidateSize(); }
+  function encuadrar() { if (lastBounds) lmap.fitBounds(lastBounds, { animate:true }); }
 
   function markPin(url) {
     Array.prototype.forEach.call(document.querySelectorAll("#leafmap .pin.on"),
@@ -3788,14 +3836,14 @@
         (d.sv === false ? "" :
           ' <a class="go" href="' + urlPano(d.sv ? d.sv.lat : d.lat, d.sv ? d.sv.lon : d.lon) +
           '" target="_blank" rel="noopener">Fachada &rarr;</a>') +
-        "</div></div>", { maxWidth:236, minWidth:236, offset:[0, -6] });
+        "</div></div>", { maxWidth:236, minWidth:236, offset:[0, -6], autoPan:false });
       m.on("click", function () { focusCard(d.url, false); markPin(d.url); });
       m.addTo(markerLayer);
       pinById[d.url] = m;
       pts.push([d.lat, d.lon]);
     });
     lastBounds = pts.length > ANCLAS.length ? L.latLngBounds(pts).pad(0.04) : null;
-    if (lastBounds) lmap.fitBounds(lastBounds, { animate:false });
+    if (lastBounds && !yaEncuadrado) { lmap.fitBounds(lastBounds, { animate:false }); yaEncuadrado = true; }
   }
 
   /* ---------- tema claro / oscuro ---------- */
@@ -3832,6 +3880,8 @@
       '<span><i style="background:transparent;box-shadow:0 0 0 2px var(--accent)"></i> apareció en la última corrida</span>' +
       "<span>La pastilla muestra " + (state.op === "venta" ? "el precio pedido" : "el costo mensual total") + "</span>";
   }
+
+  document.getElementById("v-fit").addEventListener("click", encuadrar);
 
   function render() {
     pintarLeyenda();
