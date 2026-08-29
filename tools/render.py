@@ -276,6 +276,11 @@ def main():
     # en otra pestana en vez de incrustarlo.
     sv = os.environ.get("SV_EMBED_KEY", "").strip()
     s = re.sub(r'var SV_KEY = "[^"]*";', 'var SV_KEY = "%s";' % sv, s, count=1)
+    # Llave de CARTO Basemaps: tambien es publica por diseno (viaja en la URL de cada
+    # tile) y se restringe por dominio en el panel de CARTO. Sin ella el mapa carga
+    # igual, contra la cuota compartida y sin garantia de servicio.
+    carto = os.environ.get("CARTO_KEY", "").strip()
+    s = re.sub(r'var CARTO_KEY = "[^"]*";', 'var CARTO_KEY = "%s";' % carto, s, count=1)
     s = re.sub(r'var FECHA_CORRIDA = "[^"]*";', 'var FECHA_CORRIDA = "%s";' % fecha, s, count=1)
 
     s = swap(s, "  var DATA = [", bloque_datos(cfg, avisos, nuevos))

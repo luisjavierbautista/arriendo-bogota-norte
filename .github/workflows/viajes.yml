@@ -48,6 +48,7 @@ jobs:
       - name: Regenerar las páginas
         env:
           SV_EMBED_KEY: ${{ vars.SV_EMBED_KEY }}
+          CARTO_KEY: ${{ vars.CARTO_KEY }}
         run: |
           for b in norte occidente; do
             python3 tools/render.py --busqueda "$b"

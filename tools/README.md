@@ -114,6 +114,24 @@ Si la imagen de Street View devuelve 200 sin referente, la llave todavía tiene 
 API de las restricciones de la llave y dejar solo Maps Embed API. Los cambios tardan unos minutos en
 propagar.
 
+## Mapa base
+
+Los mapas usan los estilos **Positron** (claro) y **Dark Matter** (oscuro) de CARTO, con la llave de
+CARTO Basemaps en la URL del tile. Como cualquier llave de basemap, **es pública por diseño**: viaja
+en cada petición del navegador y no se puede esconder. Lo que sí hay que hacer es **restringirla por
+dominio** en el panel de CARTO, para que nadie más gaste esa cuota.
+
+Se guarda como *variable* del repo (no secreto, porque va al HTML) y `render.py` la inyecta:
+
+```
+gh variable set CARTO_KEY --repo luisjavierbautista/finca-raiz-bogota
+export CARTO_KEY=...        # para renderizar en local con llave
+```
+
+Sin la variable el mapa **carga igual**, pero contra la cuota compartida de CARTO y sin garantía de
+servicio: el `var CARTO_KEY = ""` de la página hace que la URL salga sin `?key=`.
+
+
 ## Recién aparecidos
 
 `data.json` guarda en `nuevos` las URLs que no estaban en la corrida anterior, comparando por

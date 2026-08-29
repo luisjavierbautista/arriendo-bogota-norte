@@ -435,6 +435,8 @@
                 "Ciencuadras":"https://www.ciencuadras.com", "Properati":"https://www.properati.com.co" };
   function linkOf(d) { return (BASES[d.src] || BASES["Fincaraíz"]) + d.url; }
 
+  var CARTO_KEY = "cb1_2i4b_1_7033d48a7cca7cc2e3a223cf";
+
   var SV_KEY = "AIzaSyBf-KHphnkdiM0rLRysrLwcFeQgm1937k8";
 
   var FECHA_CORRIDA = "28 ago 2026";
@@ -1200,8 +1202,14 @@
   var CARTO = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
   var lmap = L.map("leafmap", { scrollWheelZoom:false }).setView([4.716, -74.056], 13);
   L.control.scale({ imperial:false }).addTo(lmap);
-  var URL_CLARO = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
-  var URL_OSCURO = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+  /* La llave de CARTO va en la URL del tile: es publica por diseno, como cualquier
+     llave de basemap, y debe estar restringida por dominio en el panel de CARTO.
+     Sin ella los tiles siguen cargando, pero sin cuota propia ni garantia de servicio. */
+  function tiles(estilo) {
+    return "https://{s}.basemaps.cartocdn.com/" + estilo + "/{z}/{x}/{y}{r}.png" +
+           (CARTO_KEY ? "?key=" + CARTO_KEY : "");
+  }
+  var URL_CLARO = tiles("light_all"), URL_OSCURO = tiles("dark_all");
   var base = L.tileLayer(isDark() ? URL_OSCURO : URL_CLARO,
                          { maxZoom:20, subdomains:"abcd", attribution:CARTO }).addTo(lmap);
   var satelite = L.tileLayer(
