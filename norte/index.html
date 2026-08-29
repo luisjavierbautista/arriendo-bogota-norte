@@ -287,13 +287,13 @@
     <div class="tile is-key"><div class="n">71</div><div class="l">candidatos vigentes hoy</div></div>
     <div class="tile"><div class="n">9</div><div class="l">no estaban en el barrido anterior</div></div>
     <div class="tile"><div class="n">25</div><div class="l">con ascensor confirmado en la ficha</div></div>
-    <div class="tile"><div class="n">3h42</div><div class="l">el mejor viaje semanal, solo ida</div></div>
+    <div class="tile"><div class="n">3h17</div><div class="l">el mejor viaje semanal, solo ida</div></div>
   </div>
 
   <div class="verdict">
     <h2>Qué cambió</h2>
     <p id="auto-resumen">
-      El barrido del 29 ago 2026 deja <strong>71 candidatos vigentes</strong>: 9 que no estaban en la corrida anterior y 3 que se cayeron de los portales. <strong>Ojo con el de Santa Barbara de 397,1 m²</strong>: el barrido lo marca en $2.355.000 pero esa cifra es solo la administración — el canon real, verificado en la ficha de Fincaraíz, es $14.700.000, muy por encima del tope de esta búsqueda; es un error de parseo del portal, no una oferta real. Descontando ese, el más económico que entró es Colina Campestre: 128 m² por <strong>$3.100.000</strong>. Solo <strong>25 de 71</strong> declaran ascensor en la ficha: el resto quedan marcados como sin confirmar, no como sin ascensor. En tiempos de viaje, el mejor ubicado es <strong>Alhambra</strong>: 24 minutos a Colegio y 22 minutos a Oficina, para un total de 3h42 por semana solo de ida.
+      El barrido del 29 ago 2026 deja <strong>71 candidatos vigentes</strong>: 9 que no estaban en la corrida anterior y 3 que se cayeron de los portales. El más económico que entró está en Santa Barbara: 397,1 m² por <strong>$2.355.000</strong>. Solo <strong>25 de 71</strong> declaran ascensor en la ficha: el resto quedan marcados como sin confirmar, no como sin ascensor. En tiempos de viaje, el mejor ubicado es <strong>Santa Barbara</strong>: 20 minutos a Colegio y 24 minutos a Oficina, para un total de 3h17 por semana solo de ida.
     </p>
     <p>
       Los portales publican el mismo apartamento con precios y datos distintos, así que cada aviso se deduplica por coordenada y área, no por enlace. La cifra grande de cada ficha es el <strong>costo mensual total</strong>: en Suba la mayoría incluye la administración en el canon y en Usaquén casi siempre va aparte, y compararlos por canon llevaría a escoger mal. Los tiempos de viaje son en carro, con el tráfico previsto por Google para el día y la hora reales de cada compromiso. El del colegio es referencia comparativa entre apartamentos, no el tiempo de la ruta escolar, que recoge a otros niños y depende de cuál les asignen.
@@ -448,9 +448,9 @@
                 "Ciencuadras":"https://www.ciencuadras.com", "Properati":"https://www.properati.com.co" };
   function linkOf(d) { return (BASES[d.src] || BASES["Fincaraíz"]) + d.url; }
 
-  var CARTO_KEY = "";
+  var CARTO_KEY = "cb1_2i4b_1_7033d48a7cca7cc2e3a223cf";
 
-  var SV_KEY = "";
+  var SV_KEY = "AIzaSyBf-KHphnkdiM0rLRysrLwcFeQgm1937k8";
 
   var FECHA_CORRIDA = "29 ago 2026";
 
@@ -459,9 +459,11 @@
       estrato:"6", piso:"6", asc:"si", src:"Fincaraíz", date:"2026-08-26", pub:"TREA - The Real Estate Co", inc:[],
       lat:4.6991509, lon:-74.0518031, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/194168203", img:"https://cdn2.infocasas.com.uy/repo/img/6a8f71330d594_infocdn__1781196269423-16653c3d30a3baefjpg.jpg",
       dist:{casa:2.22},
+      via:{gimnasio:8,musica:12,teatro:9,colegio:20,oficina:24}, semana:197,
+      sv:{f:"2025-02", lat:4.699035, lon:-74.051793},
       nuevo:true,
       note:"397,1 m² con 5 habitaciones, 6 baños, 4 parqueaderos en Santa Barbara. Piso 6.",
-      flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
+      flags:[{t:"Colegio a 20 minutos, de lo mejor de la lista.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { op:"arriendo", barrio:"Monaco", canon:2900000, admin:null, m2:100, hab:0, ban:3, parq:0, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.698074, lon:-74.061535, approx:false, url:"/inmueble/apartamento-en-arriendo-en-monaco-bogota-3562467", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3562467/e177159863094_plana.jpeg",
@@ -474,9 +476,11 @@
       estrato:"4", piso:"17", asc:"si", src:"Fincaraíz", date:"2026-08-28", pub:"PRAGMA REAL S.A.S.", inc:[],
       lat:4.7418364, lon:-74.0600145, approx:false, url:"/apartamento-en-arriendo-en-colina-campestre-bogota/194180445", img:"https://cdn2.infocasas.com.uy/repo/img/6a91fd61095c5_infocdn__nconudmvyngbi9f7cdeouqdpehbcooa5s6wzro9gjpg.jpg",
       dist:{casa:4.57},
+      via:{gimnasio:21,musica:21,teatro:22,colegio:19,oficina:34}, semana:265,
+      sv:{f:"2025-01", lat:4.741846, lon:-74.060053},
       nuevo:true,
       note:"128 m² con 3 habitaciones, 3 baños, 1 parqueadero en Colina Campestre. Piso 17.",
-      flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
+      flags:[{t:"Colegio a 19 minutos, de lo mejor de la lista.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { op:"arriendo", barrio:"Monaco", canon:3144000, admin:null, m2:100, hab:0, ban:2, parq:0, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.705042, lon:-74.068982, approx:false, url:"/inmueble/apartamento-en-arriendo-en-monaco-bogota-3852452", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3852452/affff__178779531196_plana.jpeg",
@@ -521,6 +525,8 @@
       estrato:"5", piso:"2", asc:"si", src:"Fincaraíz", date:"2026-08-28", pub:"Commodity Asesorias S.A.S.", inc:[],
       lat:4.7106556, lon:-74.0781099, approx:false, url:"/apartamento-en-arriendo-en-niza-bogota/194181092", img:"https://cdn2.infocasas.com.uy/repo/img/6a925a9691a29_infocdn__gr93943320250403031708jpg.jpg",
       dist:{casa:4.83},
+      via:{gimnasio:18,musica:21,teatro:20,colegio:29,oficina:21}, semana:274,
+      sv:{f:"2024-05", lat:4.710748, lon:-74.078083},
       nuevo:true,
       note:"160 m² con 4 habitaciones, 4 baños, 2 parqueaderos en Niza. Piso 2.",
       flags:[{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
@@ -786,9 +792,11 @@
       estrato:"5", piso:"2", asc:"si", src:"Fincaraíz", date:"2026-08-28", pub:"Esperanza Domínguez P", inc:[],
       lat:4.7039419, lon:-74.030546, approx:false, url:"/apartamento-en-arriendo-en-bella-suiza-bogota/194179947", img:"https://cdn2.infocasas.com.uy/repo/img/6a91e99bc2e20_infocdn__mg0lnjtflqjg5wkntv40gw6zc6e39tgjhlnbo6snjpg.jpg",
       dist:{casa:0.75},
+      via:{gimnasio:13,musica:14,teatro:21,colegio:26,oficina:34}, semana:276,
+      sv:{f:"2024-06", lat:4.70384, lon:-74.030587},
       nuevo:true,
       note:"115 m² con 3 habitaciones, 3 baños, 2 parqueaderos en Bella Suiza. Piso 2.",
-      flags:[{t:"A 0,8 km de tu casa actual.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
+      flags:[{t:"Colegio a 26 minutos, de lo mejor de la lista.", s:"ok"},{t:"A 0,8 km de tu casa actual.", s:"ok"},{t:"Ascensor confirmado en la ficha.", s:"ok"}] },
     { op:"arriendo", barrio:"Chico Navarra", canon:4500000, admin:0, m2:103, hab:3, ban:2, parq:2, dep:null,
       estrato:"6", piso:"3", asc:"nd", src:"Fincaraíz", date:"2026-07-30", pub:"OSCAR GARCIA", inc:[],
       lat:4.6926622, lon:-74.0501092, approx:false, url:"/apartamento-en-arriendo-en-chico-navarra-bogota/194054894", img:"https://cdn2.infocasas.com.uy/repo/img/6a6b9348ddc2d_infocdn__mwjonyznukjavpoffffaojmppxqhb3q9slzishgdjpg.jpg",
@@ -938,9 +946,11 @@
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado", inc:[],
       lat:4.7178436, lon:-74.0639775, approx:false, url:"/inmueble/arriendo-apartamento-bogota-iberia-3-habitaciones-3-banos-2-garajes/11139-M6997038", img:"https://multimedia.metrocuadrado.com/11139-M6997038/11139-M6997038_1_x.jpg",
       dist:{casa:3.39},
+      via:{gimnasio:17,musica:17,teatro:17,colegio:22,oficina:29}, semana:250,
+      sv:{f:"2025-02", lat:4.717666, lon:-74.064031},
       nuevo:true,
       note:"138 m² con 3 habitaciones, 3 baños, 2 parqueaderos en Iberia.",
-      flags:[] },
+      flags:[{t:"Colegio a 22 minutos, de lo mejor de la lista.", s:"ok"}] },
     { op:"arriendo", barrio:"Santa Barbara", canon:4300000, admin:615000, m2:114, hab:3, ban:2, parq:1, dep:null,
       estrato:"6", piso:"2", asc:"si", src:"Fincaraíz", date:"2025-02-27", pub:"Ingrid Guerra", inc:[],
       lat:4.6956038426177, lon:-74.040386177246, approx:false, url:"/apartamento-en-arriendo-en-santa-barbara-bogota/192081673", img:"https://cdn2.infocasas.com.uy/repo/img/67d5ea3d653d6_infocdn__2ckeqtyd6kfrorsg06thaqhe1pjkpnf8qdpscsy1jpg.jpg",
@@ -969,6 +979,8 @@
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.695685, lon:-74.035686, approx:false, url:"/inmueble/apartamento-en-arriendo-en-santa-barbara-central-bogota-3845340", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3845340/add__178796219453_plana.jpeg",
       dist:{casa:1.52},
+      via:{gimnasio:6,musica:11,teatro:13,colegio:28,oficina:27}, semana:244,
+      sv:{f:"2025-02", lat:4.695583, lon:-74.035718},
       nuevo:true,
       note:"110 m² con habitaciones sin dato, 3 baños en Santa Barbara Central.",
       flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"A 1,5 km de tu casa actual.", s:"ok"},{t:"Queda en el tope de $5.000.000.", s:"warn"}] },
