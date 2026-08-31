@@ -309,13 +309,13 @@
     <div class="tile is-key"><div class="n">102</div><div class="l">en arriendo hasta $2.000.000</div></div>
     <div class="tile"><div class="n">297</div><div class="l">en venta hasta $500 millones</div></div>
     <div class="tile"><div class="n">52</div><div class="l">no estaban en el barrido anterior</div></div>
-    <div class="tile"><div class="n">211</div><div class="l">a menos de 20 minutos de El Tiempo</div></div>
+    <div class="tile"><div class="n">217</div><div class="l">a menos de 20 minutos de El Tiempo</div></div>
   </div>
 
   <div class="verdict">
     <h2>Qué cambió</h2>
     <p id="auto-resumen">
-      El barrido del 31 ago 2026 deja <strong>399 opciones vigentes</strong>: 52 que no estaban en la corrida anterior y 38 que se cayeron de los portales. Son <strong>102 en arriendo</strong> y <strong>297 en venta</strong>. En arriendo, el más económico que entró está en Engativa: 70 m² por <strong>$1.400.000</strong>. En venta, el más económico que entró está en Castilla: 47 m² por <strong>$223 millones</strong>. En tiempos de viaje, el mejor ubicado es <strong>Engativa</strong>: 4 minutos a El Tiempo y 27 minutos a la casa de la familia, para un total de 1h14 por semana solo de ida. Entre los nuevos en arriendo hay una <strong>oficina en La Estrada</strong> publicada sin habitaciones ni parqueadero (Ciencuadras no los informa): no es un apartamento, aunque pase el filtro de m² y precio.
+      El barrido del 31 ago 2026 deja <strong>399 opciones vigentes</strong>: 52 que no estaban en la corrida anterior y 38 que se cayeron de los portales. Son <strong>102 en arriendo</strong> y <strong>297 en venta</strong>. En arriendo, el más económico que entró está en Engativa: 70 m² por <strong>$1.400.000</strong>. En venta, el más económico que entró está en Castilla: 47 m² por <strong>$223 millones</strong>. En tiempos de viaje, el mejor ubicado es <strong>Engativa</strong>: 4 minutos a El Tiempo y 27 minutos a la casa de la familia, para un total de 1h14 por semana solo de ida.
     </p>
     <p>
       Cada aviso se deduplica por coordenada y área, no por enlace: los portales republican el mismo apartamento con códigos nuevos. En arriendo, la cifra grande es el <strong>costo mensual total</strong> (canon más administración cuando el aviso la informa); en venta es el precio pedido, que casi siempre se negocia. Los tiempos son en carro con el tráfico previsto por Google, no en transporte público: sobre la Calle 26 y la Avenida Boyacá los minutos y los kilómetros no se parecen. La zona sale de dos anclas —El Tiempo y la casa de la familia— y no de una lista de barrios, así que aparecen barrios que no estabas mirando.
@@ -426,9 +426,9 @@
                 "Ciencuadras":"https://www.ciencuadras.com", "Properati":"https://www.properati.com.co" };
   function linkOf(d) { return (BASES[d.src] || BASES["Fincaraíz"]) + d.url; }
 
-  var CARTO_KEY = "";
+  var CARTO_KEY = "cb1_2i4b_1_7033d48a7cca7cc2e3a223cf";
 
-  var SV_KEY = "";
+  var SV_KEY = "AIzaSyBf-KHphnkdiM0rLRysrLwcFeQgm1937k8";
 
   var FECHA_CORRIDA = "31 ago 2026";
 
@@ -629,9 +629,11 @@
       estrato:"3", piso:"1", asc:"nd", src:"Fincaraíz", date:"2026-08-30", pub:"juliomontenegro", inc:[],
       lat:4.671666, lon:-74.099202, approx:false, url:"/apartamento-en-arriendo-en-engativa-bogota/194184389", img:"https://cdn2.infocasas.com.uy/repo/img/6a94942b8096e_infocdn__n3lnx64p5ozu33ll5aso0l9ckej3aclvydhlchcsjpg.jpg",
       dist:{familia:7.10,tiempo:1.59},
+      via:{tiempo:9,familia:40}, semana:125,
+      sv:{f:"2025-03", lat:4.671593, lon:-74.099122},
       nuevo:true,
       note:"70 m² con 2 habitaciones, 2 baños, 0 parqueaderos en Engativa. Piso 1.",
-      flags:[] },
+      flags:[{t:"A 9 minutos de El Tiempo en hora pico.", s:"ok"}] },
     { op:"arriendo", barrio:"Milenta Ii Kennedy", canon:1400000, admin:null, m2:54, hab:3, ban:2, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado", inc:[],
       lat:4.6112185, lon:-74.12899, approx:false, url:"/inmueble/arriendo-apartamento-bogota-milenta-et.-ii-3-habitaciones-2-banos-1-garajes/MC6981705", img:"https://multimedia.metrocuadrado.com/MC6981705/MC6981705_2_x.jpg",
@@ -644,9 +646,11 @@
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.681345, lon:-74.09113, approx:false, url:"/inmueble/oficina-en-arriendo-en-la-estrada-bogota-3087869", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3087869/bfced177333491956_plana.jpeg",
       dist:{familia:8.50,tiempo:2.93},
+      via:{tiempo:13,familia:47}, semana:159,
+      sv:{f:"2025-03", lat:4.681231, lon:-74.091025},
       nuevo:true,
       note:"90 m² con habitaciones sin dato, 3 baños en Oficina En Arriendo En la Estrada.",
-      flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"}] },
+      flags:[{t:"A 13 minutos de El Tiempo en hora pico.", s:"ok"},{t:"El aviso no informa la administración.", s:"crit"},{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"}] },
     { op:"arriendo", barrio:"Kennedy Central", canon:1430000, admin:0, m2:50, hab:2, ban:2, parq:1, dep:null,
       estrato:"3", piso:"2", asc:"nd", src:"Fincaraíz", date:"2025-07-15", pub:"AC Ingeniería e Inmobiliaria", inc:[],
       lat:4.6223917, lon:-74.1542476, approx:false, url:"/apartamento-en-arriendo-en-kennedy-central-bogota/192643375", img:"https://cdn2.infocasas.com.uy/repo/img/6876dd1d06e67_infocdn__ellexy2bxyfqfpmmsymtfum1yefovd5ut40f4eqkjpg.jpg",
@@ -940,6 +944,8 @@
       estrato:"3", piso:"3", asc:"nd", src:"Fincaraíz", date:"2026-08-30", pub:"Grupo Inmobiliario Mundo Sas", inc:[],
       lat:4.6189552, lon:-74.122586, approx:false, url:"/apartamento-en-arriendo-en-galan-bogota/194184629", img:"https://cdn2.infocasas.com.uy/repo/img/6a94d42561e41_infocdn__kcqoas6uij4avf04hsefu7qpltnqa9y52kr0njnqjpg.jpg",
       dist:{familia:2.13,tiempo:4.80},
+      via:{tiempo:26,familia:20}, semana:170,
+      sv:{f:"2025-01", lat:4.618883, lon:-74.12253},
       nuevo:true,
       note:"47 m² con 2 habitaciones, 1 baños, 0 parqueaderos en Galan. Piso 3.",
       flags:[] },
@@ -1203,9 +1209,11 @@
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado", inc:[],
       lat:4.676466, lon:-74.10716, approx:false, url:"/inmueble/arriendo-apartamento-bogota-normandia-occidental-2-habitaciones-1-banos-1-garajes/MC7002862", img:"https://multimedia.metrocuadrado.com/MC7002862/MC7002862_1_x.jpg",
       dist:{familia:6.99,tiempo:2.07},
+      via:{tiempo:14,familia:36}, semana:142,
+      sv:{f:"2025-03", lat:4.676559, lon:-74.107242},
       nuevo:true,
       note:"49 m² con 2 habitaciones, 1 baños, 1 parqueadero en Normandia Occidental Normandia.",
-      flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"Queda en el tope de $2.000.000.", s:"warn"}] },
+      flags:[{t:"A 14 minutos de El Tiempo en hora pico.", s:"ok"},{t:"El aviso no informa la administración.", s:"crit"},{t:"Queda en el tope de $2.000.000.", s:"warn"}] },
     { op:"arriendo", barrio:"Carvajal", canon:2000000, admin:null, m2:95, hab:3, ban:2, parq:0, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado", inc:[],
       lat:4.605449, lon:-74.138747, approx:false, url:"/inmueble/arriendo-apartamento-bogota-carvajal-3-habitaciones-2-banos/2214-M5142526", img:"https://multimedia.metrocuadrado.com/2214-M5142526/2214-M5142526_189_x.jpg",
@@ -1234,6 +1242,8 @@
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.678219, lon:-74.105816, approx:false, url:"/inmueble/apartamento-en-arriendo-en-el-encanto-bogota-3857599", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3857599/ac_178810784298_plana.jpeg",
       dist:{familia:7.24,tiempo:2.24},
+      via:{tiempo:16,familia:38}, semana:156,
+      sv:{f:"2025-03", lat:4.678242, lon:-74.105789},
       nuevo:true,
       note:"60 m² con habitaciones sin dato, 1 baños en El Encanto.",
       flags:[{t:"El aviso no informa la administración.", s:"crit"},{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"},{t:"Queda en el tope de $2.000.000.", s:"warn"}] },
@@ -1339,9 +1349,11 @@
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado", inc:[],
       lat:4.622641, lon:-74.15571, approx:false, url:"/inmueble/venta-apartamento-bogota-bosque-de-kenndy-2-habitaciones-1-banos/MC7002947", img:"https://multimedia.metrocuadrado.com/MC7002947/MC7002947_1_x.jpg",
       dist:{familia:1.61,tiempo:6.96},
+      via:{tiempo:39,familia:8}, semana:211,
+      sv:{f:"2025-04", lat:4.62258, lon:-74.155722},
       nuevo:true,
       note:"49 m² con 2 habitaciones, 1 baños, 0 parqueaderos en Ciudad Kennedy Central Kennedy.",
-      flags:[] },
+      flags:[{t:"A 8 minutos de la casa de la familia.", s:"ok"},{t:"El Tiempo queda a 39 minutos en la mañana.", s:"warn"}] },
     { op:"venta", barrio:"Pio Xii", canon:243000000, admin:null, m2:47, hab:3, ban:0, parq:0, dep:null,
       estrato:"3", piso:"2", asc:"nd", src:"Fincaraíz", date:"2026-07-25", pub:"ANDREA FLECHAS", inc:[],
       lat:4.635877, lon:-74.1491719, approx:false, url:"/apartamento-en-venta-en-pio-xii-bogota/194034320", img:"",
@@ -1718,9 +1730,11 @@
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.643425, lon:-74.149675, approx:false, url:"/inmueble/apartamento-en-venta-en-el-castillo-bogota-3707229", img:"https://www.ciencuadras.com/sources/images/result/no-photo-property.jpg",
       dist:{familia:2.42,tiempo:5.34},
+      via:{tiempo:39,familia:16}, semana:227,
+      sv:{f:"2023-11", lat:4.643448, lon:-74.149651},
       nuevo:true,
       note:"54 m² con habitaciones sin dato, 2 baños en El Castillo.",
-      flags:[{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"}] },
+      flags:[{t:"El Tiempo queda a 39 minutos en la mañana.", s:"warn"},{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"}] },
     { op:"venta", barrio:"Las Americas", canon:280000000, admin:null, m2:58, hab:0, ban:2, parq:0, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.624785, lon:-74.126729, approx:false, url:"/inmueble/apartamento-en-venta-en-las-americas-bogota-2248151", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/2248151/xQddBBVNcXvVfuVTZW_pnLQEifaNWGkfnlMShfegwawZiDVVcgRyctqiMPxuRwbo_kzaMERfLM-MOJSIGuTfwvSQAfYMZtQ164434999773_plana.jpeg",
@@ -1927,9 +1941,11 @@
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.607172, lon:-74.150629, approx:false, url:"/inmueble/casa-en-venta-en-timiza-a-bogota-3800030", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3800030/aa__178792923230_plana.jpeg",
       dist:{familia:2.06,tiempo:7.66},
+      via:{tiempo:44,familia:14}, semana:248,
+      sv:{f:"2025-01", lat:4.607111, lon:-74.150541},
       nuevo:true,
       note:"61 m² con habitaciones sin dato, 3 baños en Casa En Venta En Timiza A.",
-      flags:[{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"}] },
+      flags:[{t:"A 14 minutos de la casa de la familia.", s:"ok"},{t:"El Tiempo queda a 44 minutos en la mañana.", s:"warn"},{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"}] },
     { op:"venta", barrio:"Galan", canon:300000000, admin:null, m2:68, hab:0, ban:2, parq:0, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.620028, lon:-74.123975, approx:false, url:"/inmueble/apartamento-en-venta-en-galan-bogota-3739664", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3739664/ae__178719715880_plana.jpeg",
@@ -1991,9 +2007,11 @@
       estrato:"4", piso:null, asc:"nd", src:"Fincaraíz", date:"2026-04-06", pub:"MARCK PLUSS INMOBILIARIA", inc:[],
       lat:4.6686066732127, lon:-74.106388092041, approx:false, url:"/apartamento-en-venta-en-normandia-bogota/193595943", img:"https://cdn2.infocasas.com.uy/repo/img/6a7129a65bef1_infocdn__5470-3-1775498999jpg.jpg",
       dist:{familia:6.33,tiempo:1.20},
+      via:{tiempo:14,familia:35}, semana:140,
+      sv:{f:"2025-03", lat:4.668478, lon:-74.106297},
       nuevo:true,
       note:"50 m² con 2 habitaciones, 1 baños, 1 parqueadero en Normandia.",
-      flags:[] },
+      flags:[{t:"A 14 minutos de El Tiempo en hora pico.", s:"ok"}] },
     { op:"venta", barrio:"Ciudad Alsacia", canon:318000000, admin:null, m2:54, hab:3, ban:2, parq:0, dep:null,
       estrato:"4", piso:"5", asc:"nd", src:"Fincaraíz", date:"2026-05-04", pub:"KATHERIN SANDOVAL", inc:[],
       lat:4.6443133, lon:-74.1265292, approx:false, url:"/apartamento-en-venta-en-ciudad-alsacia-bogota/193706304", img:"https://cdn2.infocasas.com.uy/repo/img/69f9113926318_infocdn__gxpmzasvjearfikyttcaoqe3kn6ydk80sfo1k98vjpg.jpg",
@@ -3063,9 +3081,11 @@
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado", inc:[],
       lat:4.6346992, lon:-74.09676, approx:false, url:"/inmueble/venta-apartamento-bogota-quinta-paredes-3-habitaciones-2-banos-1-garajes/16305-M7002715", img:"https://multimedia.metrocuadrado.com/16305-M7002715/16305-M7002715_18_x.jpg",
       dist:{familia:5.10,tiempo:2.70},
+      via:{tiempo:10,familia:31}, semana:112,
+      sv:{f:"2025-03", lat:4.634545, lon:-74.096684},
       nuevo:true,
       note:"74 m² con 3 habitaciones, 2 baños, 1 parqueadero en Quinta Paredes.",
-      flags:[] },
+      flags:[{t:"A 10 minutos de El Tiempo en hora pico.", s:"ok"}] },
     { op:"venta", barrio:"Nicolas de Federman", canon:450000000, admin:null, m2:57, hab:2, ban:1, parq:1, dep:null,
       estrato:"4", piso:null, asc:"si", src:"Fincaraíz", date:"2026-02-05", pub:"Grupo Inmobiliario Crecer SAS", inc:[],
       lat:4.6513517, lon:-74.079532, approx:false, url:"/apartamento-en-venta-en-nicolas-de-federman-bogota/193365016", img:"",
@@ -3320,9 +3340,11 @@
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.613037, lon:-74.156175, approx:false, url:"/inmueble/casa-en-venta-en-timiza-bogota-3838561", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3838561/acba__178759155515_plana.jpeg",
       dist:{familia:2.00,tiempo:7.65},
+      via:{tiempo:45,familia:10}, semana:245,
+      sv:{f:"2026-03", lat:4.613066, lon:-74.156135},
       nuevo:true,
       note:"135 m² con habitaciones sin dato, 2 baños en Casa En Venta En Timiza.",
-      flags:[{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"}] },
+      flags:[{t:"A 10 minutos de la casa de la familia.", s:"ok"},{t:"El Tiempo queda a 45 minutos en la mañana.", s:"warn"},{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"}] },
     { op:"venta", barrio:"Normandia", canon:475000000, admin:null, m2:73, hab:3, ban:2, parq:1, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Metrocuadrado", date:null, pub:"Metrocuadrado", inc:[],
       lat:4.676027297973633, lon:-74.10643005371094, approx:false, url:"/inmueble/venta-apartamento-bogota-normandia-occidental-3-habitaciones-2-banos-1-garajes/22985-M6976994", img:"https://multimedia.metrocuadrado.com/22985-M6976994/22985-M6976994_1_x.jpg",
@@ -3481,9 +3503,11 @@
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.607812, lon:-74.149691, approx:false, url:"/inmueble/casa-en-venta-en-timiza-a-bogota-3429623", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3429623/aaee__178792923080_plana.jpeg",
       dist:{familia:1.95,tiempo:7.54},
+      via:{tiempo:43,familia:13}, semana:241,
+      sv:{f:"2025-01", lat:4.607821, lon:-74.149719},
       nuevo:true,
       note:"170 m² con habitaciones sin dato, 1 baños en Casa En Venta En Timiza A.",
-      flags:[{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"},{t:"Queda en el tope de $500 millones.", s:"warn"}] },
+      flags:[{t:"A 13 minutos de la casa de la familia.", s:"ok"},{t:"El Tiempo queda a 43 minutos en la mañana.", s:"warn"},{t:"El aviso no publica cuántas habitaciones tiene.", s:"crit"},{t:"El aviso no dice si tiene parqueadero.", s:"warn"},{t:"Queda en el tope de $500 millones.", s:"warn"}] },
     { op:"venta", barrio:"Modelia", canon:487730000, admin:null, m2:57.38, hab:0, ban:2, parq:0, dep:null,
       estrato:null, piso:null, asc:"nd", src:"Ciencuadras", date:null, pub:"Ciencuadras", inc:["hab","parq"],
       lat:4.668642, lon:-74.11631, approx:false, url:"/inmueble/apartamento-en-venta-en-modelia-bogota-3545597", img:"https://www-img-cc.s3.amazonaws.com/inmuebles/images/3545597/afedfe1766522453100_plana.jpeg",
