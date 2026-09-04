@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-03",
+ "actualizado": "2026-09-04",
  "destinos": [
   {
    "clave": "gimnasio",
@@ -11,7 +11,7 @@
     4
    ],
    "hora": "16:30",
-   "salida_consultada": "2026-09-04T21:30:00Z"
+   "salida_consultada": "2026-09-07T21:30:00Z"
   },
   {
    "clave": "musica",
@@ -45,7 +45,7 @@
     4
    ],
    "hora": "07:15",
-   "salida_consultada": "2026-09-04T12:15:00Z"
+   "salida_consultada": "2026-09-07T12:15:00Z"
   },
   {
    "clave": "oficina",
@@ -57,7 +57,7 @@
     4
    ],
    "hora": "07:00",
-   "salida_consultada": "2026-09-04T12:00:00Z"
+   "salida_consultada": "2026-09-07T12:00:00Z"
   }
  ],
  "edificios": {
